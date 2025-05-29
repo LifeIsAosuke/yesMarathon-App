@@ -8,6 +8,16 @@
 import SwiftUI
 
 struct HomeView: View {
+    
+    let yesSuggestion = YesSuggestion()
+    
+    // YESお題のラベル
+    @State private var yesLabel: String
+    
+    init() {
+        yesLabel = yesSuggestion.random()
+    }
+    
     var body: some View {
         VStack {
             Text("本日のYES")
@@ -17,22 +27,27 @@ struct HomeView: View {
             
             //お題ラベル
             HStack {
-                Text("自分らしくないことを1つやってみる")
+                Text(yesLabel)
                     .font(.title)
                     .fontWeight(.bold)
                     .padding()
-                Button(action: {}) {
+                    .frame(width: 268, height: 180, alignment: .leading)
+                
+                Button(action: {
+                    
+                    yesLabel = yesSuggestion.random()
+                }) {
                     VStack {
                         ZStack {
                             Circle()
                                 .foregroundColor(Color(red: 217 / 255.0, green: 217 / 255.0, blue: 217 / 255.0))
-                                .opacity(0.5)
+                                .opacity(80.5)
                                 .frame(width: 44, height: 44)
                             Image(systemName: "arrow.trianglehead.2.clockwise")
                                 .foregroundColor(.black)
                                 .font(.system(size: 24))
                         }
-                        Text("変更する")
+                        Text("シャッフル")
                             .foregroundColor(.black)
                             .font(.system(size: 10))
                     }
