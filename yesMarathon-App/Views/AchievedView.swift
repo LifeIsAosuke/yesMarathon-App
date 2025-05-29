@@ -24,6 +24,7 @@ struct AchievedView: View {
                 .padding()
         }
         .padding()
+        .navigationBarBackButtonHidden(true)
     }
 }
 
