@@ -21,11 +21,11 @@ let yesChallenges: [String] = [
 
 class YesSuggestion {
     
-    // yesDataの配列数を保持
-    let yesDatas: Int = yesChallenges.count
+    // yesChallengesの配列数を保持
+    private let yesDatas: Int = yesChallenges.count
     
     // yesChallengesの中からランダムに1つ取り出す
-    func random() -> String {
+    public func random() -> String {
         let randomNumber = Int.random(in:0..<yesDatas)
         return yesChallenges[randomNumber]
     }

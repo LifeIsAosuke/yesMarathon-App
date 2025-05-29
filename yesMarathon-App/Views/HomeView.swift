@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     
-    let yesSuggestion = YesSuggestion()
+    private let yesSuggestion = YesSuggestion()
     
     // YESお題のラベル
     @State private var yesLabel: String
@@ -77,7 +77,6 @@ struct HomeView: View {
             }
         }
         .padding()
-        
     }
 }
 
