@@ -8,15 +8,19 @@
 import SwiftUI
 
 extension Color {
+    // オレンジ色
     static let yesOrange = Color(red: 255 / 255.0, green: 161 / 255.0, blue: 0 / 255.0)
+    // 灰色
     static let yesLightGray = Color(red: 217 / 255.0, green: 217 / 255.0, blue: 217 / 255.0)
 }
 
 struct HomeView: View {
     
+    // YESボタンタップ後の画面遷移を管理する変数
     @Binding var isTrue: Bool
+    // YESお題の中身
     @Binding var yesLabel: String
-    
+    // 画面更新後の初期化
     init(isTrue: Binding<Bool>, yesLabel: Binding<String>) {
         self._isTrue = isTrue
         self._yesLabel = yesLabel
@@ -24,19 +28,25 @@ struct HomeView: View {
     
     var body: some View {
         VStack {
+            
             Text("本日のYES")
-                .foregroundColor(Color(.sRGB, red: 153 / 255.0, green: 153 / 255.0, blue: 153 / 255.0))
+                .foregroundColor(Color.yesLightGray)
+                .bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
+                .padding(.leading, 40)
+                .padding(.top, 40)
             
             //お題ラベル
             HStack {
+                
+                // YESお題
                 Text(yesLabel)
                     .font(.title)
-                    .fontWeight(.bold)
-                    .padding()
-                    .frame(width: 268, height: 180, alignment: .leading)
+                    .bold()
+//                    .padding()
+                    .frame(width: 300, height: 180)
                 
+                // シャッフルボタン
                 Button(action: {
                     yesLabel = YesSuggestion().random()
                 }) {
@@ -58,7 +68,10 @@ struct HomeView: View {
                 .contentShape(Rectangle())
                 .accessibilityLabel("お題をシャッフルします")
             }
+            .padding([.leading, .trailing], 16)
+            
             Spacer()
+            
             // YESボタン
             Button() {
                 isTrue = true
