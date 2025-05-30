@@ -13,7 +13,10 @@ struct AchievedView: View {
     @State private var isAnimating: Bool = false
     
     //　背景色
-    @State private var backgroundColor: Color = Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0)
+    @State private var backgroundColor: Color = Color.white
+    
+    // アイコンのアニメーション用変数
+    @State private var iconScale: CGFloat = 0.0
     
     var body: some View {
         ZStack {
@@ -32,6 +35,14 @@ struct AchievedView: View {
                     .resizable()
                     .frame(width: 237, height: 258)
                     .padding()
+                    .scaleEffect(iconScale)
+                    // HomeViewから画面遷移後アニメーション開始
+                    .onAppear {
+                        withAnimation (.easeOut(duration: 2.0)) {
+                            iconScale = 1.0
+                        }
+
+                    }
                 
                 Text("また明日も頑張ろう")
                     .bold()
@@ -42,7 +53,10 @@ struct AchievedView: View {
         .navigationBarBackButtonHidden(true)
         // ナビゲーション遷移後アニメーション開始
         .onAppear {
-            // 画面遷移後、３秒後にアニメーションを開始
+            
+            backgroundColor = Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0)
+            
+            // 2秒後にアニメーションを開始
             DispatchQueue.main.asyncAfter(deadline: .now() + 2){
                 // 背景色を徐々に白にするアニメーション
                 withAnimation(.easeInOut(duration: 1.0)) {

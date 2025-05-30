@@ -76,8 +76,9 @@ struct HomeView: View {
                 Spacer()
             }
         }
-        .padding()
     }
+    
+    // slack連携できてるかテスト用メッセージ
 }
 
 #Preview {
