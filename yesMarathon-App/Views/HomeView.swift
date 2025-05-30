@@ -7,18 +7,19 @@
 
 import SwiftUI
 
+extension Color {
+    static let yesOrange = Color(red: 255 / 255.0, green: 161 / 255.0, blue: 0 / 255.0)
+    static let yesLightGray = Color(red: 217 / 255.0, green: 217 / 255.0, blue: 217 / 255.0)
+}
+
 struct HomeView: View {
     
-    private let yesSuggestion = YesSuggestion()
+    @Binding var isTrue: Bool
+    @Binding var yesLabel: String
     
-    // YESお題のラベル
-    @State private var yesLabel: String
-    
-    // AchievedViewへ遷移用のフラグ変数
-    @State var isShowAchievedView = false
-    
-    init() {
-        yesLabel = yesSuggestion.random()
+    init(isTrue: Binding<Bool>, yesLabel: Binding<String>) {
+        self._isTrue = isTrue
+        self._yesLabel = yesLabel
     }
     
     var body: some View {
@@ -37,14 +38,13 @@ struct HomeView: View {
                     .frame(width: 268, height: 180, alignment: .leading)
                 
                 Button(action: {
-                    
-                    yesLabel = yesSuggestion.random()
+                    yesLabel = YesSuggestion().random()
                 }) {
                     VStack {
                         ZStack {
                             Circle()
-                                .foregroundColor(Color(red: 217 / 255.0, green: 217 / 255.0, blue: 217 / 255.0))
-                                .opacity(80.5)
+                                .foregroundColor(Color.yesLightGray)
+                                .opacity(0.8)
                                 .frame(width: 44, height: 44)
                             Image(systemName: "arrow.trianglehead.2.clockwise")
                                 .foregroundColor(.black)
@@ -55,16 +55,17 @@ struct HomeView: View {
                             .font(.system(size: 10))
                     }
                 }
-                
+                .contentShape(Rectangle())
+                .accessibilityLabel("お題をシャッフルします")
             }
             Spacer()
             // YESボタン
             Button() {
-                isShowAchievedView = true
+                isTrue = true
             } label: {
                 ZStack {
                     Circle()
-                        .foregroundColor(Color(red: 255 / 255.0, green: 161 / 255.0, blue: 0 / 255.0))
+                        .foregroundColor(Color.yesOrange)
                         .frame(width: 320, height: 320)
                     Circle()
                         .foregroundColor(Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0))
@@ -74,9 +75,6 @@ struct HomeView: View {
                         .foregroundColor(.white)
                 }
             }
-            .sheet(isPresented: $isShowAchievedView) {
-                AchievedView()
-            }
             
             Spacer()
         }
@@ -84,5 +82,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(isTrue: .constant(false), yesLabel: .constant(YesSuggestion().random()))
 }
