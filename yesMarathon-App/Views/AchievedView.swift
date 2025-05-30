@@ -19,39 +19,60 @@ struct AchievedView: View {
     @State private var iconScale: CGFloat = 0.0
     
     var body: some View {
-        ZStack {
-            
-            // 背景
-            backgroundColor.ignoresSafeArea()
-            
-            VStack {
+        NavigationStack {
+            ZStack {
                 
-                Text("本日のYES達成！")
-                    .font(.title)
-                    .bold()
-                    .padding()
+                // 背景
+                backgroundColor.ignoresSafeArea()
                 
-                Image("achievedIcon")
-                    .resizable()
-                    .frame(width: 237, height: 258)
-                    .padding()
-                    .scaleEffect(iconScale)
-                    // HomeViewから画面遷移後アニメーション開始
-                    .onAppear {
-                        withAnimation (.easeOut(duration: 2.0)) {
-                            iconScale = 1.0
+                VStack {
+                    
+                    Text("本日のYES達成！")
+                        .font(.title)
+                        .bold()
+                        .padding()
+                    
+                    Image("achievedIcon")
+                        .resizable()
+                        .frame(width: 237, height: 258)
+                        .padding()
+                        .scaleEffect(iconScale)
+                        // HomeViewから画面遷移後アニメーション開始
+                        .onAppear {
+                            withAnimation (.easeOut(duration: 2.0)) {
+                                iconScale = 1.0
+                            }
                         }
-
-                    }
+                    
+                    Text("また明日も頑張ろう")
+                        .bold()
+                        .padding()
+                }
+                .padding()
                 
-                Text("また明日も頑張ろう")
-                    .bold()
-                    .padding()
+                // YESログボタン
+                VStack {
+                    HStack {
+                        Spacer()
+                        NavigationLink {
+                            YesLogView()
+                        } label: {
+                            VStack {
+                                Image(systemName: "calendar.badge.checkmark")
+                                    .resizable()
+                                    .frame(width: 48, height: 48)
+                                Text("YESログ")
+                                    .font(.caption)
+                            }
+                            .foregroundColor(Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0))
+                            .padding()
+                        }
+                    }
+                    Spacer()
+                }
             }
-            .padding()
         }
-        .navigationBarBackButtonHidden(true)
-        // ナビゲーション遷移後アニメーション開始
+        // 画面遷移後アニメーション開始
         .onAppear {
             
             backgroundColor = Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0)

@@ -21,7 +21,7 @@ struct YesLogView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text("ホーム画面へ")
+                    Text("戻る")
                 }
                 .foregroundColor(.black)
             }
