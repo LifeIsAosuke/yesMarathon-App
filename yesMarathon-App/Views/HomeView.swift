@@ -78,7 +78,7 @@ struct HomeView: View {
         }
     }
     
-    // slack連携できてるかテスト用メッセージ
+    // slack連携できてるかテスト用メッセージどうじゃろ
 }
 
 #Preview {
