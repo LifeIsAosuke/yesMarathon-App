@@ -9,8 +9,12 @@ import SwiftUI
 import SwiftData
 
 extension Color {
+    // 黄オレンジ色
+    static let yesYellowOrange = Color(red: 255 / 255.0, green: 161 / 255.0, blue: 0 / 255.0)
+    
     // オレンジ色
-    static let yesOrange = Color(red: 255 / 255.0, green: 161 / 255.0, blue: 0 / 255.0)
+    static let yesOrange = Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0)
+    
     // 灰色
     static let yesLightGray = Color(red: 217 / 255.0, green: 217 / 255.0, blue: 217 / 255.0)
     
@@ -45,23 +49,25 @@ struct HomeView: View {
         NavigationStack {
             ZStack {
                 
-                // YESログボタン
-                ZStack {
-                    NavigationLink {
-                        YesLogView()
-                    } label: {
-                        VStack {
-                            Image(systemName: "calendar.badge.checkmark")
-                                .resizable()
-                                .frame(width: 48, height: 48)
-                            Text("YESログ")
+                if !isYesButtonTapped{
+                    // YESログボタン
+                    ZStack {
+                        NavigationLink {
+                            YesLogView()
+                        } label: {
+                            VStack {
+                                Image(systemName: "calendar.badge.checkmark")
+                                    .resizable()
+                                    .frame(width: 48, height: 48)
+                                Text("YESログ")
+                            }
+                            .foregroundColor(Color.yesOrange)
+                            .frame(width: 100, height: 100, alignment: .center)
                         }
-                        .foregroundColor(Color.yesOrange)
-                        .frame(width: 100, height: 100, alignment: .center)
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                    .padding()
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                .padding()
                 
                 VStack {
                     
@@ -83,51 +89,52 @@ struct HomeView: View {
                             .frame(width: 300, height: 180)
                         
                         // シャッフルボタン
-                        Button(action: {
-                            yesLabel = YesSuggestion().random()
-                        }) {
-                            VStack {
-                                ZStack {
-                                    Circle()
-                                        .foregroundColor(Color.yesLightGray)
-                                        .opacity(0.8)
-                                        .frame(width: 44, height: 44)
-                                    Image(systemName: "arrow.trianglehead.2.clockwise")
+                        if !isYesButtonTapped {
+                            Button(action: {
+                                yesLabel = YesSuggestion().random()
+                            }) {
+                                VStack {
+                                    ZStack {
+                                        Circle()
+                                            .foregroundColor(Color.yesLightGray)
+                                            .opacity(0.8)
+                                            .frame(width: 44, height: 44)
+                                        Image(systemName: "arrow.trianglehead.2.clockwise")
+                                            .foregroundColor(.black)
+                                            .font(.system(size: 24))
+                                    }
+                                    Text("シャッフル")
                                         .foregroundColor(.black)
-                                        .font(.system(size: 24))
+                                        .font(.system(size: 10))
                                 }
-                                Text("シャッフル")
-                                    .foregroundColor(.black)
-                                    .font(.system(size: 10))
                             }
+                            .contentShape(Rectangle())
+                            .accessibilityLabel("お題をシャッフルします")
                         }
-                        .contentShape(Rectangle())
-                        .accessibilityLabel("お題をシャッフルします")
                     }
                     .padding([.leading, .trailing], 16)
                     
                     if !isYesButtonTapped{
                         // YESボタン
                         Button() {
-                            isTrue = true
                             isYesButtonTapped.toggle()
                         } label: {
                             ZStack {
                                 Circle()
-                                    .foregroundColor(Color.yesOrange)
+                                    .foregroundColor(Color.yesYellowOrange)
                                     .frame(width: 320, height: 320)
                                 Circle()
-                                    .foregroundColor(Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0))
+                                    .foregroundColor(Color.yesOrange)
                                     .frame(width: 310, height: 310)
                                 Text("YES!")
                                     .font(.system(size: 90))
+                                    .bold()
                                     .foregroundColor(.white)
                             }
                         }
                         
                     } else {
                         VStack {
-                            
                             Divider()
                             
                             // コメント入力部分
@@ -152,7 +159,7 @@ struct HomeView: View {
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.bottom, 8)
-
+                                
                                 HStack(alignment: .top) {
                                     // 評価１
                                     Button(action: {
@@ -283,10 +290,57 @@ struct HomeView: View {
                                 }
                                 .padding()
                                 .frame(maxWidth: .infinity, alignment: .center)
+                                
+                                
                             }
                             .foregroundColor(.black)
+                            
+                            Divider()
+                            // 画像追加
+                            Group {
+                                
+                                HStack {
+                                    Image(systemName: "photo")
+                                    Text("画像を追加")
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.bottom, 8)
+                                
+                                
+                            }
+                            
+                            // 登録ボタン
+                            Button(action: {
+                                // eachDayDataをここでインスタンス化
+                                
+                                // 画面遷移フラグをオンに
+                                isTrue = true
+                            }) {
+                                ZStack {
+                                    Rectangle()
+                                        .fill(Color.yesOrange)
+                                        .frame(height: 60)
+                                        .cornerRadius(10)
+                                    Text("登録する")
+                                        .font(.system(size: 20))
+                                        .bold()
+                                        .foregroundColor(.white)
+                                }
+                            }
+                            
+                            // キャンセル
+                            Button (action: {
+                                isYesButtonTapped.toggle()
+                            }) {
+                                Text("キャンセル")
+                            }
+                            .foregroundColor(.black)
+                            .padding()
+
+
+                            
                         }
-                        .padding()
+                        .padding(40)
                     }
                     
                     Spacer()
