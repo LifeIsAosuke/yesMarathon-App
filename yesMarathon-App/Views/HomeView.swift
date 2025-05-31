@@ -6,28 +6,40 @@
 //
 
 import SwiftUI
+import SwiftData
 
 extension Color {
     // オレンジ色
     static let yesOrange = Color(red: 255 / 255.0, green: 161 / 255.0, blue: 0 / 255.0)
     // 灰色
     static let yesLightGray = Color(red: 217 / 255.0, green: 217 / 255.0, blue: 217 / 255.0)
+    
+    // 黄色
+    static let yesYellow = Color(red: 253 / 255.0, green: 202 / 255.0, blue: 0 / 255.0)
 }
 
 struct HomeView: View {
     
+    //入力部分に関する変数
+    @State private var comment: String = ""
+    @State private var stars: [Int] = [1, 1, 1, 0, 0] //YES評価のスターアイコンに対応（１だったらその部分がfillアイコンに変わる）
+    @State private var yesEvaluation: Int = 3
+    @State private var image: Data? = nil
+    
+    // YESボタンタップしたかどうかを管理する変数
+    @State private var isYesButtonTapped: Bool = false
+    
     // YESボタンタップ後の画面遷移を管理する変数
     @Binding var isTrue: Bool
+    
     // YESお題の中身
     @Binding var yesLabel: String
+    
     // 画面更新後の初期化
     init(isTrue: Binding<Bool>, yesLabel: Binding<String>) {
         self._isTrue = isTrue
         self._yesLabel = yesLabel
     }
-    
-    // YESボタンタップしたかどうかを管理する変数
-    @State private var isYesButtonTapped: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -112,8 +124,169 @@ struct HomeView: View {
                                     .foregroundColor(.white)
                             }
                         }
+                        
                     } else {
-                        Text("ここが入力画面です")
+                        VStack {
+                            
+                            Divider()
+                            
+                            // コメント入力部分
+                            Group {
+                                HStack {
+                                    Image(systemName: "text.justify.left")
+                                        .frame(width: 25, height: 25)
+                                    Text("コメント")
+                                        .font(.system(size: 14))
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                TextField("", text: $comment)
+                            }
+                            
+                            Divider()
+                            
+                            // YES評価
+                            Group {
+                                HStack {
+                                    Image(systemName: "star")
+                                    Text("YES評価")
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.bottom, 8)
+
+                                HStack(alignment: .top) {
+                                    // 評価１
+                                    Button(action: {
+                                        stars[0] = 1
+                                        stars[1] = 0
+                                        stars[2] = 0
+                                        stars[3] = 0
+                                        stars[4] = 0
+                                        yesEvaluation = 1
+                                    }) {
+                                        VStack {
+                                            if stars[0] == 0{
+                                                Image(systemName: "star")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 24, height: 24)
+                                            } else {
+                                                Image(systemName: "star.fill")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 24, height: 24)
+                                                    .foregroundColor(Color.yesYellow)
+                                            }
+                                            Text("イマイチ")
+                                                .font(.caption)
+                                        }
+                                    }
+                                    // 評価２
+                                    Button(action: {
+                                        stars[0] = 1
+                                        stars[1] = 1
+                                        stars[2] = 0
+                                        stars[3] = 0
+                                        stars[4] = 0
+                                        yesEvaluation = 2
+                                    }) {
+                                        VStack {
+                                            if stars[1] == 0{
+                                                Image(systemName: "star")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 24, height: 24)
+                                            } else {
+                                                Image(systemName: "star.fill")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 24, height: 24)
+                                                    .foregroundColor(Color.yesYellow)
+                                            }
+                                        }
+                                    }
+                                    // 評価３
+                                    Button(action: {
+                                        stars[0] = 1
+                                        stars[1] = 1
+                                        stars[2] = 1
+                                        stars[3] = 0
+                                        stars[4] = 0
+                                        yesEvaluation = 3
+                                    }) {
+                                        VStack {
+                                            if stars[2] == 0{
+                                                Image(systemName: "star")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 24, height: 24)
+                                            } else {
+                                                Image(systemName: "star.fill")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 24, height: 24)
+                                                    .foregroundColor(Color.yesYellow)
+                                            }
+                                            Text("イイネ!")
+                                                .font(.caption)
+                                        }
+                                    }
+                                    // 評価４
+                                    Button(action: {
+                                        stars[0] = 1
+                                        stars[1] = 1
+                                        stars[2] = 1
+                                        stars[3] = 1
+                                        stars[4] = 0
+                                        yesEvaluation = 4
+                                    }) {
+                                        VStack {
+                                            if stars[3] == 0{
+                                                Image(systemName: "star")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 24, height: 24)
+                                            } else {
+                                                Image(systemName: "star.fill")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 24, height: 24)
+                                                    .foregroundColor(Color.yesYellow)
+                                            }
+                                        }
+                                    }
+                                    // 評価５
+                                    Button(action: {
+                                        stars[0] = 1
+                                        stars[1] = 1
+                                        stars[2] = 1
+                                        stars[3] = 1
+                                        stars[4] = 1
+                                        yesEvaluation = 5
+                                    }) {
+                                        VStack {
+                                            if stars[4] == 0{
+                                                Image(systemName: "star")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 24, height: 24)
+                                            } else {
+                                                Image(systemName: "star.fill")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 24, height: 24)
+                                                    .foregroundColor(Color.yesYellow)
+                                            }
+                                            Text("バチイケ!!")
+                                                .font(.caption)
+                                        }
+                                    }
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            }
+                            .foregroundColor(.black)
+                        }
+                        .padding()
                     }
                     
                     Spacer()
