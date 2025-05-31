@@ -27,69 +27,90 @@ struct HomeView: View {
     }
     
     var body: some View {
-        VStack {
-            
-            Text("本日のYES")
-                .foregroundColor(Color.yesLightGray)
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 40)
-                .padding(.top, 40)
-            
-            //お題ラベル
-            HStack {
+        NavigationStack {
+            ZStack {
                 
-                // YESお題
-                Text(yesLabel)
-                    .font(.title)
-                    .bold()
-//                    .padding()
-                    .frame(width: 300, height: 180)
-                
-                // シャッフルボタン
-                Button(action: {
-                    yesLabel = YesSuggestion().random()
-                }) {
-                    VStack {
-                        ZStack {
-                            Circle()
-                                .foregroundColor(Color.yesLightGray)
-                                .opacity(0.8)
-                                .frame(width: 44, height: 44)
-                            Image(systemName: "arrow.trianglehead.2.clockwise")
-                                .foregroundColor(.black)
-                                .font(.system(size: 24))
+                // YESログボタン
+                ZStack {
+                    NavigationLink {
+                        YesLogView()
+                    } label: {
+                        VStack {
+                            Image(systemName: "calendar.badge.checkmark")
+                                .resizable()
+                                .frame(width: 48, height: 48)
+                            Text("YESログ")
                         }
-                        Text("シャッフル")
-                            .foregroundColor(.black)
-                            .font(.system(size: 10))
+                        .foregroundColor(Color.yesOrange)
+                        .frame(width: 100, height: 100, alignment: .center)
                     }
                 }
-                .contentShape(Rectangle())
-                .accessibilityLabel("お題をシャッフルします")
-            }
-            .padding([.leading, .trailing], 16)
-            
-            Spacer()
-            
-            // YESボタン
-            Button() {
-                isTrue = true
-            } label: {
-                ZStack {
-                    Circle()
-                        .foregroundColor(Color.yesOrange)
-                        .frame(width: 320, height: 320)
-                    Circle()
-                        .foregroundColor(Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0))
-                        .frame(width: 310, height: 310)
-                    Text("YES!")
-                        .font(.system(size: 90))
-                        .foregroundColor(.white)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                .padding()
+                
+                VStack {
+                    
+                    Text("本日のYES")
+                        .foregroundColor(Color.yesLightGray)
+                        .bold()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 40)
+                        .padding(.top, 40)
+                    
+                    //お題ラベル
+                    HStack {
+                        
+                        // YESお題
+                        Text(yesLabel)
+                            .font(.title)
+                            .bold()
+                        //                    .padding()
+                            .frame(width: 300, height: 180)
+                        
+                        // シャッフルボタン
+                        Button(action: {
+                            yesLabel = YesSuggestion().random()
+                        }) {
+                            VStack {
+                                ZStack {
+                                    Circle()
+                                        .foregroundColor(Color.yesLightGray)
+                                        .opacity(0.8)
+                                        .frame(width: 44, height: 44)
+                                    Image(systemName: "arrow.trianglehead.2.clockwise")
+                                        .foregroundColor(.black)
+                                        .font(.system(size: 24))
+                                }
+                                Text("シャッフル")
+                                    .foregroundColor(.black)
+                                    .font(.system(size: 10))
+                            }
+                        }
+                        .contentShape(Rectangle())
+                        .accessibilityLabel("お題をシャッフルします")
+                    }
+                    .padding([.leading, .trailing], 16)
+                    
+                    // YESボタン
+                    Button() {
+                        isTrue = true
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .foregroundColor(Color.yesOrange)
+                                .frame(width: 320, height: 320)
+                            Circle()
+                                .foregroundColor(Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0))
+                                .frame(width: 310, height: 310)
+                            Text("YES!")
+                                .font(.system(size: 90))
+                                .foregroundColor(.white)
+                        }
+                    }
+                    
+                    Spacer()
                 }
             }
-            
-            Spacer()
         }
     }
 }
