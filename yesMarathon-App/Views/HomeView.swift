@@ -26,6 +26,9 @@ struct HomeView: View {
         self._yesLabel = yesLabel
     }
     
+    // YESボタンタップしたかどうかを管理する変数
+    @State private var isYesButtonTapped: Bool = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -91,21 +94,26 @@ struct HomeView: View {
                     }
                     .padding([.leading, .trailing], 16)
                     
-                    // YESボタン
-                    Button() {
-                        isTrue = true
-                    } label: {
-                        ZStack {
-                            Circle()
-                                .foregroundColor(Color.yesOrange)
-                                .frame(width: 320, height: 320)
-                            Circle()
-                                .foregroundColor(Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0))
-                                .frame(width: 310, height: 310)
-                            Text("YES!")
-                                .font(.system(size: 90))
-                                .foregroundColor(.white)
+                    if !isYesButtonTapped{
+                        // YESボタン
+                        Button() {
+                            isTrue = true
+                            isYesButtonTapped.toggle()
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .foregroundColor(Color.yesOrange)
+                                    .frame(width: 320, height: 320)
+                                Circle()
+                                    .foregroundColor(Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0))
+                                    .frame(width: 310, height: 310)
+                                Text("YES!")
+                                    .font(.system(size: 90))
+                                    .foregroundColor(.white)
+                            }
                         }
+                    } else {
+                        Text("ここが入力画面です")
                     }
                     
                     Spacer()
