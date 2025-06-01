@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct YesLogView: View {
-    @Query private var eachDayDatas: [EachDayData]
+    @Query private var eachDayDatas: [EachDayData] // SwiftDataからYES情報を取得
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
