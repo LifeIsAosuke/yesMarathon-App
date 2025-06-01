@@ -6,8 +6,13 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    // データベースから情報を取得
+//    @Query private var dayChangeManager: [DayChangeManager]
+    @Environment(\.modelContext) private var modelContext
+    
     @State private var isTrue: Bool = false
     @State private var yesLabel: String = YesSuggestion().random()
     @State private var currentDate: Date = Date()
@@ -16,6 +21,7 @@ struct ContentView: View {
     let yesSuggestion = YesSuggestion()
 
     var body: some View {
+        
         Group {
             if isTrue {
                 AchievedView()
@@ -24,9 +30,14 @@ struct ContentView: View {
             }
         }
         .onAppear {
+            
+            let dayChangeManager = DayChangeManager(isTrue: isTrue)
+            modelContext.insert(dayChangeManager)
+            
             startTemporaryFalseReset()
             startYesLabelUpdate()
         }
+        
     }
 
     func startTemporaryFalseReset() {
@@ -43,6 +54,8 @@ struct ContentView: View {
         }
         RunLoop.current.add(timer, forMode: .common)
     }
+    
+    
 }
 
 

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 extension Color {
     // 黄オレンジ色
@@ -24,11 +25,22 @@ extension Color {
 
 struct HomeView: View {
     
+    //データの永続化用変数
+    @Environment(\.modelContext) private var modelContext
+    
+    // 日付
+    @State private var today : Date = Date()
+    
     //入力部分に関する変数
     @State private var comment: String = ""
-    @State private var stars: [Int] = [1, 1, 1, 0, 0] //YES評価のスターアイコンに対応（１だったらその部分がfillアイコンに変わる）
+    
+    //YES評価のスターアイコンに対応（１だったらその部分がfillアイコンに変わる）
+    @State private var stars: [Int] = [1, 1, 1, 0, 0]
     @State private var yesEvaluation: Int = 3
-    @State private var image: Data? = nil
+    
+    // 画像に関する変数
+    @State private var selectedItem: PhotosPickerItem?
+    @State private var imageData: Data?
     
     // YESボタンタップしたかどうかを管理する変数
     @State private var isYesButtonTapped: Bool = false
@@ -38,6 +50,11 @@ struct HomeView: View {
     
     // YESお題の中身
     @Binding var yesLabel: String
+    
+    // テキストフィールドにフォーカスがあったているか管理
+    @FocusState private var focus: Bool
+
+    
     
     // 画面更新後の初期化
     init(isTrue: Binding<Bool>, yesLabel: Binding<String>) {
@@ -85,7 +102,6 @@ struct HomeView: View {
                         Text(yesLabel)
                             .font(.title)
                             .bold()
-                        //                    .padding()
                             .frame(width: 300, height: 180)
                         
                         // シャッフルボタン
@@ -112,6 +128,7 @@ struct HomeView: View {
                             .accessibilityLabel("お題をシャッフルします")
                         }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding([.leading, .trailing], 16)
                     
                     if !isYesButtonTapped{
@@ -146,7 +163,12 @@ struct HomeView: View {
                                         .font(.system(size: 14))
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                TextField("", text: $comment)
+                                .padding()
+                                
+                                TextField("", text: $comment, axis: .vertical)
+                                    .focused(self.$focus)
+                                    .frame(height: 40)
+                                    .padding()
                             }
                             
                             Divider()
@@ -158,133 +180,29 @@ struct HomeView: View {
                                     Text("YES評価")
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.bottom, 8)
+                                .padding()
                                 
                                 HStack(alignment: .top) {
-                                    // 評価１
-                                    Button(action: {
-                                        stars[0] = 1
-                                        stars[1] = 0
-                                        stars[2] = 0
-                                        stars[3] = 0
-                                        stars[4] = 0
-                                        yesEvaluation = 1
-                                    }) {
-                                        VStack {
-                                            if stars[0] == 0{
-                                                Image(systemName: "star")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 24, height: 24)
-                                            } else {
-                                                Image(systemName: "star.fill")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 24, height: 24)
-                                                    .foregroundColor(Color.yesYellow)
+                                    ForEach(0..<5) { index in
+                                        Button(action: {
+                                            for i in 0...index {
+                                                stars[i] = 1
                                             }
-                                            Text("イマイチ")
-                                                .font(.caption)
-                                        }
-                                    }
-                                    // 評価２
-                                    Button(action: {
-                                        stars[0] = 1
-                                        stars[1] = 1
-                                        stars[2] = 0
-                                        stars[3] = 0
-                                        stars[4] = 0
-                                        yesEvaluation = 2
-                                    }) {
-                                        VStack {
-                                            if stars[1] == 0{
-                                                Image(systemName: "star")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 24, height: 24)
-                                            } else {
-                                                Image(systemName: "star.fill")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 24, height: 24)
-                                                    .foregroundColor(Color.yesYellow)
+                                            for i in (index+1)..<5 {
+                                                stars[i] = 0
                                             }
-                                        }
-                                    }
-                                    // 評価３
-                                    Button(action: {
-                                        stars[0] = 1
-                                        stars[1] = 1
-                                        stars[2] = 1
-                                        stars[3] = 0
-                                        stars[4] = 0
-                                        yesEvaluation = 3
-                                    }) {
-                                        VStack {
-                                            if stars[2] == 0{
-                                                Image(systemName: "star")
+                                            yesEvaluation = index + 1
+                                        }) {
+                                            VStack {
+                                                Image(systemName: stars[index] == 1 ? "star.fill" : "star")
                                                     .resizable()
                                                     .scaledToFit()
                                                     .frame(width: 24, height: 24)
-                                            } else {
-                                                Image(systemName: "star.fill")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 24, height: 24)
-                                                    .foregroundColor(Color.yesYellow)
+                                                    .foregroundColor(stars[index] == 1 ? Color.yesYellow : .gray)
+                                                if index == 0 { Text("イマイチ").font(.caption) }
+                                                if index == 2 { Text("イイネ!").font(.caption) }
+                                                if index == 4 { Text("バチイケ!!").font(.caption) }
                                             }
-                                            Text("イイネ!")
-                                                .font(.caption)
-                                        }
-                                    }
-                                    // 評価４
-                                    Button(action: {
-                                        stars[0] = 1
-                                        stars[1] = 1
-                                        stars[2] = 1
-                                        stars[3] = 1
-                                        stars[4] = 0
-                                        yesEvaluation = 4
-                                    }) {
-                                        VStack {
-                                            if stars[3] == 0{
-                                                Image(systemName: "star")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 24, height: 24)
-                                            } else {
-                                                Image(systemName: "star.fill")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 24, height: 24)
-                                                    .foregroundColor(Color.yesYellow)
-                                            }
-                                        }
-                                    }
-                                    // 評価５
-                                    Button(action: {
-                                        stars[0] = 1
-                                        stars[1] = 1
-                                        stars[2] = 1
-                                        stars[3] = 1
-                                        stars[4] = 1
-                                        yesEvaluation = 5
-                                    }) {
-                                        VStack {
-                                            if stars[4] == 0{
-                                                Image(systemName: "star")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 24, height: 24)
-                                            } else {
-                                                Image(systemName: "star.fill")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 24, height: 24)
-                                                    .foregroundColor(Color.yesYellow)
-                                            }
-                                            Text("バチイケ!!")
-                                                .font(.caption)
                                         }
                                     }
                                 }
@@ -296,25 +214,53 @@ struct HomeView: View {
                             .foregroundColor(.black)
                             
                             Divider()
+                            
                             // 画像追加
-                            Group {
-                                
+                            PhotosPicker(
+                                selection: $selectedItem
+                            ) {
                                 HStack {
                                     Image(systemName: "photo")
                                     Text("画像を追加")
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.bottom, 8)
-                                
-                                
                             }
+                            .foregroundColor(.black)
+                            .frame(height: 60)
+                            .padding()
+                            .onChange(of: selectedItem) { newItem in
+                                Task {
+                                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                        imageData = data
+                                    }
+                                }
+                            }
+                            
                             
                             // 登録ボタン
                             Button(action: {
-                                // eachDayDataをここでインスタンス化
                                 
-                                // 画面遷移フラグをオンに
-                                isTrue = true
+                                // 必須項目の検証
+                                guard !yesLabel.isEmpty else {
+                                    print("お題が未入力です")
+                                    return
+                                }
+                                
+                                // 入力事項をデータベースに保存
+                                let newData = EachDayData(
+                                    yesTitle: yesLabel,
+                                    day: today,
+                                    comment: comment,
+                                    yesEvaluation: yesEvaluation,
+                                    imageData: imageData
+                                )
+                                // データが正しく保存されていれば画面遷移
+                                do {
+                                    modelContext.insert(newData)
+                                    isTrue = true
+                                } catch {
+                                    print("データの保存に失敗しました: \(error.localizedDescription)")
+                                }
                             }) {
                                 ZStack {
                                     Rectangle()
@@ -330,14 +276,24 @@ struct HomeView: View {
                             
                             // キャンセル
                             Button (action: {
+                                //コメントを初期化
+                                comment = ""
+                                //YES評価を初期化
+                                yesEvaluation = 3
+                                
+                                stars[0] = 1
+                                stars[1] = 1
+                                stars[2] = 1
+                                stars[3] = 0
+                                stars[4] = 0
+                                
                                 isYesButtonTapped.toggle()
                             }) {
                                 Text("キャンセル")
                             }
                             .foregroundColor(.black)
                             .padding()
-
-
+                            
                             
                         }
                         .padding(40)

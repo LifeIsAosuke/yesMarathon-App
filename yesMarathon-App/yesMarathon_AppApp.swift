@@ -13,7 +13,7 @@ struct yesMarathon_AppApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .modelContainer(for: EachDayData.self)
+                .modelContainer(for: [EachDayData.self, DayChangeManager.self])
         }
     }
 }

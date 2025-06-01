@@ -10,19 +10,29 @@ import SwiftData
 
 @Model
 class EachDayData {
+    @Attribute(.unique)
+    var id: UUID
     var yesTitle: String
     var day: Date
     var comment: String
     var yesEvaluation: Int
-    var image: Data? // 画像をどうデータに落とし込むかは要検討
+    var imageData: Data?
     var isAchieved: Bool
     
-    init(yesTitle: String, day: Date, comment: String, yesEvaluation: Int, image: Data? = nil) {
+    init(
+        yesTitle: String,
+        day: Date,
+        comment: String,
+        yesEvaluation: Int,
+        imageData: Data? = nil,
+        isAchieved: Bool = false
+    ) {
+        self.id = UUID()
         self.yesTitle = yesTitle
         self.day = day
         self.comment = comment
         self.yesEvaluation = yesEvaluation
-        self.image = image
-        self.isAchieved = false
+        self.imageData = imageData
+        self.isAchieved = isAchieved
     }
 }
