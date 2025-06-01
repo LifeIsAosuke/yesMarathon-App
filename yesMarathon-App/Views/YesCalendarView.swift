@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct YesCalendarView: View {
     // 現在の日付を取得
     @State private var displayedDate: Date = Date()
     // 現在のカレンダーを取得
     let calendar = Calendar.current
+    // SwiftDataからYES情報を取得
+    @Query private var eachDayDatas: [EachDayData]
     
     // 取得したカレンダーのフォーマットを指定
     private let dateFormatter: DateFormatter = {
@@ -41,6 +44,7 @@ struct YesCalendarView: View {
             .foregroundColor(.black)
             .padding()
             
+            // 曜日ヘッダー
             HStack {
                 ForEach(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], id: \.self) { day in
                     Text(day)
@@ -53,11 +57,34 @@ struct YesCalendarView: View {
             GeometryReader { geometry in
                 // セルの大きさを取得
                 let cellSize = geometry.size.width / 7
+                
+                //　カレンダーの各セルを表示
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 0) {
+                    
                     ForEach(generateDates(for: displayedDate), id: \.self) { date in
                         if let date = date {
-                            Text("\(date)")
-                                .frame(width: cellSize, height: cellSize)
+                            // Find matching EachDayData for this date
+                            let matchingData = eachDayDatas.first { eachDayData in
+                                calendar.isDate(eachDayData.day, inSameDayAs: date)
+                            }
+
+                            VStack {
+                                ZStack {
+                                    Text("\(calendar.component(.day, from: date))")
+                                        .font(.headline)
+                                        .foregroundColor(.primary)
+
+                                    // Display yesTitle only if matching data exists
+                                    if let data = matchingData {
+                                       
+                                            Circle()
+                                                .frame(width: 40, height: 40)
+                                                .foregroundColor(Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0))
+                                                .opacity(0.5)
+                                    }
+                                }
+                            }
+                            .frame(width: cellSize, height: cellSize)
                         } else {
                             Spacer()
                                 .frame(width: cellSize, height: cellSize)
@@ -79,7 +106,7 @@ struct YesCalendarView: View {
     }
     
     // 指定した月の日付を生成し、空白セルを含む配列として返す関数
-    private func generateDates(for date: Date) -> [Int?] {
+    private func generateDates(for date: Date) -> [Date?] {
         // 現在の月の日数を取得
         let range = calendar.range(of: .day, in: .month, for: date)!
         
@@ -90,20 +117,22 @@ struct YesCalendarView: View {
         let firstWeekday = calendar.component(.weekday, from: firstDayOfMonth)
         
         // 先頭の空白セルを生成
-        let leadingEmptyDays = Array(repeating: Optional<Int>.none, count: firstWeekday - 1)
+        let leadingEmptyDays = Array(repeating: Optional<Date>.none, count: firstWeekday - 1)
         
         // 現在の月の日付を生成
-        let days = range.map { $0 }
+        let days = range.map { day -> Date in
+            calendar.date(byAdding: .day, value: day - 1, to: firstDayOfMonth)!
+        }
         
         // 必要なセル数を計算
         let totalCells = leadingEmptyDays.count + days.count
         let trailingEmptyDaysCount = (7 - (totalCells % 7)) % 7
         
         // 末尾の空白セルを生成
-        let trailingEmptyDays = Array(repeating: Optional<Int>.none, count: trailingEmptyDaysCount)
+        let trailingEmptyDays = Array(repeating: Optional<Date>.none, count: trailingEmptyDaysCount)
         
         // 先頭の空白セル、日付、末尾の空白セルを結合して返す
-        return leadingEmptyDays + days + trailingEmptyDays
+        return leadingEmptyDays + days.map { Optional($0) } + trailingEmptyDays
     }
 }
 #Preview {
