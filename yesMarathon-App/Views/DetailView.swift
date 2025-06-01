@@ -8,20 +8,16 @@
 import SwiftUI
 
 struct DetailView: View {
-    
-    //　その日の日付
     let displayedDate: Date
-    
-    // 対応するデータを取得
     let matchingData: EachDayData!
-    
+
     // 現在のカレンダーを取得
-    let calendar = Calendar.current
+    private let calendar = Calendar.current
 
     // 取得したカレンダーのフォーマットを指定
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy年MM月DD日"
+        formatter.dateFormat = "yyyy年MM月dd日"
         return formatter
     }()
     
@@ -77,7 +73,6 @@ struct DetailView: View {
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .center)
                     
-                    
                 }
                 .foregroundColor(.black)
                 
@@ -90,6 +85,19 @@ struct DetailView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
                 
+                if let image = matchingData.image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 200)
+                        .cornerRadius(10)
+                        .padding()
+                } else {
+                    Text("画像はありません")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .padding()
+                }
             }
         }
     }
