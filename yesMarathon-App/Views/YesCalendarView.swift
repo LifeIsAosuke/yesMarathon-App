@@ -22,7 +22,7 @@ struct YesCalendarView: View {
         formatter.dateFormat = "yyyy年MM月"
         return formatter
     }()
-
+    
     var body: some View {
         VStack {
             HStack {
@@ -60,15 +60,14 @@ struct YesCalendarView: View {
                 
                 //　カレンダーの各セルを表示
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 0) {
-                    
-                    ForEach(generateDates(for: displayedDate), id: \.self) { date in
+                    ForEach(Array(generateDates(for: displayedDate).enumerated()), id: \.offset) { index, date in
                         if let date = date {
                             // Find matching EachDayData for this date
                             let matchingData = eachDayDatas.first { eachDayData in
                                 calendar.isDate(eachDayData.day, inSameDayAs: date)
                             }
 
-                            NavigationLink(destination: DetailView()) {
+                            NavigationLink(destination: DetailView(displayedDate: date, matchingData: matchingData)) {
                                 VStack {
                                     ZStack {
                                         Text("\(calendar.component(.day, from: date))")
@@ -86,6 +85,7 @@ struct YesCalendarView: View {
                                 }
                                 .frame(width: cellSize, height: cellSize)
                             }
+                            .buttonStyle(PlainButtonStyle())
                         } else {
                             Spacer()
                                 .frame(width: cellSize, height: cellSize)

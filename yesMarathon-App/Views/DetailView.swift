@@ -8,13 +8,30 @@
 import SwiftUI
 
 struct DetailView: View {
+    
+    //　その日の日付
+    let displayedDate: Date
+    
+    // 対応するデータを取得
+    let matchingData: EachDayData!
+    
+    // 現在のカレンダーを取得
+    let calendar = Calendar.current
+
+    // 取得したカレンダーのフォーマットを指定
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy年MM月DD日"
+        return formatter
+    }()
+    
     var body: some View {
         NavigationStack {
             VStack {
-                Text("2025年5月26日")
+                Text(displayedDate, formatter: dateFormatter)
                     .padding()
                 
-                Text("自分らしくないことを１つやってみる")
+                Text(matchingData.yesTitle)
                     .font(.title)
                 
                 Divider()
@@ -29,7 +46,7 @@ struct DetailView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
                     
-                    Text("河川敷までランニングしてみた！どっと疲れたけど気分爽快！久々の運動も悪くないな。今日はぐっすり眠れそう")
+                    Text(matchingData.comment)
                         .frame(height: 40)
                         .padding()
                 }
@@ -37,7 +54,7 @@ struct DetailView: View {
                 Divider()
                 
                 // YES評価
-                Group {
+                VStack {
                     HStack {
                         Image(systemName: "star")
                         Text("YES評価")
@@ -45,13 +62,17 @@ struct DetailView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
                     
-                    HStack(alignment: .top) {
+                    HStack {
+                        // 色塗りスターの表示
+                        ForEach(0..<matchingData.yesEvaluation, id: \.self) { _ in
+                            Image(systemName: "star.fill")
+                                .foregroundColor(Color(red: 253 / 255.0, green: 202 / 255.0, blue: 0 / 255.0))
+                        }
                         
-                        Image(systemName: "star")
-                        Image(systemName: "star")
-                        Image(systemName: "star")
-                        Image(systemName: "star")
-                        Image(systemName: "star")
+                        // 外縁スターの表示
+                        ForEach(0..<5-matchingData.yesEvaluation, id: \.self) { _ in
+                            Image(systemName: "star")
+                        }
                     }
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -72,8 +93,4 @@ struct DetailView: View {
             }
         }
     }
-}
-
-#Preview {
-    DetailView()
 }
