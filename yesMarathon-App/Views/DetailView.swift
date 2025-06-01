@@ -8,11 +8,7 @@
 import SwiftUI
 
 struct DetailView: View {
-    let displayedDate: Date
     let matchingData: EachDayData!
-
-    // 現在のカレンダーを取得
-    private let calendar = Calendar.current
 
     // 取得したカレンダーのフォーマットを指定
     private let dateFormatter: DateFormatter = {
@@ -24,7 +20,7 @@ struct DetailView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text(displayedDate, formatter: dateFormatter)
+                Text(matchingData.day, formatter: dateFormatter)
                     .padding()
                 
                 Text(matchingData.yesTitle)
@@ -101,4 +97,5 @@ struct DetailView: View {
             }
         }
     }
+
 }

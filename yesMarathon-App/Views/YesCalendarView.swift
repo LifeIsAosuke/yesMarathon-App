@@ -67,25 +67,31 @@ struct YesCalendarView: View {
                                 calendar.isDate(eachDayData.day, inSameDayAs: date)
                             }
 
-                            NavigationLink(destination: DetailView(displayedDate: date, matchingData: matchingData)) {
-                                VStack {
-                                    ZStack {
-                                        Text("\(calendar.component(.day, from: date))")
-                                            .font(.headline)
-                                            .foregroundColor(.primary)
+                            if let data = matchingData {
+                                // Show NavigationLink if matching data exists
+                                NavigationLink(destination: DetailView(matchingData: data)) {
+                                    VStack {
+                                        ZStack {
+                                            Text("\(calendar.component(.day, from: date))")
+                                                .font(.headline)
+                                                .foregroundColor(.primary)
 
-                                        // Display an indicator if matching data exists
-                                        if let data = matchingData {
                                             Circle()
                                                 .frame(width: 40, height: 40)
                                                 .foregroundColor(Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0))
                                                 .opacity(0.5)
                                         }
                                     }
+                                    .frame(width: cellSize, height: cellSize)
                                 }
-                                .frame(width: cellSize, height: cellSize)
+                                .buttonStyle(PlainButtonStyle())
+                            } else {
+                                // Show regular text if no matching data exists
+                                Text("\(calendar.component(.day, from: date))")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                    .frame(width: cellSize, height: cellSize)
                             }
-                            .buttonStyle(PlainButtonStyle())
                         } else {
                             Spacer()
                                 .frame(width: cellSize, height: cellSize)
