@@ -78,15 +78,31 @@ struct YesCalendarView: View {
         }
     }
     
-    // その月の月をInt型の配列で返す関数
+    // 指定した月の日付を生成し、空白セルを含む配列として返す関数
     private func generateDates(for date: Date) -> [Int?] {
+        // 現在の月の日数を取得
         let range = calendar.range(of: .day, in: .month, for: date)!
+        
+        // 月初の日付を取得
         let firstDayOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: date))!
+        
+        // 月初の曜日を取得 (1: 日曜, 2: 月曜, ...)
         let firstWeekday = calendar.component(.weekday, from: firstDayOfMonth)
-        let leadingEmptyDays = (1..<firstWeekday).map { _ in Optional<Int>.none }
+        
+        // 先頭の空白セルを生成
+        let leadingEmptyDays = Array(repeating: Optional<Int>.none, count: firstWeekday - 1)
+        
+        // 現在の月の日付を生成
         let days = range.map { $0 }
-        let currentCellCount = leadingEmptyDays.count + days.count
-        let trailingEmptyDays = (currentCellCount < 42 ? (1...(42 - currentCellCount)).map { _ in Optional<Int>.none } : [])
+        
+        // 必要なセル数を計算
+        let totalCells = leadingEmptyDays.count + days.count
+        let trailingEmptyDaysCount = (7 - (totalCells % 7)) % 7
+        
+        // 末尾の空白セルを生成
+        let trailingEmptyDays = Array(repeating: Optional<Int>.none, count: trailingEmptyDaysCount)
+        
+        // 先頭の空白セル、日付、末尾の空白セルを結合して返す
         return leadingEmptyDays + days + trailingEmptyDays
     }
 }
