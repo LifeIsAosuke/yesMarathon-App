@@ -68,23 +68,24 @@ struct YesCalendarView: View {
                                 calendar.isDate(eachDayData.day, inSameDayAs: date)
                             }
 
-                            VStack {
-                                ZStack {
-                                    Text("\(calendar.component(.day, from: date))")
-                                        .font(.headline)
-                                        .foregroundColor(.primary)
+                            NavigationLink(destination: DetailView()) {
+                                VStack {
+                                    ZStack {
+                                        Text("\(calendar.component(.day, from: date))")
+                                            .font(.headline)
+                                            .foregroundColor(.primary)
 
-                                    // Display yesTitle only if matching data exists
-                                    if let data = matchingData {
-                                       
+                                        // Display an indicator if matching data exists
+                                        if let data = matchingData {
                                             Circle()
                                                 .frame(width: 40, height: 40)
                                                 .foregroundColor(Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0))
                                                 .opacity(0.5)
+                                        }
                                     }
                                 }
+                                .frame(width: cellSize, height: cellSize)
                             }
-                            .frame(width: cellSize, height: cellSize)
                         } else {
                             Spacer()
                                 .frame(width: cellSize, height: cellSize)
@@ -137,4 +138,12 @@ struct YesCalendarView: View {
 }
 #Preview {
     YesCalendarView()
+}
+
+extension DateFormatter {
+    static let shortDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter
+    }()
 }
