@@ -8,27 +8,13 @@ struct YesLogView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if eachDayDatas.isEmpty {
-                    Text("登録されたYESログがありません")
-                        .font(.headline)
-                        .foregroundColor(.gray)
-                        .padding()
-                } else {
-                    List {
-                        ForEach(eachDayDatas) { data in
-                            VStack(alignment: .leading) {
-                                Text(data.yesTitle)
-                                    .font(.headline)
-                                Text("評価: \(data.yesEvaluation)")
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
-                                Text(data.comment)
-                                    .font(.body)
-                            }
-                            .padding(.vertical, 8)
-                        }
-                    }
-                }
+                
+                Text("8日連続達成！！")
+                    .font(.largeTitle)
+                    .bold()
+                
+                YesCalendarView()
+                    
             }
             .navigationBarBackButtonHidden(true)
             .toolbar {
