@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import UIKit
 
 @Model
 class EachDayData {
@@ -34,5 +35,10 @@ class EachDayData {
         self.yesEvaluation = yesEvaluation
         self.imageData = imageData
         self.isAchieved = isAchieved
+    }
+    
+    var image: UIImage? {
+        guard let imageData = imageData else { return nil }
+        return UIImage(data: imageData)
     }
 }

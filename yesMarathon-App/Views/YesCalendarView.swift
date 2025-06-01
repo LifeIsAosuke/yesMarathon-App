@@ -22,7 +22,7 @@ struct YesCalendarView: View {
         formatter.dateFormat = "yyyy年MM月"
         return formatter
     }()
-
+    
     var body: some View {
         VStack {
             HStack {
@@ -60,31 +60,38 @@ struct YesCalendarView: View {
                 
                 //　カレンダーの各セルを表示
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 0) {
-                    
-                    ForEach(generateDates(for: displayedDate), id: \.self) { date in
+                    ForEach(Array(generateDates(for: displayedDate).enumerated()), id: \.offset) { index, date in
                         if let date = date {
                             // Find matching EachDayData for this date
                             let matchingData = eachDayDatas.first { eachDayData in
                                 calendar.isDate(eachDayData.day, inSameDayAs: date)
                             }
 
-                            VStack {
-                                ZStack {
-                                    Text("\(calendar.component(.day, from: date))")
-                                        .font(.headline)
-                                        .foregroundColor(.primary)
+                            if let data = matchingData {
+                                // Show NavigationLink if matching data exists
+                                NavigationLink(destination: DetailView(matchingData: data)) {
+                                    VStack {
+                                        ZStack {
+                                            Text("\(calendar.component(.day, from: date))")
+                                                .font(.headline)
+                                                .foregroundColor(.primary)
 
-                                    // Display yesTitle only if matching data exists
-                                    if let data = matchingData {
-                                       
                                             Circle()
                                                 .frame(width: 40, height: 40)
                                                 .foregroundColor(Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0))
                                                 .opacity(0.5)
+                                        }
                                     }
+                                    .frame(width: cellSize, height: cellSize)
                                 }
+                                .buttonStyle(PlainButtonStyle())
+                            } else {
+                                // Show regular text if no matching data exists
+                                Text("\(calendar.component(.day, from: date))")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                    .frame(width: cellSize, height: cellSize)
                             }
-                            .frame(width: cellSize, height: cellSize)
                         } else {
                             Spacer()
                                 .frame(width: cellSize, height: cellSize)
@@ -137,4 +144,12 @@ struct YesCalendarView: View {
 }
 #Preview {
     YesCalendarView()
+}
+
+extension DateFormatter {
+    static let shortDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter
+    }()
 }

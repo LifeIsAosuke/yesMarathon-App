@@ -34,26 +34,28 @@ struct ContentView: View {
             let dayChangeManager = DayChangeManager(isTrue: isTrue)
             modelContext.insert(dayChangeManager)
             
-            startTemporaryFalseReset()
             startYesLabelUpdate()
         }
         
     }
 
-    func startTemporaryFalseReset() {
-        let timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
-            isTrue = false
-            forceUpdate.toggle()
-        }
-        RunLoop.current.add(timer, forMode: .common)
-    }
-
     func startYesLabelUpdate() {
-        let timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
+        let midnight = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 0, minute: 0, second: 0), matchingPolicy: .nextTime)!
+        let timeInterval = midnight.timeIntervalSinceNow
+
+        Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { _ in
             yesLabel = yesSuggestion.random()
+            startYesLabelUpdate() // Restart the timer for the next day
         }
-        RunLoop.current.add(timer, forMode: .common)
     }
+    
+    // for debug
+//    func startYesLabelUpdate() {
+//        let timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
+//            yesLabel = yesSuggestion.random()
+//        }
+//        RunLoop.current.add(timer, forMode: .common)
+//    }
     
     
 }

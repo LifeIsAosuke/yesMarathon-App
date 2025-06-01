@@ -24,7 +24,7 @@ struct YesLogView: View {
                     } label: {
                         HStack {
                             Image(systemName: "chevron.backward")
-                            Text("戻る")
+                            Text("ホームに戻る")
                         }
                     }
                     .foregroundColor(.black)
