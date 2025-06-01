@@ -44,6 +44,7 @@ struct YesCalendarView: View {
             .foregroundColor(.black)
             .padding()
             
+            // 曜日ヘッダー
             HStack {
                 ForEach(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], id: \.self) { day in
                     Text(day)
@@ -56,7 +57,10 @@ struct YesCalendarView: View {
             GeometryReader { geometry in
                 // セルの大きさを取得
                 let cellSize = geometry.size.width / 7
+                
+                //　カレンダーの各セルを表示
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 0) {
+                    
                     ForEach(generateDates(for: displayedDate), id: \.self) { date in
                         if let date = date {
                             // Find matching EachDayData for this date
@@ -81,8 +85,6 @@ struct YesCalendarView: View {
                                 }
                             }
                             .frame(width: cellSize, height: cellSize)
-//                            .background(matchingData?.isAchieved == true ? Color.green.opacity(0.3) : Color.gray.opacity(0.1))
-//                            .cornerRadius(4)
                         } else {
                             Spacer()
                                 .frame(width: cellSize, height: cellSize)
