@@ -63,13 +63,13 @@ struct YesCalendarView: View {
                     ForEach(Array(generateDates(for: displayedDate).enumerated()), id: \.offset) { index, date in
                         if let date = date {
                             // Find matching EachDayData for this date
-                            let matchingData = eachDayDatas.first { eachDayData in
+                            @State var matchingData = eachDayDatas.first { eachDayData in
                                 calendar.isDate(eachDayData.day, inSameDayAs: date)
                             }
 
                             if let data = matchingData {
                                 // Show NavigationLink if matching data exists
-                                NavigationLink(destination: DetailView(matchingData: data)) {
+                                NavigationLink(destination: DetailView(matchingData: $matchingData)) {
                                     VStack {
                                         ZStack {
                                             Text("\(calendar.component(.day, from: date))")
