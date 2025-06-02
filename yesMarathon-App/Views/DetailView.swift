@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DetailView: View {
-    let matchingData: EachDayData!
+    @Binding var matchingData: EachDayData!
 
     // 取得したカレンダーのフォーマットを指定
     private let dateFormatter: DateFormatter = {
