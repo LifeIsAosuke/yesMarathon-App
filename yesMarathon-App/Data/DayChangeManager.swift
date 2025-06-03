@@ -12,7 +12,7 @@ import SwiftData
 class DayChangeManager {
     var isTrue: Bool
     
-    init(isTrue: Bool) {
-        self.isTrue = isTrue
+    init() {
+        self.isTrue = false
     }
 }

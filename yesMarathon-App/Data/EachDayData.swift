@@ -26,7 +26,6 @@ class EachDayData {
         comment: String,
         yesEvaluation: Int,
         imageData: Data? = nil,
-        isAchieved: Bool = false
     ) {
         self.id = UUID()
         self.yesTitle = yesTitle
@@ -34,7 +33,7 @@ class EachDayData {
         self.comment = comment
         self.yesEvaluation = yesEvaluation
         self.imageData = imageData
-        self.isAchieved = isAchieved
+        self.isAchieved = false
     }
     
     var image: UIImage? {
