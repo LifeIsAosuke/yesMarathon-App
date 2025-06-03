@@ -10,6 +10,8 @@ import SwiftUI
 struct DetailView: View {
     @Environment(\.modelContext) private var modelContext
     @State var matchingData: EachDayData
+    
+    @Environment(\.dismiss) private var dismiss
 
     // 取得したカレンダーのフォーマットを指定
     private let dateFormatter: DateFormatter = {
@@ -113,6 +115,20 @@ struct DetailView: View {
                 }
             }
             .padding()
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        HStack {
+                            Image(systemName: "chevron.backward")
+                            Text("戻る")
+                        }
+                    }
+                    .foregroundColor(.black)
+                }
+            }
         }
     }
 
