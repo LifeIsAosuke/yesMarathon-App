@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct DetailView: View {
-    @Binding var matchingData: EachDayData!
+    @Environment(\.modelContext) private var modelContext
+    @State var matchingData: EachDayData
 
     // 取得したカレンダーのフォーマットを指定
     private let dateFormatter: DateFormatter = {
@@ -16,18 +17,21 @@ struct DetailView: View {
         formatter.dateFormat = "yyyy年MM月dd日"
         return formatter
     }()
-    
+
     var body: some View {
         NavigationStack {
             VStack {
+                // 日付
                 Text(matchingData.day, formatter: dateFormatter)
                     .padding()
-                
+
+                // YESタイトル
                 Text(matchingData.yesTitle)
                     .font(.title)
-                
+
                 Divider()
-                
+
+                // コメント
                 Group {
                     HStack {
                         Image(systemName: "text.justify.left")
@@ -37,15 +41,15 @@ struct DetailView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-                    
+
                     Text(matchingData.comment)
                         .frame(height: 40)
                         .padding()
                 }
-                
+
                 Divider()
-                
-                // YES評価
+
+                // YES評価の編集
                 VStack {
                     HStack {
                         Image(systemName: "star")
@@ -68,19 +72,18 @@ struct DetailView: View {
                     }
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .center)
-                    
                 }
-                .foregroundColor(.black)
-                
+
                 Divider()
-                
+
+                // 画像の表示と追加
                 HStack {
                     Image(systemName: "photo")
                     Text("画像")
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-                
+
                 if let image = matchingData.image {
                     Image(uiImage: image)
                         .resizable()
@@ -94,8 +97,30 @@ struct DetailView: View {
                         .foregroundColor(.gray)
                         .padding()
                 }
+
+                Spacer()
+
+                // 保存ボタン
+                Button(action: saveChanges) {
+                    Text("保存する")
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 44)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                        .padding()
+                }
             }
+            .padding()
         }
     }
 
+    private func saveChanges() {
+        do {
+            try modelContext.save()
+        } catch {
+            print("データの保存に失敗しました: \(error.localizedDescription)")
+        }
+    }
 }

@@ -107,7 +107,7 @@ struct HomeView: View {
                                             Circle()
                                                 .foregroundColor(Color.yesLightGray)
                                                 .opacity(0.8)
-                                                .frame(width: 44, height: 44)
+                                                .frame(width: 48, height: 48)
                                             Image(systemName: "arrow.trianglehead.2.clockwise")
                                                 .foregroundColor(.black)
                                                 .font(.system(size: 24))
