@@ -50,6 +50,10 @@ struct HomeView: View {
     // YESお題の中身
     @Binding var yesLabel: String
     
+    // アラート画面の管理
+    @State private var isPresented: Bool = false
+    @State private var editingText: String = ""
+    
     // 画面更新後の初期化
     init(yesLabel: Binding<String>) {
         self._yesLabel = yesLabel
@@ -121,7 +125,9 @@ struct HomeView: View {
                                     }
                                     
                                     Button {
-                                        
+                                        // Initialize editingText with the current yesLabel when presenting
+                                        editingText = yesLabel
+                                        isPresented = true
                                     } label: {
                                         VStack {
                                             ZStack {
@@ -138,8 +144,22 @@ struct HomeView: View {
                                                 .font(.system(size: 10))
                                         }
                                     }
+                                    .alert("本日のYESを入力", isPresented: $isPresented, actions: {
+                                        TextField("本日のYES", text: $editingText)
+                                        Button("登録する") {
+                                            // Only update yesLabel if editingText is not empty
+                                            if !editingText.isEmpty {
+                                                yesLabel = editingText
+                                            }
+                                            isPresented = false
+                                        }
+                                        Button("キャンセル", role: .cancel) {
+                                            editingText = ""
+                                            isPresented = false
+                                        }
+                                    })
                                 }
-                                }
+                            }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding([.leading, .trailing], 16)
@@ -275,7 +295,7 @@ struct HomeView: View {
                                 // キャンセル
                                 Button (action: {
                                     comment = ""
-                                
+                                    
                                     yesEvaluation = 3
                                     
                                     stars = [1, 1, 1, 0, 0]
