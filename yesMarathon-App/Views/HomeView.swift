@@ -25,8 +25,10 @@ extension Color {
 
 struct HomeView: View {
     
-    // データの永続化用変数
+    // データ管理変数
     @Environment(\.modelContext) private var modelContext
+    // DayChangeManagerの情報を取得（配列で取得し状態管理）
+    @Query private var dayChangeManager: [DayChangeManager]
     
     // 日付
     @State private var today : Date = Date()
@@ -45,15 +47,11 @@ struct HomeView: View {
     // YESボタンタップしたかどうかを管理する変数
     @State private var isYesButtonTapped: Bool = false
     
-    // YESボタンタップ後の画面遷移を管理する変数
-    @Binding var isTrue: Bool
-    
     // YESお題の中身
     @Binding var yesLabel: String
     
     // 画面更新後の初期化
-    init(isTrue: Binding<Bool>, yesLabel: Binding<String>) {
-        self._isTrue = isTrue
+    init(yesLabel: Binding<String>) {
         self._yesLabel = yesLabel
     }
     
@@ -240,29 +238,7 @@ struct HomeView: View {
                                 
                                 // 登録ボタン
                                 Button(action: {
-                                    
-                                    // 必須項目の検証
-                                    guard !yesLabel.isEmpty else {
-                                        print("お題が未入力です")
-                                        return
-                                    }
-                                    
-                                    // 入力事項をデータベースに保存
-                                    let newData = EachDayData(
-                                        yesTitle: yesLabel,
-                                        day: today,
-                                        comment: comment,
-                                        yesEvaluation: yesEvaluation,
-                                        imageData: imageData
-                                    )
-                                    // データが正しく保存されていれば画面遷移
-                                    do {
-                                        try modelContext.insert(newData)
-                                        
-                                        isTrue = true
-                                    } catch {
-                                        print("データの保存に失敗しました: \(error.localizedDescription)")
-                                    }
+                                    addData(yesTitle: yesLabel, day: today, comment: comment, yesEvaluation: yesEvaluation, imageData: imageData)
                                 }) {
                                     ZStack {
                                         Rectangle()
@@ -278,7 +254,6 @@ struct HomeView: View {
                                 
                                 // キャンセル
                                 Button (action: {
-                                 
                                     comment = ""
                                 
                                     yesEvaluation = 3
@@ -305,8 +280,28 @@ struct HomeView: View {
             }
         }
     }
+    
+    private func addData(yesTitle: String, day: Date, comment: String, yesEvaluation: Int, imageData: Data?) {
+        // 必須項目の検証
+        guard !yesTitle.isEmpty else {
+            print("お題が未入力です")
+            return
+        }
+        // 入力事項をデータベースに保存
+        let newData = EachDayData(yesTitle: yesTitle, day: day, comment: comment, yesEvaluation: yesEvaluation, imageData: imageData)
+        do {
+            try modelContext.insert(newData)
+            // dayChangeManagerのisTrueを更新し、保存
+            if let manager = dayChangeManager.first {
+                manager.isTrue = true
+                try? modelContext.save()
+            }
+        } catch {
+            print("データの保存に失敗しました: \(error.localizedDescription)")
+        }
+    }
 }
 
 #Preview {
-    HomeView(isTrue: .constant(false), yesLabel: .constant(YesSuggestion().random()))
+    HomeView(yesLabel: .constant(YesSuggestion().random()))
 }
