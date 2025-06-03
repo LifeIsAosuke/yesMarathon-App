@@ -19,32 +19,32 @@ struct DetailView: View {
     @State var isEditing: Bool = false
     
     //---編集中に使う変数---
-    @State private var editingComent: String = ""
+    @State private var comment: String = ""
     @State private var stars: [Int] = [1, 1, 1, 0, 0]
     @State private var yesEvaluation: Int = 3
     @State private var selectedItem: PhotosPickerItem?
-    @State private var selectedImage: Data?
-
+    @State private var imageData: Data?
+    
     // 取得したカレンダーのフォーマットを指定
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy年MM月dd日"
         return formatter
     }()
-
+    
     var body: some View {
         NavigationStack {
             VStack {
                 // 日付
                 Text(matchingData.day, formatter: dateFormatter)
                     .padding()
-
+                
                 // YESタイトル
                 Text(matchingData.yesTitle)
                     .font(.title)
-
+                
                 Divider()
-
+                
                 // コメント
                 Group {
                     HStack {
@@ -55,19 +55,19 @@ struct DetailView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-
+                    
                     if !isEditing {
                         Text(matchingData.comment)
                             .frame(height: 40)
                             .padding()
                     } else { // 編集画面
-                        TextField("\(matchingData.comment)", text: $editingComent)
+                        TextField("\(matchingData.comment)", text: $comment)
                             .padding()
                     }
                 }
-
+                
                 Divider()
-
+                
                 // YES評価の編集
                 VStack {
                     HStack {
@@ -123,43 +123,60 @@ struct DetailView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                     }
                 }
-
+                
                 Divider()
-
+                
                 // 画像の表示と追加
-                HStack {
-                    Image(systemName: "photo")
-                    Text("画像")
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
-
-                if let image = matchingData.image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 200)
-                        .cornerRadius(10)
-                        .padding()
-                } else {
-                    Text("画像はありません")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                        .padding()
-                }
-
-                Spacer()
-
-                // 保存ボタン
-                Button(action: saveChanges) {
-                    Text("保存する")
-                        .bold()
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 44)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                        .padding()
+                if !isEditing {
+                    HStack {
+                        Image(systemName: "photo")
+                        Text("画像")
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                    
+                    
+                    if let image = matchingData.image {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 200)
+                            .cornerRadius(10)
+                            .padding()
+                    } else {
+                        Text("画像はありません")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                            .padding()
+                    }
+                } else { // 編集画面
+                    // 画像追加
+                    if let imageData = imageData, let uiImage = UIImage(data: imageData) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 200)
+                            .cornerRadius(10)
+                            .padding()
+                    } else {
+                        PhotosPicker(selection: $selectedItem) {
+                            HStack {
+                                Image(systemName: "photo")
+                                Text("画像を追加")
+                            }
+                            .frame(minHeight: 40)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                        }
+                        .foregroundColor(.black)
+                        .onChange(of: selectedItem) { newItem in
+                            Task {
+                                if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                    imageData = data
+                                }
+                            }
+                        }
+                    }
                 }
             }
             .padding()
@@ -186,6 +203,7 @@ struct DetailView: View {
                         }
                     } else {
                         Button {
+                            saveChanges()
                             isEditing.toggle()
                         } label: {
                             Text("完了")
@@ -197,8 +215,13 @@ struct DetailView: View {
             }
         }
     }
-
+    
     private func saveChanges() {
+        
+        matchingData.comment = comment
+        matchingData.yesEvaluation = yesEvaluation
+        matchingData.imageData = imageData
+        
         do {
             try modelContext.save()
         } catch {
