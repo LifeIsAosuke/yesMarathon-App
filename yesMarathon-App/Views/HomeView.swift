@@ -50,6 +50,10 @@ struct HomeView: View {
     // YESお題の中身
     @Binding var yesLabel: String
     
+    // アラート画面の管理
+    @State private var isPresented: Bool = false
+    @State private var editingText: String = ""
+    
     // 画面更新後の初期化
     init(yesLabel: Binding<String>) {
         self._yesLabel = yesLabel
@@ -97,28 +101,64 @@ struct HomeView: View {
                                 .bold()
                                 .frame(width: 300, height: 180)
                             
-                            // シャッフルボタン
+                            
                             if !isYesButtonTapped {
-                                Button(action: {
-                                    yesLabel = YesSuggestion().random()
-                                }) {
-                                    VStack {
-                                        ZStack {
-                                            Circle()
-                                                .foregroundColor(Color.yesLightGray)
-                                                .opacity(0.8)
-                                                .frame(width: 48, height: 48)
-                                            Image(systemName: "arrow.trianglehead.2.clockwise")
+                                VStack {
+                                    // シャッフルボタン
+                                    Button{
+                                        yesLabel = YesSuggestion().random()
+                                    } label: {
+                                        VStack {
+                                            ZStack {
+                                                Circle()
+                                                    .foregroundColor(Color.yesLightGray)
+                                                    .opacity(0.8)
+                                                    .frame(width: 48, height: 48)
+                                                Image(systemName: "arrow.trianglehead.2.clockwise")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 24))
+                                            }
+                                            Text("シャッフル")
                                                 .foregroundColor(.black)
-                                                .font(.system(size: 24))
+                                                .font(.system(size: 10))
                                         }
-                                        Text("シャッフル")
-                                            .foregroundColor(.black)
-                                            .font(.system(size: 10))
                                     }
+                                    
+                                    Button {
+                                        // Initialize editingText with the current yesLabel when presenting
+                                        editingText = yesLabel
+                                        isPresented = true
+                                    } label: {
+                                        VStack {
+                                            ZStack {
+                                                Circle()
+                                                    .foregroundColor(Color.yesLightGray)
+                                                    .opacity(0.8)
+                                                    .frame(width: 48, height: 48)
+                                                Image(systemName: "pencil")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 24))
+                                            }
+                                            Text("自分で決める")
+                                                .foregroundColor(.black)
+                                                .font(.system(size: 10))
+                                        }
+                                    }
+                                    .alert("本日のYESを入力", isPresented: $isPresented, actions: {
+                                        TextField("本日のYES", text: $editingText)
+                                        Button("登録する") {
+                                            // Only update yesLabel if editingText is not empty
+                                            if !editingText.isEmpty {
+                                                yesLabel = editingText
+                                            }
+                                            isPresented = false
+                                        }
+                                        Button("キャンセル", role: .cancel) {
+                                            editingText = ""
+                                            isPresented = false
+                                        }
+                                    })
                                 }
-                                .contentShape(Rectangle())
-                                .accessibilityLabel("お題をシャッフルします")
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -255,7 +295,7 @@ struct HomeView: View {
                                 // キャンセル
                                 Button (action: {
                                     comment = ""
-                                
+                                    
                                     yesEvaluation = 3
                                     
                                     stars = [1, 1, 1, 0, 0]
