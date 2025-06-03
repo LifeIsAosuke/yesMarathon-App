@@ -177,7 +177,26 @@ struct DetailView: View {
                             }
                         }
                     }
+                    
+                    if isEditing {
+                        Button {
+                            saveChanges()
+                            isEditing.toggle()
+                        } label: {
+                            ZStack {
+                                Rectangle()
+                                    .fill(Color.yesOrange)
+                                    .frame(height: 60)
+                                    .cornerRadius(10)
+                                Text("保存する")
+                                    .font(.system(size: 20))
+                                    .bold()
+                                    .foregroundColor(.white)
+                            }
+                        }
+                    }
                 }
+                
             }
             .padding()
             .navigationBarBackButtonHidden(true)
@@ -203,12 +222,10 @@ struct DetailView: View {
                         }
                     } else {
                         Button {
-                            saveChanges()
                             isEditing.toggle()
                         } label: {
-                            Text("完了")
+                            Text("キャンセル")
                                 .foregroundColor(.black)
-                                .bold()
                         }
                     }
                 }
