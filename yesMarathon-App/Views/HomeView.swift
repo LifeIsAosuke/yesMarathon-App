@@ -97,29 +97,49 @@ struct HomeView: View {
                                 .bold()
                                 .frame(width: 300, height: 180)
                             
-                            // シャッフルボタン
+                            
                             if !isYesButtonTapped {
-                                Button(action: {
-                                    yesLabel = YesSuggestion().random()
-                                }) {
-                                    VStack {
-                                        ZStack {
-                                            Circle()
-                                                .foregroundColor(Color.yesLightGray)
-                                                .opacity(0.8)
-                                                .frame(width: 48, height: 48)
-                                            Image(systemName: "arrow.trianglehead.2.clockwise")
+                                VStack {
+                                    // シャッフルボタン
+                                    Button{
+                                        yesLabel = YesSuggestion().random()
+                                    } label: {
+                                        VStack {
+                                            ZStack {
+                                                Circle()
+                                                    .foregroundColor(Color.yesLightGray)
+                                                    .opacity(0.8)
+                                                    .frame(width: 48, height: 48)
+                                                Image(systemName: "arrow.trianglehead.2.clockwise")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 24))
+                                            }
+                                            Text("シャッフル")
                                                 .foregroundColor(.black)
-                                                .font(.system(size: 24))
+                                                .font(.system(size: 10))
                                         }
-                                        Text("シャッフル")
-                                            .foregroundColor(.black)
-                                            .font(.system(size: 10))
+                                    }
+                                    
+                                    Button {
+                                        
+                                    } label: {
+                                        VStack {
+                                            ZStack {
+                                                Circle()
+                                                    .foregroundColor(Color.yesLightGray)
+                                                    .opacity(0.8)
+                                                    .frame(width: 48, height: 48)
+                                                Image(systemName: "pencil")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 24))
+                                            }
+                                            Text("自分で決める")
+                                                .foregroundColor(.black)
+                                                .font(.system(size: 10))
+                                        }
                                     }
                                 }
-                                .contentShape(Rectangle())
-                                .accessibilityLabel("お題をシャッフルします")
-                            }
+                                }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding([.leading, .trailing], 16)
