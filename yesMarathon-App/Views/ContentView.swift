@@ -58,6 +58,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .modelContainer(for: [DayChangeManager.self, EachDayData.self])
 }
 
 
