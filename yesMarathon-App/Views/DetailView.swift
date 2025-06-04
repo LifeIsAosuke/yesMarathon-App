@@ -18,12 +18,13 @@ struct DetailView: View {
     // 編集画面を管理する変数
     @State var isEditing: Bool = false
     
-    //---編集中に使う変数---
+    //---編集中に使う変数-------------------------------
     @State private var comment: String = "コメント"
     @State private var stars: [Int] = [1, 1, 1, 0, 0]
     @State private var yesEvaluation: Int = 3
     @State private var selectedItem: PhotosPickerItem?
     @State private var imageData: Data?
+    //-----------------------------------------------
     
     // 取得したカレンダーのフォーマットを指定
     private let dateFormatter: DateFormatter = {
