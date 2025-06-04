@@ -29,6 +29,7 @@ struct YesCalendarView: View {
             Text("\(calculateAchievedDays())日連続達成！！")
                 .font(.largeTitle)
                 .bold()
+            Text(showDayAchievedLabel())
             
             HStack {
                 // 先月のカレンダー情報を取得するボタン
@@ -71,7 +72,7 @@ struct YesCalendarView: View {
                             let matchingData = eachDayDatas.first { eachDayData in
                                 calendar.isDate(eachDayData.day, inSameDayAs: date)
                             }
-
+                            
                             if let data = matchingData {
                                 // yesを達成した日は詳細画面に飛べるようにする
                                 NavigationLink(destination: DetailView(matchingData: data)) {
@@ -147,14 +148,15 @@ struct YesCalendarView: View {
         return leadingEmptyDays + days.map { Optional($0) } + trailingEmptyDays
     }
     
+    // 連続YES達成日数を計算する関数
     private func calculateAchievedDays() -> Int {
         // 現在の日付を取得し、時間をクリアして日付のみにする
         var currentDay = calendar.startOfDay(for: Date())
         var consecutiveCount = 0
-
+        
         // 日付順にソートした達成データを取得
         let achievedData = eachDayDatas.sorted { $0.day > $1.day }
-
+        
         for data in achievedData {
             // 現在のチェック日付とデータの日付を比較
             if calendar.isDate(currentDay, inSameDayAs: data.day) {
@@ -167,8 +169,33 @@ struct YesCalendarView: View {
                 break
             }
         }
-
+        
         return consecutiveCount
+    }
+    
+    private func showDayAchievedLabel() -> String {
+        
+        let yesAchievedDays = calculateAchievedDays()
+        var showLabel: String = ""
+        
+        switch yesAchievedDays {
+        case 0:
+            showLabel = "YESを積み上げていこう"
+            break
+        case 1:
+            showLabel = "YESは大きな一歩！！"
+        case 2:
+            showLabel = "ついにYESが2つ！！"
+        case 3:
+            showLabel = "YESが3つ！！！"
+            case 4...:
+            showLabel = "YESが\(yesAchievedDays)つ！！！"
+        default:
+            print("表示に失敗しました")
+            break
+        }
+        
+        return showLabel
     }
 }
 #Preview {
