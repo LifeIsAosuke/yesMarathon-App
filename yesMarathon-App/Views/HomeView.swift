@@ -9,26 +9,14 @@ import SwiftUI
 import SwiftData
 import PhotosUI
 
-extension Color {
-    // 黄オレンジ色
-    static let yesYellowOrange = Color(red: 255 / 255.0, green: 161 / 255.0, blue: 0 / 255.0)
-    
-    // オレンジ色
-    static let yesOrange = Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0)
-    
-    // 灰色
-    static let yesLightGray = Color(red: 217 / 255.0, green: 217 / 255.0, blue: 217 / 255.0)
-    
-    // 黄色
-    static let yesYellow = Color(red: 253 / 255.0, green: 202 / 255.0, blue: 0 / 255.0)
-}
-
 struct HomeView: View {
     
     // データ管理変数
     @Environment(\.modelContext) private var modelContext
     // DayChangeManagerの情報を取得（配列で取得し状態管理）
     @Query private var dayChangeManager: [DayChangeManager]
+    
+    //-----入力部分に使う変数--------------------------------------
     
     // 日付
     @State private var today : Date = Date()
@@ -53,6 +41,8 @@ struct HomeView: View {
     // アラート画面の管理
     @State private var isPresented: Bool = false
     @State private var editingText: String = ""
+    
+    //------------------------------------------------------------
     
     // 画面更新後の初期化
     init(yesLabel: Binding<String>) {
@@ -264,7 +254,7 @@ struct HomeView: View {
                                                 
                                             }
                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                    
+                                            
                                             
                                             Image(systemName: "chevron.right")
                                                 .frame(maxWidth: .infinity, alignment: .trailing)
@@ -284,9 +274,7 @@ struct HomeView: View {
                                 
                                 
                                 // 登録ボタン
-                                Button(action: {
-                                    addData(yesTitle: yesLabel, day: today, comment: comment, yesEvaluation: yesEvaluation, imageData: imageData)
-                                }) {
+                                Button(action: {addData()}) {
                                     ZStack {
                                         Rectangle()
                                             .fill(Color.yesOrange)
@@ -300,17 +288,7 @@ struct HomeView: View {
                                 }
                                 
                                 // キャンセル
-                                Button (action: {
-                                    comment = ""
-                                    
-                                    yesEvaluation = 3
-                                    
-                                    stars = [1, 1, 1, 0, 0]
-                                    
-                                    imageData = nil
-                                    
-                                    isYesButtonTapped.toggle()
-                                }) {
+                                Button (action:{cansel()}) {
                                     Text("キャンセル")
                                 }
                                 .foregroundColor(.black)
@@ -328,14 +306,15 @@ struct HomeView: View {
         }
     }
     
-    private func addData(yesTitle: String, day: Date, comment: String, yesEvaluation: Int, imageData: Data?) {
+    // SwiftDataに保存するための関数
+    private func addData() {
         // 必須項目の検証
-        guard !yesTitle.isEmpty else {
+        guard !yesLabel.isEmpty else {
             print("お題が未入力です")
             return
         }
         // 入力事項をデータベースに保存
-        let newData = EachDayData(yesTitle: yesTitle, day: day, comment: comment, yesEvaluation: yesEvaluation, imageData: imageData)
+        let newData = EachDayData(yesTitle: yesLabel, day: today, comment: comment, yesEvaluation: yesEvaluation, imageData: imageData)
         do {
             try modelContext.insert(newData)
             // dayChangeManagerのisTrueを更新し、保存
@@ -346,6 +325,15 @@ struct HomeView: View {
         } catch {
             print("データの保存に失敗しました: \(error.localizedDescription)")
         }
+    }
+    
+    // キャンセルボタンタップで各パラメータの初期化
+    private func cansel() {
+        comment = ""
+        yesEvaluation = 3
+        stars = [1, 1, 1, 0, 0]
+        imageData = nil
+        isYesButtonTapped.toggle()
     }
 }
 
