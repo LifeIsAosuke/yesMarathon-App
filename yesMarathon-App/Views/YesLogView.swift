@@ -11,6 +11,8 @@ struct YesLogView: View {
             VStack {
                 
                 YesCalendarView()
+                
+                Spacer()
                     
             }
             .navigationBarBackButtonHidden(true)

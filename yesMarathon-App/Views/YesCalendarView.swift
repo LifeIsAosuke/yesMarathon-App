@@ -27,13 +27,21 @@ struct YesCalendarView: View {
         VStack {
             
             if calculateAchievedDays() >= 2{
-                Text("\(calculateAchievedDays())日連続達成！！")
-                    .font(.largeTitle)
-                    .bold()
+                HStack() {
+                    Text("\(calculateAchievedDays())")
+                        .font(.system(size: 70))
+                        .foregroundColor(Color.yesOrange)
+
+                    Text("日連続達成！！")
+                        .font(.system(size: 35))
+                        .alignmentGuide(.bottom) { dimension in dimension[.bottom]}
+                }
+                .bold()
             }
             
             // 一言コメント表示
             Text(showDayAchievedLabel())
+                .padding()
             
             HStack {
                 // 先月のカレンダー情報を取得するボタン
@@ -182,19 +190,14 @@ struct YesCalendarView: View {
         var showLabel: String = ""
         
         switch yesAchievedDays {
-        case 0:
-            showLabel = "YESを積み上げていこう"
+        case 0...100:
+            showLabel = motivationalComments[yesAchievedDays]
             break
-        case 1:
-            showLabel = "YESは大きな一歩！！"
-        case 2:
-            showLabel = "ついにYESが2つ！！"
-        case 3:
-            showLabel = "YESが3つ！！！"
-            case 4...:
-            showLabel = "YESが\(yesAchievedDays)つ！！！"
+            case 101...:
+            showLabel = "101日以上達成です！おめでとう！"
+            break
         default:
-            print("表示に失敗しました")
+            print("コメントの表示に失敗しました")
             break
         }
         
