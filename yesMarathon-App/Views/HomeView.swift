@@ -258,11 +258,18 @@ struct HomeView: View {
                                 } else {
                                     PhotosPicker(selection: $selectedItem) {
                                         HStack {
-                                            Image(systemName: "photo")
-                                            Text("画像を追加")
+                                            HStack {
+                                                Image(systemName: "photo")
+                                                Text("画像を追加")
+                                                
+                                            }
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                            
+                                            Image(systemName: "chevron.right")
+                                                .frame(maxWidth: .infinity, alignment: .trailing)
                                         }
                                         .frame(minHeight: 40)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
                                         .padding()
                                     }
                                     .foregroundColor(.black)

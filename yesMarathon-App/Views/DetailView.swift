@@ -19,7 +19,7 @@ struct DetailView: View {
     @State var isEditing: Bool = false
     
     //---編集中に使う変数---
-    @State private var comment: String = ""
+    @State private var comment: String = "コメント"
     @State private var stars: [Int] = [1, 1, 1, 0, 0]
     @State private var yesEvaluation: Int = 3
     @State private var selectedItem: PhotosPickerItem?
@@ -161,11 +161,18 @@ struct DetailView: View {
                     } else {
                         PhotosPicker(selection: $selectedItem) {
                             HStack {
-                                Image(systemName: "photo")
-                                Text("画像を追加")
+                                HStack {
+                                    Image(systemName: "photo")
+                                    Text("画像を追加")
+                                    
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                                
+                                Image(systemName: "chevron.right")
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
                             }
                             .frame(minHeight: 40)
-                            .frame(maxWidth: .infinity, alignment: .leading)
                             .padding()
                         }
                         .foregroundColor(.black)
@@ -202,15 +209,17 @@ struct DetailView: View {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        HStack {
-                            Image(systemName: "chevron.backward")
-                            Text("戻る")
+                    if !isEditing {
+                        Button {
+                            dismiss()
+                        } label: {
+                            HStack {
+                                Image(systemName: "chevron.backward")
+                                Text("戻る")
+                            }
                         }
+                        .foregroundColor(.black)
                     }
-                    .foregroundColor(.black)
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     if !isEditing{
