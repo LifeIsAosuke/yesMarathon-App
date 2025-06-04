@@ -20,7 +20,7 @@ struct ContentView: View {
     }
 
     @State private var yesLabel: String = YesSuggestion().random()
-    let yesSuggestion = YesSuggestion()
+    let yesSuggestion = YesSuggestion() 
 
     var body: some View {
         Group {

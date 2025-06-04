@@ -10,10 +10,6 @@ struct YesLogView: View {
         NavigationStack {
             VStack {
                 
-                Text("8日連続達成！！")
-                    .font(.largeTitle)
-                    .bold()
-                
                 YesCalendarView()
                     
             }

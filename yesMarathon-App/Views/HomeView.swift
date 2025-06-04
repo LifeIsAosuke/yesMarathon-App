@@ -76,11 +76,12 @@ struct HomeView: View {
                     VStack {
                         
                         Text("本日のYES")
-                            .foregroundColor(Color.yesLightGray)
+                            .foregroundColor(.black)
+                            .opacity(0.5)
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.leading, 40)
-                            .padding(.top, 40)
+                            .padding(.leading, 50)
+                            .padding(.top, 60)
                         
                         //お題ラベル
                         HStack {

@@ -25,6 +25,11 @@ struct YesCalendarView: View {
     
     var body: some View {
         VStack {
+            
+            Text("\(calculateAchievedDays())日連続達成！！")
+                .font(.largeTitle)
+                .bold()
+            
             HStack {
                 // 先月のカレンダー情報を取得するボタン
                 Button(action: { changeMonth(by: -1) }) {
@@ -140,6 +145,30 @@ struct YesCalendarView: View {
         
         // 先頭の空白セル、日付、末尾の空白セルを結合して返す
         return leadingEmptyDays + days.map { Optional($0) } + trailingEmptyDays
+    }
+    
+    private func calculateAchievedDays() -> Int {
+        // 現在の日付を取得し、時間をクリアして日付のみにする
+        var currentDay = calendar.startOfDay(for: Date())
+        var consecutiveCount = 0
+
+        // 日付順にソートした達成データを取得
+        let achievedData = eachDayDatas.sorted { $0.day > $1.day }
+
+        for data in achievedData {
+            // 現在のチェック日付とデータの日付を比較
+            if calendar.isDate(currentDay, inSameDayAs: data.day) {
+                consecutiveCount += 1
+                // 次の日を過去に1日進める
+                if let previousDay = calendar.date(byAdding: .day, value: -1, to: currentDay) {
+                    currentDay = previousDay
+                }
+            } else {
+                break
+            }
+        }
+
+        return consecutiveCount
     }
 }
 #Preview {
