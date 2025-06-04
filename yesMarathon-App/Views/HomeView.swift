@@ -264,7 +264,7 @@ struct HomeView: View {
                                                 
                                             }
                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                
+                                    
                                             
                                             Image(systemName: "chevron.right")
                                                 .frame(maxWidth: .infinity, alignment: .trailing)
