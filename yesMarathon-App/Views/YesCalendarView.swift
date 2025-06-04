@@ -68,25 +68,25 @@ struct YesCalendarView: View {
                             }
 
                             if let data = matchingData {
-                                // Show NavigationLink if matching data exists
+                                // yesを達成した日は詳細画面に飛べるようにする
                                 NavigationLink(destination: DetailView(matchingData: data)) {
                                     VStack {
                                         ZStack {
+                                            Circle()
+                                                .frame(width: 40, height: 40)
+                                                .foregroundColor(Color.yesOrange)
+                                                .opacity(0.8)
+                                            
                                             Text("\(calendar.component(.day, from: date))")
                                                 .font(.headline)
                                                 .foregroundColor(.primary)
-
-                                            Circle()
-                                                .frame(width: 40, height: 40)
-                                                .foregroundColor(Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0))
-                                                .opacity(0.5)
                                         }
                                     }
                                     .frame(width: cellSize, height: cellSize)
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             } else {
-                                // Show regular text if no matching data exists
+                                // それ以外は日付ラベル
                                 Text("\(calendar.component(.day, from: date))")
                                     .font(.headline)
                                     .foregroundColor(.primary)
@@ -144,6 +144,7 @@ struct YesCalendarView: View {
 }
 #Preview {
     YesCalendarView()
+        .modelContainer(for: [DayChangeManager.self, EachDayData.self])
 }
 
 extension DateFormatter {
