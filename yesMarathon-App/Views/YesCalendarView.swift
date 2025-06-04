@@ -25,6 +25,24 @@ struct YesCalendarView: View {
     
     var body: some View {
         VStack {
+            
+            if calculateAchievedDays() >= 2{
+                HStack() {
+                    Text("\(calculateAchievedDays())")
+                        .font(.system(size: 70))
+                        .foregroundColor(Color.yesOrange)
+
+                    Text("日連続達成！！")
+                        .font(.system(size: 35))
+                        .alignmentGuide(.bottom) { dimension in dimension[.bottom]}
+                }
+                .bold()
+            }
+            
+            // 一言コメント表示
+            Text(showDayAchievedLabel())
+                .padding()
+            
             HStack {
                 // 先月のカレンダー情報を取得するボタン
                 Button(action: { changeMonth(by: -1) }) {
@@ -33,7 +51,6 @@ struct YesCalendarView: View {
                 Spacer()
                 // 現在の年月
                 Text(displayedDate, formatter: dateFormatter)
-                    .font(.title)
                     .bold()
                 Spacer()
                 // 来月のカレンダー情報を取得するボタン
@@ -46,7 +63,7 @@ struct YesCalendarView: View {
             
             // 曜日ヘッダー
             HStack {
-                ForEach(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], id: \.self) { day in
+                ForEach(["日", "月", "火", "水", "木", "金", "土"], id: \.self) { day in
                     Text(day)
                         .bold()
                         .frame(maxWidth: .infinity)
@@ -66,7 +83,7 @@ struct YesCalendarView: View {
                             let matchingData = eachDayDatas.first { eachDayData in
                                 calendar.isDate(eachDayData.day, inSameDayAs: date)
                             }
-
+                            
                             if let data = matchingData {
                                 // yesを達成した日は詳細画面に飛べるようにする
                                 NavigationLink(destination: DetailView(matchingData: data)) {
@@ -140,6 +157,51 @@ struct YesCalendarView: View {
         
         // 先頭の空白セル、日付、末尾の空白セルを結合して返す
         return leadingEmptyDays + days.map { Optional($0) } + trailingEmptyDays
+    }
+    
+    // 連続YES達成日数を計算する関数
+    private func calculateAchievedDays() -> Int {
+        // 現在の日付を取得し、時間をクリアして日付のみにする
+        var currentDay = calendar.startOfDay(for: Date())
+        var consecutiveCount = 0
+        
+        // 日付順にソートした達成データを取得
+        let achievedData = eachDayDatas.sorted { $0.day > $1.day }
+        
+        for data in achievedData {
+            // 現在のチェック日付とデータの日付を比較
+            if calendar.isDate(currentDay, inSameDayAs: data.day) {
+                consecutiveCount += 1
+                // 次の日を過去に1日進める
+                if let previousDay = calendar.date(byAdding: .day, value: -1, to: currentDay) {
+                    currentDay = previousDay
+                }
+            } else {
+                break
+            }
+        }
+        
+        return consecutiveCount
+    }
+    
+    private func showDayAchievedLabel() -> String {
+        
+        let yesAchievedDays = calculateAchievedDays()
+        var showLabel: String = ""
+        
+        switch yesAchievedDays {
+        case 0...100:
+            showLabel = motivationalComments[yesAchievedDays]
+            break
+            case 101...:
+            showLabel = "101日以上達成です！おめでとう！"
+            break
+        default:
+            print("コメントの表示に失敗しました")
+            break
+        }
+        
+        return showLabel
     }
 }
 #Preview {
