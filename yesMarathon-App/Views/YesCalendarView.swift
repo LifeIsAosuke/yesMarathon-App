@@ -26,9 +26,13 @@ struct YesCalendarView: View {
     var body: some View {
         VStack {
             
-            Text("\(calculateAchievedDays())日連続達成！！")
-                .font(.largeTitle)
-                .bold()
+            if calculateAchievedDays() >= 2{
+                Text("\(calculateAchievedDays())日連続達成！！")
+                    .font(.largeTitle)
+                    .bold()
+            }
+            
+            // 一言コメント表示
             Text(showDayAchievedLabel())
             
             HStack {
@@ -39,7 +43,6 @@ struct YesCalendarView: View {
                 Spacer()
                 // 現在の年月
                 Text(displayedDate, formatter: dateFormatter)
-                    .font(.title)
                     .bold()
                 Spacer()
                 // 来月のカレンダー情報を取得するボタン
@@ -52,7 +55,7 @@ struct YesCalendarView: View {
             
             // 曜日ヘッダー
             HStack {
-                ForEach(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], id: \.self) { day in
+                ForEach(["日", "月", "火", "水", "木", "金", "土"], id: \.self) { day in
                     Text(day)
                         .bold()
                         .frame(maxWidth: .infinity)
