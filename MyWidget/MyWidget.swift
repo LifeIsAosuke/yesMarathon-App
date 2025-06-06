@@ -76,10 +76,14 @@ struct MyWidgetEntryView : View {
                 ZStack {
                     
                     Circle()
-                        .frame(width: 60)
+                        .frame(width: 83)
+                        .foregroundColor(.black)
+                    
+                    Circle()
+                        .frame(width: 80)
                         .foregroundColor(.white)
-                        .border(Color.black, width: 2)
-                        .cornerRadius(10)
+                    
+                    
                     
                     Image("achievedIcon")
                         .resizable()
