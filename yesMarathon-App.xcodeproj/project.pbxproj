@@ -6,7 +6,20 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		428D85992DF183D500D64710 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428D85982DF183D500D64710 /* WidgetKit.framework */; };
+		428D859B2DF183D500D64710 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428D859A2DF183D500D64710 /* SwiftUI.framework */; };
+		428D85A62DF183D700D64710 /* MyWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 428D85962DF183D500D64710 /* MyWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
+		428D85A42DF183D700D64710 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42BF139E2DE7514400E7B73B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 428D85952DF183D500D64710;
+			remoteInfo = MyWidgetExtension;
+		};
 		42BF13B42DE7514500E7B73B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 42BF139E2DE7514400E7B73B /* Project object */;
@@ -23,13 +36,48 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		428D85A72DF183D700D64710 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				428D85A62DF183D700D64710 /* MyWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		428D85962DF183D500D64710 /* MyWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MyWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		428D85982DF183D500D64710 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		428D859A2DF183D500D64710 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		42BF13A62DE7514400E7B73B /* yesMarathon-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "yesMarathon-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42BF13B32DE7514500E7B73B /* yesMarathon-AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "yesMarathon-AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42BF13BD2DE7514500E7B73B /* yesMarathon-AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "yesMarathon-AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		428D85AA2DF183D700D64710 /* Exceptions for "MyWidget" folder in "MyWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 428D85952DF183D500D64710 /* MyWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		428D859C2DF183D500D64710 /* MyWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				428D85AA2DF183D700D64710 /* Exceptions for "MyWidget" folder in "MyWidgetExtension" target */,
+			);
+			path = MyWidget;
+			sourceTree = "<group>";
+		};
 		42BF13A82DE7514400E7B73B /* yesMarathon-App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "yesMarathon-App";
@@ -48,6 +96,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		428D85932DF183D500D64710 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				428D859B2DF183D500D64710 /* SwiftUI.framework in Frameworks */,
+				428D85992DF183D500D64710 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		42BF13A32DE7514400E7B73B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -72,12 +129,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		428D85972DF183D500D64710 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				428D85982DF183D500D64710 /* WidgetKit.framework */,
+				428D859A2DF183D500D64710 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		42BF139D2DE7514400E7B73B = {
 			isa = PBXGroup;
 			children = (
 				42BF13A82DE7514400E7B73B /* yesMarathon-App */,
 				42BF13B62DE7514500E7B73B /* yesMarathon-AppTests */,
 				42BF13C02DE7514500E7B73B /* yesMarathon-AppUITests */,
+				428D859C2DF183D500D64710 /* MyWidget */,
+				428D85972DF183D500D64710 /* Frameworks */,
 				42BF13A72DE7514400E7B73B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,6 +156,7 @@
 				42BF13A62DE7514400E7B73B /* yesMarathon-App.app */,
 				42BF13B32DE7514500E7B73B /* yesMarathon-AppTests.xctest */,
 				42BF13BD2DE7514500E7B73B /* yesMarathon-AppUITests.xctest */,
+				428D85962DF183D500D64710 /* MyWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,6 +164,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		428D85952DF183D500D64710 /* MyWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 428D85AB2DF183D700D64710 /* Build configuration list for PBXNativeTarget "MyWidgetExtension" */;
+			buildPhases = (
+				428D85922DF183D500D64710 /* Sources */,
+				428D85932DF183D500D64710 /* Frameworks */,
+				428D85942DF183D500D64710 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				428D859C2DF183D500D64710 /* MyWidget */,
+			);
+			name = MyWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = MyWidgetExtension;
+			productReference = 428D85962DF183D500D64710 /* MyWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		42BF13A52DE7514400E7B73B /* yesMarathon-App */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 42BF13C72DE7514500E7B73B /* Build configuration list for PBXNativeTarget "yesMarathon-App" */;
@@ -102,10 +193,12 @@
 				42BF13A22DE7514400E7B73B /* Sources */,
 				42BF13A32DE7514400E7B73B /* Frameworks */,
 				42BF13A42DE7514400E7B73B /* Resources */,
+				428D85A72DF183D700D64710 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				428D85A52DF183D700D64710 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				42BF13A82DE7514400E7B73B /* yesMarathon-App */,
@@ -170,9 +263,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1630;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
+					428D85952DF183D500D64710 = {
+						CreatedOnToolsVersion = 16.4;
+					};
 					42BF13A52DE7514400E7B73B = {
 						CreatedOnToolsVersion = 16.3;
 					};
@@ -203,11 +299,19 @@
 				42BF13A52DE7514400E7B73B /* yesMarathon-App */,
 				42BF13B22DE7514500E7B73B /* yesMarathon-AppTests */,
 				42BF13BC2DE7514500E7B73B /* yesMarathon-AppUITests */,
+				428D85952DF183D500D64710 /* MyWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		428D85942DF183D500D64710 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		42BF13A42DE7514400E7B73B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -232,6 +336,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		428D85922DF183D500D64710 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		42BF13A22DE7514400E7B73B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -256,6 +367,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		428D85A52DF183D700D64710 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 428D85952DF183D500D64710 /* MyWidgetExtension */;
+			targetProxy = 428D85A42DF183D700D64710 /* PBXContainerItemProxy */;
+		};
 		42BF13B52DE7514500E7B73B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 42BF13A52DE7514400E7B73B /* yesMarathon-App */;
@@ -269,6 +385,62 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		428D85A82DF183D700D64710 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8CG4864C4M;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MyWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MyWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "app.Suzuki.Aosuke.yesMarathon-App.MyWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		428D85A92DF183D700D64710 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8CG4864C4M;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MyWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MyWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "app.Suzuki.Aosuke.yesMarathon-App.MyWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		42BF13C52DE7514500E7B73B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -515,6 +687,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		428D85AB2DF183D700D64710 /* Build configuration list for PBXNativeTarget "MyWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				428D85A82DF183D700D64710 /* Debug */,
+				428D85A92DF183D700D64710 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		42BF13A12DE7514400E7B73B /* Build configuration list for PBXProject "yesMarathon-App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -64,7 +64,7 @@ struct AchievedView: View {
                                 Text("YESログ")
                                     .font(.caption)
                             }
-                            .foregroundColor(Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0))
+                            .foregroundColor(Color.yesOrange)
                             .padding()
                         }
                     }
@@ -75,7 +75,7 @@ struct AchievedView: View {
         // 画面遷移後アニメーション開始
         .onAppear {
             
-            backgroundColor = Color(red: 255 / 255.0, green: 123 / 255.0, blue: 0 / 255.0)
+            backgroundColor = Color.yesOrange
             
             // 2秒後にアニメーションを開始
             DispatchQueue.main.asyncAfter(deadline: .now() + 2){
