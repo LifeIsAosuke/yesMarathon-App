@@ -76,12 +76,6 @@ struct MyWidgetEntryView : View {
     var body: some View {
         ZStack {
             
-            Text("YESマラソン")
-                .font(.caption)
-                .foregroundColor(.white)
-                .bold()
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            
             HStack {
                 ZStack {
                     
@@ -113,6 +107,7 @@ struct MyWidgetEntryView : View {
                         .foregroundColor(.white)
                         .bold()
                     Text("\(yesLabel)")
+                        .bold()
                 }
                 .padding()
             }
