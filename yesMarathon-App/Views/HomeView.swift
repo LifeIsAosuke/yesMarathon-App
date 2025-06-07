@@ -362,13 +362,9 @@ struct HomeView: View {
         do {
             try modelContext.insert(newData)
             // dayChangeManagerのisTrueを更新し、保存
-            if let manager = dayChangeManager.first {
-                manager.isTrue = true
-                try? modelContext.save()
-                //                modelContext.save()
-            } else {
-                print("dayChangeMnagerのデータが取得できません")
-            }
+            currentManager?.isTrue = true
+            try modelContext.save()
+
         } catch {
             print("データの保存に失敗しました: \(error.localizedDescription)")
         }
