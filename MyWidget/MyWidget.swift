@@ -101,6 +101,7 @@ struct MyWidgetEntryView : View {
                         Text("2")
                             .foregroundColor(.white)
                             .font(.system(size: 20))
+                            .bold()
                         Text("日目 🔥🔥")
                             .font(.system(size: 15))
                     }
