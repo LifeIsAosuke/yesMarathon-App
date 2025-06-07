@@ -44,6 +44,7 @@ struct HomeView: View {
     // アラート画面の管理
     @State private var isPresented: Bool = false
     @State private var editingText: String = ""
+    @State private var yesSuggestion = YesSuggestion()
     //------------------------------------------------------------
     
     var body: some View {
@@ -96,16 +97,7 @@ struct HomeView: View {
                                     // シャッフルボタン
                                     Button{
                                         yesLabel = YesSuggestion().random()
-                                        currentManager?.EditYesTitle(yesTitle: yesLabel)
-                                        do {
-                                            try modelContext.save()
-                                            print("\(currentManager?.showYesTitle())")
-                                        } catch {
-                                            print("シャッフルによるデータベースの保存に失敗しました")
-                                        }
-                                        
-                                        // widgetを更新
-                                        WidgetCenter.shared.reloadAllTimelines()
+                                        modifyYesLabel()
                                         
                                     } label: {
                                         VStack {
@@ -126,7 +118,7 @@ struct HomeView: View {
                                     
                                     Button {
                                         // Initialize editingText with the current yesLabel when presenting
-                                        editingText = yesLabel
+                                        editingText = ""
                                         isPresented = true
                                     } label: {
                                         VStack {
@@ -145,29 +137,20 @@ struct HomeView: View {
                                         }
                                     }
                                     .alert("本日のYESを入力", isPresented: $isPresented, actions: {
-                                        TextField("本日のYES", text: $editingText)
+                                        TextField("\(yesSuggestion.random())", text: $editingText)
 
                                         
                                         Button{
-                                            // Only update yesLabel if editingText is not empty
+                                            // 変更があればYESラベルに登録
                                             if !editingText.isEmpty {
                                                 yesLabel = editingText
                                             }
                                             
-                                            
-                                            currentManager?.EditYesTitle(yesTitle: yesLabel)
-                                            do {
-                                                try modelContext.save()
-                                            } catch {
-                                                print("自分で決めるボタンでの登録エラー")
-                                            }
+                                            modifyYesLabel() // YESラベルを変更
                                             
                                             // アラート画面を閉じる
                                             isPresented = false
-                                            
-                                            // widgetを更新
-                                            WidgetCenter.shared.reloadAllTimelines()
-                                            
+    
                                         } label: {
                                             Text("登録する")
                                                 .bold()
@@ -371,6 +354,19 @@ struct HomeView: View {
         stars = [1, 1, 1, 0, 0]
         imageData = nil
         isYesButtonTapped.toggle()
+    }
+    
+    // YESラベルを変更した時に呼ばれる
+    private func modifyYesLabel() {
+        // データベースに本日のYESの変更内容を保存
+        currentManager?.EditYesTitle(yesTitle: yesLabel)
+        do {
+            try modelContext.save()
+        } catch {
+            print("本日のYESの更新に失敗しました")
+        }
+        // widgetを更新
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
 
