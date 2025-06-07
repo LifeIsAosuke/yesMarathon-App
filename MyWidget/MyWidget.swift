@@ -99,17 +99,26 @@ struct MyWidgetEntryView : View {
                 VStack() {
                     HStack {
                         Text("2")
-                        Text("日目 🔥")
+                            .foregroundColor(.white)
+                            .font(.system(size: 20))
+                        Text("日目 🔥🔥")
+                            .font(.system(size: 15))
                     }
+                    
+                    Divider()
+                        .frame(height: 0.3) // Dividerの太さを設定
+                        .background(Color.black) // Dividerの色を指定
+                        .padding(.bottom,5)
+                    
                     Text("本日のYES")
-                        .frame(width: .infinity, alignment: .leading)
-                        .font(.system(size: 10))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.system(size: 11))
                         .foregroundColor(.white)
                         .bold()
+                        .padding(.bottom, 1)
                     Text("\(yesLabel)")
                         .bold()
                 }
-                .padding()
             }
         }
         .onAppear {
