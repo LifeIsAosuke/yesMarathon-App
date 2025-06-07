@@ -47,6 +47,10 @@ struct HomeView: View {
     @State private var yesSuggestion = YesSuggestion()
     //------------------------------------------------------------
     
+    // Yesボタンタップ時のアニメーション起動フラグ変数
+    @State private var animationFlag: Bool = false
+    @State private var animationScale: Double = 1.2
+    
     var body: some View {
         NavigationStack {
             
@@ -171,21 +175,34 @@ struct HomeView: View {
                     if !isYesButtonTapped{
                         // YESボタン
                         Button() {
-                            isYesButtonTapped.toggle()
+                            // アニメーション開始
+                            animationFlag.toggle()
+                            // 画面切り替え
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                animationFlag.toggle()
+                                isYesButtonTapped.toggle()
+                            }
+                            
                         } label: {
                             ZStack {
                                 Circle()
                                     .foregroundColor(Color.yesYellowOrange)
                                     .frame(width: 320, height: 320)
+                                    .scaleEffect(animationFlag ? 1.1 : 1.0)
                                 Circle()
                                     .foregroundColor(Color.yesOrange)
                                     .frame(width: 310, height: 310)
+                                    .scaleEffect(animationFlag ? 1.1 : 1.0)
                                 Text("YES!")
                                     .font(.system(size: 90))
                                     .bold()
                                     .foregroundColor(.white)
+                                    .scaleEffect(animationFlag ? 1.1 : 1.0)
                             }
                         }
+                        
+                        
+                        
                         
                     } else {
                         ScrollView {

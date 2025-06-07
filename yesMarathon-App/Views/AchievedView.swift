@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct AchievedView: View {
     
-    // アニメーションフラグ変数(Home画面から遷移したときtrueに)
-    @State private var isAnimating: Bool = false
+    // データベースからDayChangeManagerの情報を取得
+    @Query private var dayChangeManager: [DayChangeManager]
+    @State private var currentManager: DayChangeManager?
     
     //　背景色
     @State private var backgroundColor: Color = Color.white
@@ -18,12 +20,16 @@ struct AchievedView: View {
     // アイコンのアニメーション用変数
     @State private var iconScale: CGFloat = 0.0
     
+    // アニメーションを適応するかの管理用変数
+    @State private var isAnimated: Bool = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
                 
                 // 背景
                 backgroundColor.ignoresSafeArea()
+                   
                 
                 VStack {
                     
@@ -74,6 +80,8 @@ struct AchievedView: View {
         }
         // 画面遷移後アニメーション開始
         .onAppear {
+            
+            currentManager = dayChangeManager.first
             
             backgroundColor = Color.yesOrange
             
