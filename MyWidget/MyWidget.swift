@@ -40,7 +40,7 @@ struct Provider: TimelineProvider {
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
         for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
+            let entryDate = Calendar.current.date(byAdding: .minute, value: 15, to: .now)!
             let entry = SimpleEntry(date: .now, yesData: sampleData)
             entries.append(entry)
         }
@@ -67,6 +67,9 @@ struct MyWidgetEntryView : View {
     @Query private var dayChangeManager: [DayChangeManager]
     @State private var currentManager: DayChangeManager?
     //-----------------------------------------------------
+    
+    // 本日のYES表示用
+    @State private var yesLabel: String = "Hello world"
     
     var entry: Provider.Entry
     
@@ -101,7 +104,7 @@ struct MyWidgetEntryView : View {
                 
                 VStack() {
                     HStack {
-                        Text("\(sampleData.achievedCount)")
+                        Text("2")
                         Text("日目 🔥")
                     }
                     Text("本日のYES")
@@ -109,13 +112,17 @@ struct MyWidgetEntryView : View {
                         .font(.system(size: 10))
                         .foregroundColor(.white)
                         .bold()
-                    Text("\(currentManager?.showYesTitle())")
+                    Text("\(yesLabel)")
                 }
                 .padding()
             }
         }
         .onAppear {
             currentManager = dayChangeManager.first
+            yesLabel = currentManager?.showYesTitle() ?? "DayChangeManagerの取得に失敗しているよ"
+        }
+        .onChange(of: currentManager) { _ in
+            yesLabel = currentManager?.showYesTitle() ?? "更新に失敗しているよ"
         }
     }
 }
