@@ -13,20 +13,17 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     // データベースに登録されているDayChangeManager型のインスタンスを全て取得
     @Query private var dayChangeManager: [DayChangeManager]
+    
     // ------------------------------
 
     @State private var currentManager: DayChangeManager?
-    
-    @State private var yesLabel: String = "Hello World"
-    
-//    let yesSuggestion = YesSuggestion()
 
     var body: some View {
         Group {
             if currentManager?.isTrue == true { // isTrue == true
                 AchievedView()
             } else if currentManager?.isTrue == false { // isTrue == true
-                HomeView(yesLabel: $yesLabel)
+                HomeView()
             } else {
                 Text("画面読み込みに失敗しました")
             }
@@ -47,7 +44,6 @@ struct ContentView: View {
     private func initializeManager() -> DayChangeManager {
         // DayChangeManagerのインスタンス化
         let newManager = DayChangeManager(yesTitle: YesSuggestion().random())
-        yesLabel = newManager.showYesTitle()
         
         
         modelContext.insert(newManager)
@@ -76,7 +72,6 @@ struct ContentView: View {
             manager.isTrue = false // 画面をHomeViewに
             
             manager.EditYesTitle(yesTitle: YesSuggestion().random()) // 新しいお題に変更
-            yesLabel = manager.showYesTitle()
             
 
             do {
@@ -102,3 +97,4 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+
