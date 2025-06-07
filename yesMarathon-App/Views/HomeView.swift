@@ -322,6 +322,9 @@ struct HomeView: View {
             if let manager = dayChangeManager.first {
                 manager.isTrue = true
                 try? modelContext.save()
+//                modelContext.save()
+            } else {
+                print("dayChangeMnagerのデータが取得できません")
             }
         } catch {
             print("データの保存に失敗しました: \(error.localizedDescription)")
@@ -340,4 +343,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView(yesLabel: .constant(YesSuggestion().random()))
+        .modelContainer(for: [DayChangeManager.self, EachDayData.self])
 }

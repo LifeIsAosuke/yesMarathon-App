@@ -8,56 +8,71 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    
-    // データベースの情報管理用
+    // -----データベースから情報を取得-----
     @Environment(\.modelContext) private var modelContext
-    // データベースから管理データを取得
     @Query private var dayChangeManager: [DayChangeManager]
-    
-    //　DayChangeManagerがインスタンス化されていなければ初期化
-    private var currentManager: DayChangeManager {
-        dayChangeManager.first ?? initializeManager()
-    }
+    // ------------------------------
 
+    @State private var currentManager: DayChangeManager?
     @State private var yesLabel: String = YesSuggestion().random()
-    let yesSuggestion = YesSuggestion() 
+    let yesSuggestion = YesSuggestion()
 
     var body: some View {
         Group {
-            if currentManager.isTrue {
+            if currentManager?.isTrue == true { // isTrue == true
                 AchievedView()
-            } else {
+            } else if currentManager?.isTrue == false { // isTrue == true
                 HomeView(yesLabel: $yesLabel)
+            } else {
+                Text("画面読み込みに失敗しました")
             }
         }
         .onAppear {
             if dayChangeManager.isEmpty {
-                initializeManager()
+                currentManager = initializeManager()
+            } else {
+                currentManager = dayChangeManager.first
             }
             startYesLabelUpdate()
         }
+        .onChange(of: dayChangeManager) { _ in
+            currentManager = dayChangeManager.first
+        }
     }
 
-    // DaychengeManagerの初期化
     private func initializeManager() -> DayChangeManager {
         let newManager = DayChangeManager()
-        // swiftDataに追加・更新
         modelContext.insert(newManager)
         try? modelContext.save()
         return newManager
     }
 
-    // 日付を越したか検知する関数
     private func startYesLabelUpdate() {
-        let midnight = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 0, minute: 0, second: 0), matchingPolicy: .nextTime)!
+        guard let midnight = Calendar.current.nextDate(
+            after: Date(),
+            matching: DateComponents(hour: 0, minute: 0, second: 0),
+            matchingPolicy: .nextTime
+        ) else {
+            print("Failed to calculate the next midnight.")
+            return
+        }
+
         let timeInterval = midnight.timeIntervalSinceNow
 
         Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { _ in
-            // 本日のYES更新
-            currentManager.isTrue = false
-            try? modelContext.save()
-            yesLabel = yesSuggestion.random()
-            startYesLabelUpdate() // 再帰的に処理
+            guard let manager = currentManager else { return }
+            manager.isTrue = false
+//            manager.yesTitle = yesSuggestion.random()
+            do {
+                try modelContext.save()
+                DispatchQueue.main.async {
+                    currentManager = manager
+//                    yesLabel = manager.yesTitle
+                }
+            } catch {
+                print("Failed to save updates to currentManager: \(error.localizedDescription)")
+            }
+            startYesLabelUpdate()
         }
     }
 }

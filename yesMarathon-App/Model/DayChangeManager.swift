@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class DayChangeManager {
-    var isTrue: Bool
+    @Attribute var isTrue: Bool = false
     
     init() {
         self.isTrue = false
