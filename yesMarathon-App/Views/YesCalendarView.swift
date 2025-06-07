@@ -9,12 +9,15 @@ import SwiftUI
 import SwiftData
 
 struct YesCalendarView: View {
+    
+    
+    // SwiftDataからEachData型のインスタンスを全て取得
+    @Query private var eachDayDatas: [EachDayData]
+    
     // 現在の日付を取得
     @State private var displayedDate: Date = Date()
     // 現在のカレンダーを取得
     let calendar = Calendar.current
-    // SwiftDataからYES情報を取得
-    @Query private var eachDayDatas: [EachDayData]
     
     // 取得したカレンダーのフォーマットを指定
     private let dateFormatter: DateFormatter = {

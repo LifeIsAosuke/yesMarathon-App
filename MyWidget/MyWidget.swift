@@ -7,6 +7,7 @@
 
 import WidgetKit
 import SwiftUI
+import SwiftData
 
 // ウィジェットに表示するデータ構造
 struct yesData: Identifiable {
@@ -39,7 +40,7 @@ struct Provider: TimelineProvider {
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
         for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
+            let entryDate = Calendar.current.date(byAdding: .minute, value: 15, to: .now)!
             let entry = SimpleEntry(date: .now, yesData: sampleData)
             entries.append(entry)
         }
@@ -61,6 +62,15 @@ struct SimpleEntry: TimelineEntry {
 
 // ウィジェットの見た目
 struct MyWidgetEntryView : View {
+    
+    // DayChangeManagerの情報を取得--------------------------
+    @Query private var dayChangeManager: [DayChangeManager]
+    @State private var currentManager: DayChangeManager?
+    //-----------------------------------------------------
+    
+    // 本日のYES表示用
+    @State private var yesLabel: String = "Hello world"
+    
     var entry: Provider.Entry
     
     var body: some View {
@@ -94,7 +104,7 @@ struct MyWidgetEntryView : View {
                 
                 VStack() {
                     HStack {
-                        Text("\(sampleData.achievedCount)")
+                        Text("2")
                         Text("日目 🔥")
                     }
                     Text("本日のYES")
@@ -102,10 +112,17 @@ struct MyWidgetEntryView : View {
                         .font(.system(size: 10))
                         .foregroundColor(.white)
                         .bold()
-                    Text(sampleData.yesLabel)
+                    Text("\(yesLabel)")
                 }
                 .padding()
             }
+        }
+        .onAppear {
+            currentManager = dayChangeManager.first
+            yesLabel = currentManager?.showYesTitle() ?? "DayChangeManagerの取得に失敗しているよ"
+        }
+        .onChange(of: currentManager) { _ in
+            yesLabel = currentManager?.showYesTitle() ?? "更新に失敗しているよ"
         }
     }
 }
@@ -118,12 +135,13 @@ struct MyWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             if #available(iOS 17.0, *) {
                 MyWidgetEntryView(entry: entry)
-                //                    .containerBackground(.fill.tertiary, for: .widget)
                     .containerBackground(Color.yesOrange, for: .widget)
+                    .modelContainer(for: [DayChangeManager.self])
             } else {
                 MyWidgetEntryView(entry: entry)
                     .padding()
                     .background()
+                    .modelContainer(for: [DayChangeManager.self])
             }
         }
         .configurationDisplayName("YESマラソン")

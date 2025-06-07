@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import PhotosUI
+import WidgetKit
 
 struct HomeView: View {
     
@@ -101,6 +102,10 @@ struct HomeView: View {
                                         } catch {
                                             print("シャッフルによるデータベースの保存に失敗しました")
                                         }
+                                        
+                                        // widgetを更新
+                                        WidgetCenter.shared.reloadAllTimelines()
+                                        
                                     } label: {
                                         VStack {
                                             ZStack {
@@ -158,6 +163,10 @@ struct HomeView: View {
                                             
                                             // アラート画面を閉じる
                                             isPresented = false
+                                            
+                                            // widgetを更新
+                                            WidgetCenter.shared.reloadAllTimelines()
+                                            
                                         } label: {
                                             Text("登録する")
                                                 .bold()
