@@ -57,6 +57,7 @@
 		42BF13A62DE7514400E7B73B /* yesMarathon-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "yesMarathon-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42BF13B32DE7514500E7B73B /* yesMarathon-AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "yesMarathon-AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42BF13BD2DE7514500E7B73B /* yesMarathon-AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "yesMarathon-AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42C42B112DF3EB5E00BA05E7 /* MyWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -64,6 +65,13 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+			);
+			target = 428D85952DF183D500D64710 /* MyWidgetExtension */;
+		};
+		42C42B132DF3EB7C00BA05E7 /* Exceptions for "yesMarathon-App" folder in "MyWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/DayChangeManager.swift,
 			);
 			target = 428D85952DF183D500D64710 /* MyWidgetExtension */;
 		};
@@ -80,6 +88,9 @@
 		};
 		42BF13A82DE7514400E7B73B /* yesMarathon-App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				42C42B132DF3EB7C00BA05E7 /* Exceptions for "yesMarathon-App" folder in "MyWidgetExtension" target */,
+			);
 			path = "yesMarathon-App";
 			sourceTree = "<group>";
 		};
@@ -141,6 +152,7 @@
 		42BF139D2DE7514400E7B73B = {
 			isa = PBXGroup;
 			children = (
+				42C42B112DF3EB5E00BA05E7 /* MyWidgetExtension.entitlements */,
 				42BF13A82DE7514400E7B73B /* yesMarathon-App */,
 				42BF13B62DE7514500E7B73B /* yesMarathon-AppTests */,
 				42BF13C02DE7514500E7B73B /* yesMarathon-AppUITests */,
@@ -390,6 +402,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MyWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8CG4864C4M;
@@ -418,6 +431,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MyWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8CG4864C4M;
@@ -565,6 +579,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "yesMarathon-App/yesMarathon-App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8CG4864C4M;
@@ -593,6 +608,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "yesMarathon-App/yesMarathon-App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8CG4864C4M;

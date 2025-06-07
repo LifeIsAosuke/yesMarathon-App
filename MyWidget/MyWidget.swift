@@ -7,6 +7,7 @@
 
 import WidgetKit
 import SwiftUI
+import SwiftData
 
 // ウィジェットに表示するデータ構造
 struct yesData: Identifiable {
@@ -61,6 +62,12 @@ struct SimpleEntry: TimelineEntry {
 
 // ウィジェットの見た目
 struct MyWidgetEntryView : View {
+    
+    // DayChangeManagerの情報を取得--------------------------
+    @Query private var dayChangeManager: [DayChangeManager]
+    @State private var currentManager: DayChangeManager?
+    //-----------------------------------------------------
+    
     var entry: Provider.Entry
     
     var body: some View {
@@ -102,10 +109,13 @@ struct MyWidgetEntryView : View {
                         .font(.system(size: 10))
                         .foregroundColor(.white)
                         .bold()
-                    Text(sampleData.yesLabel)
+                    Text("\(currentManager?.showYesTitle())")
                 }
                 .padding()
             }
+        }
+        .onAppear {
+            currentManager = dayChangeManager.first
         }
     }
 }
@@ -118,12 +128,13 @@ struct MyWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             if #available(iOS 17.0, *) {
                 MyWidgetEntryView(entry: entry)
-                //                    .containerBackground(.fill.tertiary, for: .widget)
                     .containerBackground(Color.yesOrange, for: .widget)
+                    .modelContainer(for: [DayChangeManager.self])
             } else {
                 MyWidgetEntryView(entry: entry)
                     .padding()
                     .background()
+                    .modelContainer(for: [DayChangeManager.self])
             }
         }
         .configurationDisplayName("YESマラソン")
