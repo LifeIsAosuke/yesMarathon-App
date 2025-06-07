@@ -46,10 +46,15 @@ struct YesCalendarView: View {
             Text(showDayAchievedLabel())
                 .padding()
             
+            //----------------------------------------------------------------------
+            //ここからカレンダー表示部分
+            
+            // ボタンと年月表示ヘッダー
             HStack {
                 // 先月のカレンダー情報を取得するボタン
                 Button(action: { changeMonth(by: -1) }) {
-                    Text("<")
+                    Image(systemName: "chevron.left")
+                        .bold()
                 }
                 Spacer()
                 // 現在の年月
@@ -58,7 +63,8 @@ struct YesCalendarView: View {
                 Spacer()
                 // 来月のカレンダー情報を取得するボタン
                 Button(action: { changeMonth(by: 1) }) {
-                    Text(">")
+                    Image(systemName: "chevron.right")
+                        .bold()
                 }
             }
             .foregroundColor(.black)
@@ -70,11 +76,15 @@ struct YesCalendarView: View {
                     Text(day)
                         .bold()
                         .frame(maxWidth: .infinity)
-                        .foregroundColor(Color.yesLightGray)
+                        .foregroundColor(.black)
+                        .opacity(0.4)
                 }
             }
             .padding(.bottom, 8)
             
+            Divider()
+            
+            // カレンダーの各セル
             GeometryReader { geometry in
                 // セルの大きさを取得
                 let cellSize = geometry.size.width / 7
