@@ -203,10 +203,17 @@ struct HomeView: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding()
                                     
-                                    
-                                    TextField("今日のYESな瞬間を記録", text: $comment)
-                                        .frame(minHeight: 40, maxHeight: 120)
+                                    TextEditor(text: $comment)
+                                        .overlay(alignment: .topLeading) {
+                                            if comment.isEmpty {
+                                                Text("今日のYESな瞬間を記録")
+                                                    .allowsHitTesting(false)
+                                                    .opacity(0.3)
+                                            }
+                                        }
+                                        .frame(minHeight: 20)
                                         .padding()
+                                        
                                 }
                                 
                                 Divider()
