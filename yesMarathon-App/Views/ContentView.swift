@@ -11,8 +11,7 @@ struct ContentView: View {
     // -----データベースから情報を取得-----
     
     @Environment(\.modelContext) private var modelContext
-    // データベースに登録されているDayChangeManager型のインスタンスを全て取得
-    @Query private var dayChangeManager: [DayChangeManager]
+    @Query private var dayChangeManager: [DayChangeManager] // データベースに登録されているDayChangeManager型のインスタンスを全て取得
     
     // ------------------------------
 
@@ -54,40 +53,40 @@ struct ContentView: View {
     }
 
     private func startYesLabelUpdate() {
+        // 次の午前０時を計算
         guard let midnight = Calendar.current.nextDate(
             after: Date(),
             matching: DateComponents(hour: 0, minute: 0, second: 0),
             matchingPolicy: .nextTime
         ) else {
-            print("Failed to calculate the next midnight.")
+            print("時刻の計算に失敗しました")
             return
         }
 
+        // 次の午前０時までの時間を計算（タイマーの時間間隔として利用）
         let timeInterval = midnight.timeIntervalSinceNow
 
         
-        // ここのコードもっと簡潔にしよう。managerをわざわざ介す必要なくない？
+        // 日付が変わったら呼び出されるタイマー
         Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { _ in
+            
+            // currentManagerがインスタンス化されているか確認
             guard let manager = currentManager else { return }
             
-            manager.isTrue = false // 画面をHomeViewに
+            currentManager?.isTrue = false // 本日のYES達成をfalseに
+            currentManager?.EditYesTitle(yesTitle: YesSuggestion().random())
             
-            manager.EditYesTitle(yesTitle: YesSuggestion().random()) // 新しいお題に変更
-            
-
             do {
-                try modelContext.save() // データベースに変更内容を保存
-                DispatchQueue.main.async {
-                    currentManager = manager
-                }
+                try modelContext.save()
             } catch {
-                print("Failed to save updates to currentManager: \(error.localizedDescription)")
+                print("managerの更新に失敗しました: \(error.localizedDescription)")
             }
             
             // 通知設定
             NotificationManager.instance.sendNotification_morning()
             NotificationManager.instance.sendNotification_evening()
             
+            // 再びこの関数を実行
             startYesLabelUpdate()
         }
     }
