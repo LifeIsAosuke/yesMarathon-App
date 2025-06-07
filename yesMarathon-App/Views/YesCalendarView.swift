@@ -70,6 +70,7 @@ struct YesCalendarView: View {
                     Text(day)
                         .bold()
                         .frame(maxWidth: .infinity)
+                        .foregroundColor(Color.yesLightGray)
                 }
             }
             .padding(.bottom, 8)
