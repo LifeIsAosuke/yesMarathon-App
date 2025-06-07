@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @Model
-class DayChangeManager {
+final class DayChangeManager {
     @Attribute var isTrue: Bool = false
     @Attribute private var yesTitle: String
     
