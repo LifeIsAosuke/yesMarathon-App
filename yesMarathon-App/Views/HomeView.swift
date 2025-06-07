@@ -72,6 +72,7 @@ struct HomeView: View {
                     
                     VStack {
                         
+                        
                         Text("本日のYES")
                             .foregroundColor(.black)
                             .opacity(0.5)

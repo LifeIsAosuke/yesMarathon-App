@@ -10,6 +10,10 @@ import SwiftData
 
 @main
 struct yesMarathon_AppApp: App {
+    
+    // 通知設定
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

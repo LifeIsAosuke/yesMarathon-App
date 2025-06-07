@@ -10,7 +10,7 @@ import SwiftData
 import UIKit
 
 @Model
-class EachDayData {
+final class EachDayData {
     @Attribute(.unique)
     var id: UUID
     var yesTitle: String

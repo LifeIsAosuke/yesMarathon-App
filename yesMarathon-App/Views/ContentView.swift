@@ -35,6 +35,7 @@ struct ContentView: View {
                 currentManager = dayChangeManager.first
             }
             startYesLabelUpdate()
+
         }
         .onChange(of: dayChangeManager) { _ in
             currentManager = dayChangeManager.first
@@ -82,6 +83,11 @@ struct ContentView: View {
             } catch {
                 print("Failed to save updates to currentManager: \(error.localizedDescription)")
             }
+            
+            // 通知設定
+            NotificationManager.instance.sendNotification_morning()
+            NotificationManager.instance.sendNotification_evening()
+            
             startYesLabelUpdate()
         }
     }

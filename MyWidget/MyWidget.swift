@@ -119,7 +119,7 @@ struct MyWidgetEntryView : View {
         }
         .onAppear {
             currentManager = dayChangeManager.first
-            yesLabel = currentManager?.showYesTitle() ?? "DayChangeManagerの取得に失敗しているよ"
+            yesLabel = currentManager?.showYesTitle() ?? "さぁ、YESマラソンへ旅立とう！"
         }
         .onChange(of: currentManager) { _ in
             yesLabel = currentManager?.showYesTitle() ?? "更新に失敗しているよ"
