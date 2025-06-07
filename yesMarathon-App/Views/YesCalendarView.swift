@@ -110,7 +110,7 @@ struct YesCalendarView: View {
                                             
                                             Text("\(calendar.component(.day, from: date))")
                                                 .font(.headline)
-                                                .foregroundColor(.primary)
+                                                .foregroundColor(.white)
                                         }
                                     }
                                     .frame(width: cellSize, height: cellSize)

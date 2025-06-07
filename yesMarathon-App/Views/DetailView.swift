@@ -19,7 +19,7 @@ struct DetailView: View {
     @State var isEditing: Bool = false
     
     //---編集中に使う変数-------------------------------
-    @State private var comment: String = "コメント"
+    @State private var comment: String = ""
     @State private var stars: [Int] = [1, 1, 1, 0, 0]
     @State private var yesEvaluation: Int = 3
     @State private var selectedItem: PhotosPickerItem?
@@ -50,24 +50,30 @@ struct DetailView: View {
                     Divider()
                     
                     // コメント
-                    Group {
-                        HStack {
-                            Image(systemName: "text.justify.left")
-                                .frame(width: 25, height: 25)
-                            Text("コメント")
-                                .font(.system(size: 14))
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        
-                        if !isEditing {
-                            Text(matchingData.comment)
-                                .frame(height: 40)
-                                .padding()
-                        } else { // 編集画面
-                            TextField("\(matchingData.comment)", text: $comment)
-                                .padding()
-                        }
+                    HStack {
+                        Image(systemName: "text.justify.left")
+                            .frame(width: 25, height: 25)
+                        Text("コメント")
+                            .font(.system(size: 14))
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                    
+                    if !isEditing {
+                        Text(matchingData.comment)
+                            .frame(minHeight: 40)
+                            .padding()
+                    } else { // 編集画面
+                        TextEditor(text: $comment)
+                            .overlay(alignment: .topLeading) {
+                                if comment.isEmpty {
+                                    Text("ここにコメントを入力")
+                                        .allowsHitTesting(false)
+                                        .opacity(0.3)
+                                }
+                            }
+                            .frame(minHeight: 40)
+                            .padding()
                     }
                     
                     Divider()
