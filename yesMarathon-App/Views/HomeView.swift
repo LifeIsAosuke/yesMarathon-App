@@ -14,6 +14,10 @@ struct HomeView: View {
     // DayChangeManagerの情報を取得（配列で取得し状態管理）-----
     @Environment(\.modelContext) private var modelContext
     @Query private var dayChangeManager: [DayChangeManager]
+    
+    private var currentManager: DayChangeManager? {
+        dayChangeManager.first
+    }
     // --------------------------------------------------
     
     
@@ -98,6 +102,13 @@ struct HomeView: View {
                                     // シャッフルボタン
                                     Button{
                                         yesLabel = YesSuggestion().random()
+                                        currentManager?.EditYesTitle(yesTitle: yesLabel)
+                                        do {
+                                            try modelContext.save()
+                                            print("\(currentManager?.showYesTitle())")
+                                        } catch {
+                                            print("シャッフルによるデータベースの保存に失敗しました")
+                                        }
                                     } label: {
                                         VStack {
                                             ZStack {
@@ -303,6 +314,13 @@ struct HomeView: View {
                         Spacer()
                     }
                 }
+            }
+        }
+        .onAppear {
+            if let currentManager = dayChangeManager.first {
+                print("dayChangeManagerを取得したよん")
+            } else {
+                print("dayChangeManagerのデータが取得できません")
             }
         }
     }

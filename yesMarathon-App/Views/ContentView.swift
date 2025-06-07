@@ -9,7 +9,9 @@ import SwiftData
 
 struct ContentView: View {
     // -----データベースから情報を取得-----
+    
     @Environment(\.modelContext) private var modelContext
+    // データベースに登録されているDayChangeManager型のインスタンスを全て取得
     @Query private var dayChangeManager: [DayChangeManager]
     // ------------------------------
 
@@ -49,7 +51,7 @@ struct ContentView: View {
         
         
         modelContext.insert(newManager)
-        try? modelContext.save()
+        try? modelContext.save() // データベースに変更内容を保存
         
         return newManager
     }
@@ -70,10 +72,15 @@ struct ContentView: View {
         // ここのコードもっと簡潔にしよう。managerをわざわざ介す必要なくない？
         Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { _ in
             guard let manager = currentManager else { return }
+            
             manager.isTrue = false // 画面をHomeViewに
+            
             manager.EditYesTitle(yesTitle: YesSuggestion().random()) // 新しいお題に変更
+            yesLabel = manager.showYesTitle()
+            
+
             do {
-                try modelContext.save()
+                try modelContext.save() // データベースに変更内容を保存
                 DispatchQueue.main.async {
                     currentManager = manager
                 }
