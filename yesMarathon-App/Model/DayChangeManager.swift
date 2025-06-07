@@ -11,8 +11,20 @@ import SwiftData
 @Model
 class DayChangeManager {
     @Attribute var isTrue: Bool = false
+    @Attribute private var yesTitle: String
     
-    init() {
+    init(yesTitle: String) {
         self.isTrue = false
+        self.yesTitle = yesTitle
+    }
+    
+    // YESタイトルの表示
+    public func showYesTitle() -> String {
+        return yesTitle
+    }
+    
+    // 自分で決めるボタンタップで呼び出し
+    public func EditYesTitle(yesTitle: String) {
+        self.yesTitle = yesTitle
     }
 }
