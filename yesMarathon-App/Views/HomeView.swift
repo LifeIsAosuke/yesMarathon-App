@@ -15,11 +15,8 @@ struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var dayChangeManager: [DayChangeManager]
     
-    private var currentManager: DayChangeManager? {
-        dayChangeManager.first
-    }
+    @State private var currentManager: DayChangeManager?
     // --------------------------------------------------
-    
     
     //-----入力部分に使う変数--------------------------------------
     
@@ -41,17 +38,12 @@ struct HomeView: View {
     @State private var isYesButtonTapped: Bool = false
     
     // YESお題の中身
-    @Binding var yesLabel: String
+    @State private var yesLabel: String = "デフォルト"
     
     // アラート画面の管理
     @State private var isPresented: Bool = false
     @State private var editingText: String = ""
     //------------------------------------------------------------
-    
-    // 画面更新後の初期化
-    init(yesLabel: Binding<String>) {
-        self._yesLabel = yesLabel
-    }
     
     var body: some View {
         NavigationStack {
@@ -148,7 +140,9 @@ struct HomeView: View {
                                     }
                                     .alert("本日のYESを入力", isPresented: $isPresented, actions: {
                                         TextField("本日のYES", text: $editingText)
-                                        Button("登録する") {
+
+                                        
+                                        Button{
                                             // Only update yesLabel if editingText is not empty
                                             if !editingText.isEmpty {
                                                 yesLabel = editingText
@@ -164,7 +158,11 @@ struct HomeView: View {
                                             
                                             // アラート画面を閉じる
                                             isPresented = false
+                                        } label: {
+                                            Text("登録する")
+                                                .bold()
                                         }
+                                        
                                         Button("キャンセル", role: .cancel) {
                                             editingText = ""
                                             isPresented = false
@@ -326,13 +324,10 @@ struct HomeView: View {
                 }
             }
         }
-//        .onAppear {
-//            if let currentManager = dayChangeManager.first {
-//                print("dayChangeManagerを取得したよん")
-//            } else {
-//                print("dayChangeManagerのデータが取得できません")
-//            }
-//        }
+        .onAppear {
+            currentManager = dayChangeManager.first
+            yesLabel = currentManager?.showYesTitle() ?? "currentManagerの取得に失敗しているよ"
+        }
     }
     
     // SwiftDataに保存するための関数
@@ -370,6 +365,7 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(yesLabel: .constant(YesSuggestion().random()))
+    HomeView()
         .modelContainer(for: [DayChangeManager.self, EachDayData.self])
 }
+
