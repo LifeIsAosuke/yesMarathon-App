@@ -14,8 +14,10 @@ struct ContentView: View {
     // ------------------------------
 
     @State private var currentManager: DayChangeManager?
-    @State private var yesLabel: String = YesSuggestion().random()
-    let yesSuggestion = YesSuggestion()
+    
+    @State private var yesLabel: String = "Hello World"
+    
+//    let yesSuggestion = YesSuggestion()
 
     var body: some View {
         Group {
@@ -28,9 +30,9 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            if dayChangeManager.isEmpty {
+            if dayChangeManager.isEmpty { // アプリ初回起動時
                 currentManager = initializeManager()
-            } else {
+            } else { // 2回目以降のアプリ起動
                 currentManager = dayChangeManager.first
             }
             startYesLabelUpdate()
@@ -41,9 +43,14 @@ struct ContentView: View {
     }
 
     private func initializeManager() -> DayChangeManager {
-        let newManager = DayChangeManager()
+        // DayChangeManagerのインスタンス化
+        let newManager = DayChangeManager(yesTitle: YesSuggestion().random())
+        yesLabel = newManager.showYesTitle()
+        
+        
         modelContext.insert(newManager)
         try? modelContext.save()
+        
         return newManager
     }
 
@@ -59,15 +66,16 @@ struct ContentView: View {
 
         let timeInterval = midnight.timeIntervalSinceNow
 
+        
+        // ここのコードもっと簡潔にしよう。managerをわざわざ介す必要なくない？
         Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { _ in
             guard let manager = currentManager else { return }
-            manager.isTrue = false
-//            manager.yesTitle = yesSuggestion.random()
+            manager.isTrue = false // 画面をHomeViewに
+            manager.EditYesTitle(yesTitle: YesSuggestion().random()) // 新しいお題に変更
             do {
                 try modelContext.save()
                 DispatchQueue.main.async {
                     currentManager = manager
-//                    yesLabel = manager.yesTitle
                 }
             } catch {
                 print("Failed to save updates to currentManager: \(error.localizedDescription)")

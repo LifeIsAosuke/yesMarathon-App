@@ -11,10 +11,11 @@ import PhotosUI
 
 struct HomeView: View {
     
-    // データ管理変数
+    // DayChangeManagerの情報を取得（配列で取得し状態管理）-----
     @Environment(\.modelContext) private var modelContext
-    // DayChangeManagerの情報を取得（配列で取得し状態管理）
     @Query private var dayChangeManager: [DayChangeManager]
+    // --------------------------------------------------
+    
     
     //-----入力部分に使う変数--------------------------------------
     
@@ -41,7 +42,6 @@ struct HomeView: View {
     // アラート画面の管理
     @State private var isPresented: Bool = false
     @State private var editingText: String = ""
-    
     //------------------------------------------------------------
     
     // 画面更新後の初期化
