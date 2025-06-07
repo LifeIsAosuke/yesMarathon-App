@@ -153,6 +153,16 @@ struct HomeView: View {
                                             if !editingText.isEmpty {
                                                 yesLabel = editingText
                                             }
+                                            
+                                            
+                                            currentManager?.EditYesTitle(yesTitle: yesLabel)
+                                            do {
+                                                try modelContext.save()
+                                            } catch {
+                                                print("自分で決めるボタンでの登録エラー")
+                                            }
+                                            
+                                            // アラート画面を閉じる
                                             isPresented = false
                                         }
                                         Button("キャンセル", role: .cancel) {
@@ -316,13 +326,13 @@ struct HomeView: View {
                 }
             }
         }
-        .onAppear {
-            if let currentManager = dayChangeManager.first {
-                print("dayChangeManagerを取得したよん")
-            } else {
-                print("dayChangeManagerのデータが取得できません")
-            }
-        }
+//        .onAppear {
+//            if let currentManager = dayChangeManager.first {
+//                print("dayChangeManagerを取得したよん")
+//            } else {
+//                print("dayChangeManagerのデータが取得できません")
+//            }
+//        }
     }
     
     // SwiftDataに保存するための関数
