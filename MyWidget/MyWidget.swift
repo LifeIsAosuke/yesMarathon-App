@@ -65,6 +65,7 @@ struct MyWidgetEntryView : View {
     
     // DayChangeManagerの情報を取得--------------------------
     @Query private var dayChangeManager: [DayChangeManager]
+    @Query private var eachDayDatas: [EachDayData]
     @State private var currentManager: DayChangeManager?
     //-----------------------------------------------------
     
@@ -72,6 +73,11 @@ struct MyWidgetEntryView : View {
     @State private var yesLabel: String = "Hello world"
     
     var entry: Provider.Entry
+    
+    // 現在の日付を取得
+    @State private var displayedDate: Date = Date()
+    // 現在のカレンダーを取得
+    let calendar = Calendar.current
     
     var body: some View {
         ZStack {
@@ -98,7 +104,7 @@ struct MyWidgetEntryView : View {
                 
                 VStack() {
                     HStack {
-                        Text("2")
+                        Text("\(calculateAchievedDays())")
                             .foregroundColor(.white)
                             .font(.system(size: 20))
                             .bold()
@@ -114,10 +120,11 @@ struct MyWidgetEntryView : View {
                     Text("本日のYES")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.system(size: 11))
-                        .foregroundColor(.white)
+                        .foregroundColor(.black)
                         .bold()
                         .padding(.bottom, 1)
                     Text("\(yesLabel)")
+                        .foregroundColor(.white)
                         .bold()
                 }
             }
@@ -129,6 +136,32 @@ struct MyWidgetEntryView : View {
         .onChange(of: currentManager) { _ in
             yesLabel = currentManager?.showYesTitle() ?? "更新に失敗しているよ"
         }
+        
+    }
+    
+    // 連続ログイン日数を記録してくれる関数
+    func calculateAchievedDays() -> Int {
+        // 現在の日付を取得し、時間をクリアして日付のみにする
+        var currentDay = calendar.startOfDay(for: Date())
+        var consecutiveCount = 0
+        
+        // 日付順にソートした達成データを取得
+        let achievedData = eachDayDatas.sorted { $0.day > $1.day }
+        
+        for data in achievedData {
+            // 現在のチェック日付とデータの日付を比較
+            if calendar.isDate(currentDay, inSameDayAs: data.day) {
+                consecutiveCount += 1
+                // 次の日を過去に1日進める
+                if let previousDay = calendar.date(byAdding: .day, value: -1, to: currentDay) {
+                    currentDay = previousDay
+                }
+            } else {
+                break
+            }
+        }
+        
+        return consecutiveCount
     }
 }
 
@@ -141,12 +174,12 @@ struct MyWidget: Widget {
             if #available(iOS 17.0, *) {
                 MyWidgetEntryView(entry: entry)
                     .containerBackground(Color.yesOrange, for: .widget)
-                    .modelContainer(for: [DayChangeManager.self])
+                    .modelContainer(for: [DayChangeManager.self, EachDayData.self])
             } else {
                 MyWidgetEntryView(entry: entry)
                     .padding()
                     .background()
-                    .modelContainer(for: [DayChangeManager.self])
+                    .modelContainer(for: [DayChangeManager.self, EachDayData.self.self])
             }
         }
         .configurationDisplayName("YESマラソン")
