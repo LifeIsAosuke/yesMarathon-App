@@ -18,6 +18,7 @@ struct yesMarathon_AppApp: App {
         WindowGroup {
             ContentView()
                 .modelContainer(for: [EachDayData.self, DayChangeManager.self])
+            
         }
     }
 }
