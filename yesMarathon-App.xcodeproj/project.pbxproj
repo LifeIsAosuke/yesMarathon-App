@@ -72,6 +72,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Model/DayChangeManager.swift,
+				Model/EachDayData.swift,
 			);
 			target = 428D85952DF183D500D64710 /* MyWidgetExtension */;
 		};

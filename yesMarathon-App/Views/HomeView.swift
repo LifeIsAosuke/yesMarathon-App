@@ -10,6 +10,16 @@ import SwiftData
 import PhotosUI
 import WidgetKit
 
+extension String {
+    // 全ての文字の間に Unicode WORD JOINER を挿入する
+    func wordJoined() -> String {
+        let wordJointer = "\u{2060}"
+        return map { String($0) }.joined(separator: wordJointer)
+    }
+}
+
+
+
 struct HomeView: View {
     
     // DayChangeManagerの情報を取得（配列で取得し状態管理）-----
@@ -54,295 +64,295 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             
-            ZStack {
-                
-                if !isYesButtonTapped{
-                    // YESログボタン
-                    ZStack {
-                        NavigationLink {
-                            YesLogView()
-                        } label: {
-                            VStack {
-                                Image(systemName: "calendar.badge.checkmark")
-                                    .resizable()
-                                    .frame(width: 48, height: 48)
-                                Text("YESログ")
-                            }
-                            .foregroundColor(Color.yesOrange)
-                            .frame(width: 100, height: 100, alignment: .center)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                }
+            VStack { // 全体のVStack
                 
                 VStack {
                     
-                    
-                    Text("本日のYES")
-                        .foregroundColor(.black)
-                        .opacity(0.5)
-                        .bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.leading, 50)
-                        .padding(.top, 60)
-                    
-                    //お題ラベル
                     HStack {
-                        
-                        // YESお題
-                        Text(yesLabel)
-                            .font(.title)
+                        Text("本日のYES")
+                            .foregroundColor(.black)
+                            .opacity(0.5)
                             .bold()
-                            .frame(width: 300, height: 180)
                         
+                        Spacer()
                         
                         if !isYesButtonTapped {
-                            VStack {
-                                // シャッフルボタン
-                                Button{
-                                    yesLabel = YesSuggestion().random()
-                                    modifyYesLabel()
-                                    
-                                } label: {
-                                    VStack {
-                                        ZStack {
-                                            Circle()
-                                                .foregroundColor(Color.yesLightGray)
-                                                .opacity(0.8)
-                                                .frame(width: 48, height: 48)
-                                            Image(systemName: "arrow.trianglehead.2.clockwise")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 24))
-                                        }
-                                        Text("シャッフル")
-                                            .foregroundColor(.black)
-                                            .font(.system(size: 10))
-                                    }
-                                }
+                            
+                            // シャッフルボタン
+                            Button{
+                                yesLabel = YesSuggestion().random()
+                                modifyYesLabel()
                                 
-                                // 自分で決めるボタン
-                                Button {
-                                    // Initialize editingText with the current yesLabel when presenting
-                                    editingText = ""
-                                    isPresented = true
-                                } label: {
-                                    VStack {
-                                        ZStack {
-                                            Circle()
-                                                .foregroundColor(Color.yesLightGray)
-                                                .opacity(0.8)
-                                                .frame(width: 48, height: 48)
-                                            Image(systemName: "pencil")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 24))
-                                        }
-                                        Text("自分で決める")
+                            } label: {
+                                VStack {
+                                    ZStack {
+                                        Circle()
+                                            .foregroundColor(Color.yesLightGray)
+                                            .opacity(0.8)
+                                            .frame(width: 48, height: 48)
+                                        Image(systemName: "arrow.trianglehead.2.clockwise")
                                             .foregroundColor(.black)
-                                            .font(.system(size: 10))
+                                            .font(.system(size: 24))
                                     }
                                 }
-                                .alert("本日のYESを入力", isPresented: $isPresented, actions: {
-                                    TextField("\(yesSuggestion.random())", text: $editingText)
-                                    
-                                    
-                                    Button{
-                                        // 変更があればYESラベルに登録
-                                        if !editingText.isEmpty {
-                                            yesLabel = editingText
-                                        }
-                                        
-                                        modifyYesLabel() // YESラベルを変更
-                                        
-                                        // アラート画面を閉じる
-                                        isPresented = false
-                                        
-                                    } label: {
-                                        Text("登録する")
-                                            .bold()
-                                    }
-                                    
-                                    Button("キャンセル", role: .cancel) {
-                                        editingText = ""
-                                        isPresented = false
-                                    }
-                                })
-                            }
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding([.leading, .trailing], 16)
-                    
-                    if !isYesButtonTapped{
-                        // YESボタン
-                        Button() {
-                            // アニメーション開始
-                            animationFlag.toggle()
-                            // 画面切り替え
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                animationFlag.toggle()
-                                isYesButtonTapped.toggle()
                             }
                             
-                        } label: {
-                            ZStack {
-                                Circle()
-                                    .foregroundColor(Color.yesYellowOrange)
-                                    .frame(width: 320, height: 320)
-                                    .scaleEffect(animationFlag ? 1.1 : 1.0)
-                                Circle()
-                                    .foregroundColor(Color.yesOrange)
-                                    .frame(width: 310, height: 310)
-                                    .scaleEffect(animationFlag ? 1.1 : 1.0)
-                                Text("YES!")
-                                    .font(.system(size: 90))
-                                    .bold()
-                                    .foregroundColor(.white)
-                                    .scaleEffect(animationFlag ? 1.1 : 1.0)
-                            }
-                        }
-                        
-                        
-                        
-                        
-                    } else {
-                        ScrollView {
-                            VStack {
-                                Divider()
-                                
-                                // コメント入力部分
-                                Group {
-                                    HStack {
-                                        Image(systemName: "text.justify.left")
-                                            .frame(width: 25, height: 25)
-                                        Text("コメント")
-                                            .font(.system(size: 14))
-                                    }
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding()
-                                    
-                                    TextEditor(text: $comment)
-                                        .overlay(alignment: .topLeading) {
-                                            if comment.isEmpty {
-                                                Text("今日のYESな瞬間を記録")
-                                                    .allowsHitTesting(false)
-                                                    .opacity(0.3)
-                                            }
-                                        }
-                                        .frame(minHeight: 20)
-                                        .padding()
-                                        
-                                }
-                                
-                                Divider()
-                                
-                                // YES評価
-                                Group {
-                                    HStack {
-                                        Image(systemName: "star")
-                                        Text("YES評価")
-                                    }
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding()
-                                    
-                                    HStack(alignment: .top) {
-                                        ForEach(0..<5) { index in
-                                            Button(action: {
-                                                for i in 0...index {
-                                                    stars[i] = 1
-                                                }
-                                                for i in (index+1)..<5 {
-                                                    stars[i] = 0
-                                                }
-                                                yesEvaluation = index + 1
-                                            }) {
-                                                VStack {
-                                                    Image(systemName: stars[index] == 1 ? "star.fill" : "star")
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                        .frame(width: 24, height: 24)
-                                                        .foregroundColor(stars[index] == 1 ? Color.yesYellow : .gray)
-                                                    if index == 0 { Text("イマイチ").font(.caption) }
-                                                    if index == 2 { Text("イイネ!").font(.caption) }
-                                                    if index == 4 { Text("バチイケ!!").font(.caption) }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    .padding()
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                    
-                                    
-                                }
-                                .foregroundColor(.black)
-                                
-                                Divider()
-                                
-                                // 画像追加
-                                if let imageData = imageData, let uiImage = UIImage(data: imageData) {
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 200)
-                                        .cornerRadius(10)
-                                        .padding()
-                                } else {
-                                    PhotosPicker(selection: $selectedItem) {
-                                        HStack {
-                                            HStack {
-                                                Image(systemName: "photo")
-                                                Text("画像を追加")
-                                                
-                                            }
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            
-                                            
-                                            Image(systemName: "chevron.right")
-                                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                        }
-                                        .frame(minHeight: 40)
-                                        .padding()
-                                    }
-                                    .foregroundColor(.black)
-                                    .onChange(of: selectedItem) { newItem in
-                                        Task {
-                                            if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                                imageData = data
-                                            }
-                                        }
-                                    }
-                                }
-                                
-                                
-                                // 登録ボタン
-                                Button(action: {addData()}) {
+                            // 自分で決めるボタン
+                            Button {
+                                // Initialize editingText with the current yesLabel when presenting
+                                editingText = ""
+                                isPresented = true
+                            } label: {
+                                VStack {
                                     ZStack {
-                                        Rectangle()
-                                            .fill(Color.yesOrange)
-                                            .frame(height: 60)
-                                            .cornerRadius(10)
-                                        Text("登録する")
-                                            .font(.system(size: 20))
-                                            .bold()
-                                            .foregroundColor(.white)
+                                        Circle()
+                                            .foregroundColor(Color.yesLightGray)
+                                            .opacity(0.8)
+                                            .frame(width: 48, height: 48)
+                                        Image(systemName: "pencil")
+                                            .foregroundColor(.black)
+                                            .font(.system(size: 24))
                                     }
                                 }
-                                
-                                // キャンセル
-                                Button (action:{cansel()}) {
-                                    Text("キャンセル")
-                                }
-                                .foregroundColor(.black)
-                                .padding()
-                                
-                                
                             }
-                            .padding(40)
+                            .alert("本日のYESを入力", isPresented: $isPresented, actions: {
+                                TextField("\(yesSuggestion.random())", text: $editingText)
+                                
+                                
+                                Button{
+                                    // 変更があればYESラベルに登録
+                                    if !editingText.isEmpty {
+                                        yesLabel = editingText
+                                    }
+                                    
+                                    modifyYesLabel() // YESラベルを変更
+                                    
+                                    // アラート画面を閉じる
+                                    isPresented = false
+                                    
+                                } label: {
+                                    Text("登録する")
+                                        .bold()
+                                }
+                                
+                                Button("キャンセル", role: .cancel) {
+                                    editingText = ""
+                                    isPresented = false
+                                }
+                            })
+                            
                         }
+                        
+                        Spacer()
+                        Spacer()
+                        Spacer()
                     }
                     
-                    Spacer()
+                    // YESお題
+                    Text(yesLabel.wordJoined())
+                        .font(.title)
+                        .bold()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .border(.black)
+                        
+
+                    
+                }
+                .frame(maxWidth: .infinity, alignment: .top)
+                .padding(.horizontal, 32)
+                .padding(.vertical, 16)
+                
+                Spacer()
+                
+                if !isYesButtonTapped{
+                    // YESボタン
+                    Button() {
+                        // アニメーション開始
+                        animationFlag.toggle()
+                        // 画面切り替え
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            animationFlag.toggle()
+                            isYesButtonTapped.toggle()
+                        }
+                        
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .foregroundColor(Color.yesYellowOrange)
+                                .frame(width: 320, height: 320)
+                                .scaleEffect(animationFlag ? 1.1 : 1.0)
+                            Circle()
+                                .foregroundColor(Color.yesOrange)
+                                .frame(width: 310, height: 310)
+                                .scaleEffect(animationFlag ? 1.1 : 1.0)
+                            Text("YES!")
+                                .font(.system(size: 90))
+                                .bold()
+                                .foregroundColor(.white)
+                                .scaleEffect(animationFlag ? 1.1 : 1.0)
+                        }
+                    }
+                    .frame(maxHeight: .infinity, alignment: .bottom)
+                    .padding(.bottom, 150)
+                    
+                    
+                    
+                    
+                } else {
+                    ScrollView {
+                        VStack {
+                            Divider()
+                            
+                            // コメント入力部分
+                            Group {
+                                HStack {
+                                    Image(systemName: "text.justify.left")
+                                        .frame(width: 25, height: 25)
+                                    Text("コメント")
+                                        .font(.system(size: 14))
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding()
+                                
+                                TextEditor(text: $comment)
+                                    .overlay(alignment: .topLeading) {
+                                        if comment.isEmpty {
+                                            Text("今日のYESな瞬間を記録")
+                                                .allowsHitTesting(false)
+                                                .opacity(0.3)
+                                        }
+                                    }
+                                    .frame(minHeight: 20)
+                                    .padding()
+                                
+                            }
+                            
+                            Divider()
+                            
+                            // YES評価
+                            Group {
+                                HStack {
+                                    Image(systemName: "star")
+                                    Text("YES評価")
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding()
+                                
+                                HStack(alignment: .top) {
+                                    ForEach(0..<5) { index in
+                                        Button(action: {
+                                            for i in 0...index {
+                                                stars[i] = 1
+                                            }
+                                            for i in (index+1)..<5 {
+                                                stars[i] = 0
+                                            }
+                                            yesEvaluation = index + 1
+                                        }) {
+                                            VStack {
+                                                Image(systemName: stars[index] == 1 ? "star.fill" : "star")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 24, height: 24)
+                                                    .foregroundColor(stars[index] == 1 ? Color.yesYellow : .gray)
+                                                if index == 0 { Text("イマイチ").font(.caption) }
+                                                if index == 2 { Text("イイネ!").font(.caption) }
+                                                if index == 4 { Text("バチイケ!!").font(.caption) }
+                                            }
+                                        }
+                                    }
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                
+                                
+                            }
+                            .foregroundColor(.black)
+                            
+                            Divider()
+                            
+                            // 画像追加
+                            if let imageData = imageData, let uiImage = UIImage(data: imageData) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 200)
+                                    .cornerRadius(10)
+                                    .padding()
+                            } else {
+                                PhotosPicker(selection: $selectedItem) {
+                                    HStack {
+                                        HStack {
+                                            Image(systemName: "photo")
+                                            Text("画像を追加")
+                                            
+                                        }
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        
+                                        
+                                        Image(systemName: "chevron.right")
+                                            .frame(maxWidth: .infinity, alignment: .trailing)
+                                    }
+                                    .frame(minHeight: 40)
+                                    .padding()
+                                }
+                                .foregroundColor(.black)
+                                .onChange(of: selectedItem) { newItem in
+                                    Task {
+                                        if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                            imageData = data
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            
+                            // 登録ボタン
+                            Button(action: {addData()}) {
+                                ZStack {
+                                    Rectangle()
+                                        .fill(Color.yesOrange)
+                                        .frame(height: 60)
+                                        .cornerRadius(10)
+                                    Text("登録する")
+                                        .font(.system(size: 20))
+                                        .bold()
+                                        .foregroundColor(.white)
+                                }
+                            }
+                            
+                            // キャンセル
+                            Button (action:{cansel()}) {
+                                Text("キャンセル")
+                            }
+                            .foregroundColor(.black)
+                            .padding()
+                            
+                            
+                        }
+                        .padding(40)
+                    }
+                }
+                
+                Spacer()
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        YesLogView()
+                    } label: {
+                        VStack {
+                            Image(systemName: "calendar.badge.checkmark")
+                                .font(.system(size: 40))
+                            Text("YESログ")
+                                .foregroundStyle(Color.yesOrange)
+                                .font(.system(size: 15))
+                        }
+                        .foregroundStyle(Color.yesOrange)
+                    }
                 }
             }
+            
         }
         .onAppear {
             currentManager = dayChangeManager.first
@@ -364,7 +374,7 @@ struct HomeView: View {
             // dayChangeManagerのisTrueを更新し、保存
             currentManager?.isTrue = true
             try modelContext.save()
-
+            
         } catch {
             print("データの保存に失敗しました: \(error.localizedDescription)")
         }

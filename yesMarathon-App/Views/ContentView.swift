@@ -14,10 +14,10 @@ struct ContentView: View {
     @Query private var dayChangeManager: [DayChangeManager] // データベースに登録されているDayChangeManager型のインスタンスを全て取得
     
     // ------------------------------
-
     @State private var currentManager: DayChangeManager?
 
     var body: some View {
+        
         Group {
             if currentManager?.isTrue == true { // isTrue == true
                 AchievedView()
