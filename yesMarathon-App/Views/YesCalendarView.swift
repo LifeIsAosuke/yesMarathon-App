@@ -37,7 +37,8 @@ struct YesCalendarView: View {
                 switch calculateAchievedDays() {
                 case 0:
                     Text("YESマラソンスタート！！")
-                        .font(.system(size: 35))
+                        .font(.system(size: 25))
+                        .shadow(radius: 5)
                 case 1:
                     HStack() {
                         Text("1")
@@ -48,6 +49,7 @@ struct YesCalendarView: View {
                             .font(.system(size: 35))
                     }
                     .bold()
+                    .shadow(radius: 1)
                     
                 case 2...:
                     HStack() {
@@ -59,6 +61,7 @@ struct YesCalendarView: View {
                             .font(.system(size: 35))
                     }
                     .bold()
+                    .shadow(radius: 1)
                 default:
                     Text("ログインに数が正しく表示されていません")
                 }
@@ -126,16 +129,18 @@ struct YesCalendarView: View {
                                         // yesを達成した日は詳細画面に飛べるようにする
                                         NavigationLink(destination: DetailView(matchingData: data)) {
                                             VStack {
-                                                ZStack {
-                                                    Circle()
-                                                        .frame(width: 40, height: 40)
-                                                        .foregroundColor(Color.yesOrange)
-                                                        .opacity(0.8)
-                                                    
-                                                    Text("\(calendar.component(.day, from: date))")
-                                                        .font(.headline)
-                                                        .foregroundColor(.white)
-                                                }
+              
+                                                Text("\(calendar.component(.day, from: date))")
+                                                    .font(.headline)
+                                                    .foregroundColor(.white)
+                                                    .background {
+                                                        Circle()
+                                                            .frame(width: 40, height: 40)
+                                                            .foregroundColor(Color.yesOrange)
+                                                            .opacity(0.8)
+                                                            .shadow(radius: 5)
+                                                    }
+                                                
                                             }
                                             .frame(width: cellSize, height: cellSize)
                                         }

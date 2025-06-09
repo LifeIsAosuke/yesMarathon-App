@@ -59,7 +59,6 @@ struct HomeView: View {
     
     // Yesボタンタップ時のアニメーション起動フラグ変数
     @State private var animationFlag: Bool = false
-    @State private var animationScale: Double = 1.2
     
     init() {
         UITextView.appearance().backgroundColor = .clear
@@ -80,12 +79,14 @@ struct HomeView: View {
                         VStack {
                             Image(systemName: "calendar.badge.checkmark")
                                 .font(.system(size: 45))
+                                
                             Text("YESログ")
                                 .foregroundStyle(Color.yesOrange)
                                 .font(.system(size: 15))
                         }
                         .padding()
                         .foregroundStyle(Color.yesOrange)
+                        .shadow(radius: 3)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
                     .padding()
@@ -107,7 +108,8 @@ struct HomeView: View {
                                 .foregroundColor(.black)
                                 .opacity(0.5)
                                 .bold()
-        
+                            
+                            
                             Spacer()
                             
                             if !isYesButtonTapped {
@@ -122,6 +124,7 @@ struct HomeView: View {
                                     Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90.circle")
                                         .foregroundColor(Color.yesOrange)
                                         .font(.system(size: 30))
+                                        .shadow(radius: 1)
                                     
                                     
                                 }
@@ -136,6 +139,7 @@ struct HomeView: View {
                                     Image(systemName: "pencil.circle")
                                         .foregroundColor(Color.yesOrange)
                                         .font(.system(size: 30))
+                                        .shadow(radius: 1)
                                     
                                 }
                                 .alert("本日のYESを入力", isPresented: $isPresented, actions: {
@@ -165,7 +169,7 @@ struct HomeView: View {
                                 })
                                 
                             }
-
+                            
                         }
                         
                         Divider()
@@ -173,10 +177,10 @@ struct HomeView: View {
                         HStack {
                             // YESお題
                             Text(yesLabel.wordJoined())
-                                .font(.title)
+                                .font(.system(size:25))
                                 .bold()
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                
+                            
                         }
                         
                         
@@ -190,7 +194,8 @@ struct HomeView: View {
                     // 影をつける
                     .shadow(radius: 2)
                     
-                    Spacer(minLength: 50)
+                    Spacer()
+                    Spacer()
                     
                     if !isYesButtonTapped{
                         // YESボタン
@@ -204,22 +209,22 @@ struct HomeView: View {
                             }
                             
                         } label: {
-                            ZStack {
-                                Circle()
-                                    .foregroundColor(Color.yesOrange)
-                                    .frame(width: 310, height: 310)
-                                    .scaleEffect(animationFlag ? 1.1 : 1.0)
-                                    .shadow(color: Color.yesYellow, radius: 5)
-                                Text("YES!")
-                                    .font(.system(size: 90))
-                                    .bold()
-                                    .foregroundColor(.white)
-                                    .scaleEffect(animationFlag ? 1.1 : 1.0)
-                            }
+                            Text("YES!")
+                                .font(.system(size: 90))
+                                .bold()
+                                .foregroundColor(.white)
+                                .background {
+                                    Circle()
+                                        .foregroundStyle(Color.yesOrange)
+                                        .frame(width: 310, height: 310)
+                                        .scaleEffect(animationFlag ? 1.1 : 1.0)
+                                        .shadow(radius: 5)
+                                }
+                            
                         }
-                        .frame(maxHeight: .infinity, alignment: .bottom)
-                        .padding(.bottom, 150)
-     
+                        .scaleEffect(animationFlag ? 1.05 : 1.0)
+                        
+                        
                     } else {
                         ScrollView {
                             VStack {
@@ -235,6 +240,7 @@ struct HomeView: View {
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding()
+                                    .bold()
                                     
                                     TextEditor(text: $comment)
                                         .overlay(alignment: .topLeading) {
@@ -259,6 +265,7 @@ struct HomeView: View {
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding()
+                                    .bold()
                                     
                                     HStack(alignment: .top) {
                                         ForEach(0..<5) { index in
@@ -277,6 +284,7 @@ struct HomeView: View {
                                                         .scaledToFit()
                                                         .frame(width: 24, height: 24)
                                                         .foregroundColor(stars[index] == 1 ? Color.yesYellow : .gray)
+                                                        .shadow(radius: 1)
                                                     if index == 0 { Text("イマイチ").font(.caption) }
                                                     if index == 2 { Text("イイネ!").font(.caption) }
                                                     if index == 4 { Text("バチイケ!!").font(.caption) }
@@ -310,10 +318,12 @@ struct HomeView: View {
                                                 
                                             }
                                             .frame(maxWidth: .infinity, alignment: .leading)
+                                      
                                             
                                             
                                             Image(systemName: "chevron.right")
                                                 .frame(maxWidth: .infinity, alignment: .trailing)
+                                              
                                         }
                                         .frame(minHeight: 40)
                                         .padding()
@@ -356,6 +366,7 @@ struct HomeView: View {
                         }
                     }
                     
+                    Spacer()
                     Spacer()
                 }
             }

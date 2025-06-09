@@ -23,6 +23,8 @@ struct AchievedView: View {
     // アニメーションを適応するかの管理用変数
     @State private var isAnimated: Bool = false
     
+    let backgroundGradientColor: LinearGradient = LinearGradient(gradient: Gradient(colors: [.yellow, .red]), startPoint: .topLeading, endPoint: .bottomTrailing)
+    
     var body: some View {
         NavigationStack {
             ZStack {
