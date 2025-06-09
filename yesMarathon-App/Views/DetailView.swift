@@ -44,8 +44,8 @@ struct DetailView: View {
                     // YESタイトル
                     Text(matchingData.yesTitle)
                         .font(.title)
-                        .fixedSize(horizontal: false, vertical: true)
                         .padding()
+                        .shadow(radius: 1)
                     
                     Divider()
                     
@@ -55,14 +55,22 @@ struct DetailView: View {
                             .frame(width: 25, height: 25)
                         Text("コメント")
                             .font(.system(size: 14))
+                            .bold()
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
                     
                     if !isEditing {
-                        Text(matchingData.comment)
-                            .frame(minHeight: 40)
-                            .padding()
+                        if !matchingData.comment.isEmpty {
+                            Text(matchingData.comment)
+                                .frame(minHeight: 40)
+                                .padding()
+                        } else {
+                            Text("コメントはありません")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                                .padding()
+                        }
                     } else { // 編集画面
                         TextEditor(text: $comment)
                             .overlay(alignment: .topLeading) {
@@ -83,6 +91,9 @@ struct DetailView: View {
                         HStack {
                             Image(systemName: "star")
                             Text("YES評価")
+                                .font(.system(size: 14))
+                                .bold()
+                                
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
@@ -92,12 +103,14 @@ struct DetailView: View {
                                 // 色塗りスターの表示
                                 ForEach(0..<matchingData.yesEvaluation, id: \.self) { _ in
                                     Image(systemName: "star.fill")
-                                        .foregroundColor(Color(red: 253 / 255.0, green: 202 / 255.0, blue: 0 / 255.0))
+                                        .foregroundColor(Color.yesYellow)
+                                        .font(.system(size: 25))
                                 }
                                 
                                 // 外縁スターの表示
                                 ForEach(0..<5-matchingData.yesEvaluation, id: \.self) { _ in
                                     Image(systemName: "star")
+                                        .font(.system(size: 25))
                                 }
                             }
                             .padding()

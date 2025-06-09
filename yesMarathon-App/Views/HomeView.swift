@@ -262,6 +262,7 @@ struct HomeView: View {
                                     HStack {
                                         Image(systemName: "star")
                                         Text("YES評価")
+                                            .font(.system(size: 14))
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding()
@@ -315,6 +316,7 @@ struct HomeView: View {
                                             HStack {
                                                 Image(systemName: "photo")
                                                 Text("画像を追加")
+                                                    .bold()
                                                 
                                             }
                                             .frame(maxWidth: .infinity, alignment: .leading)

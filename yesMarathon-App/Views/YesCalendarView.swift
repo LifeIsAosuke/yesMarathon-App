@@ -36,9 +36,16 @@ struct YesCalendarView: View {
                 
                 switch calculateAchievedDays() {
                 case 0:
-                    Text("YESマラソンスタート！！")
-                        .font(.system(size: 25))
-                        .shadow(radius: 5)
+                    HStack() {
+                        Text("YES")
+                            .font(.system(size: 50))
+                            .foregroundColor(Color.yesOrange)
+                        
+                        Text("マラソンスタート！！")
+                            .font(.system(size: 20))
+                    }
+                    .bold()
+                    .shadow(radius: 1)
                 case 1:
                     HStack() {
                         Text("1")
