@@ -17,11 +17,16 @@ struct AchievedView: View {
     //　背景色
     @State private var backgroundColor: Color = Color.white
     
+    // 文字の色
+    @State private var textColor: Color = Color.white
+    
     // アイコンのアニメーション用変数
     @State private var iconScale: CGFloat = 0.0
     
     // アニメーションを適応するかの管理用変数
     @State private var isAnimated: Bool = false
+    
+    let backgroundGradientColor: LinearGradient = LinearGradient(gradient: Gradient(colors: [.yellow, .red]), startPoint: .topLeading, endPoint: .bottomTrailing)
     
     var body: some View {
         NavigationStack {
@@ -34,9 +39,11 @@ struct AchievedView: View {
                 VStack {
                     
                     Text("本日のYES達成！")
+                        .foregroundStyle(textColor)
                         .font(.title)
                         .bold()
                         .padding()
+                        .shadow(radius: 2)
                     
                     Image("achievedIcon")
                         .resizable()
@@ -51,6 +58,7 @@ struct AchievedView: View {
                         }
                     
                     Text("また明日も頑張ろう")
+                        .foregroundStyle(textColor)
                         .bold()
                         .padding()
                 }
@@ -90,6 +98,7 @@ struct AchievedView: View {
                 // 背景色を徐々に白にするアニメーション
                 withAnimation(.easeInOut(duration: 1.0)) {
                     backgroundColor = Color.white
+                    textColor = Color.black
                 }
             }
         }

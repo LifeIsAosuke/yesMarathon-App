@@ -82,52 +82,34 @@ struct MyWidgetEntryView : View {
     var body: some View {
         ZStack {
             
-            HStack {
-                ZStack {
-                    
-                    Circle()
-                        .frame(width: 83)
-                        .foregroundColor(.black)
-                    
-                    Circle()
-                        .frame(width: 80)
+            Text("YESマラソン")
+                .foregroundStyle(.white)
+                .bold()
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .font(.system(size:10))
+            
+            VStack() {
+                HStack {
+                    Text("\(calculateAchievedDays())")
                         .foregroundColor(.white)
-                    
-                    
-                    
-                    Image("achievedIcon")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 60)
-                        .clipShape(Circle())
+                        .font(.system(size: 20))
+                        .bold()
+                    Text("日目!!")
+                        .font(.system(size: 15))
                 }
                 
-                VStack() {
-                    HStack {
-                        Text("\(calculateAchievedDays())")
-                            .foregroundColor(.white)
-                            .font(.system(size: 20))
-                            .bold()
-                        Text("日目 🔥🔥")
-                            .font(.system(size: 15))
-                    }
-                    
-                    Divider()
-                        .frame(height: 0.3) // Dividerの太さを設定
-                        .background(Color.black) // Dividerの色を指定
-                        .padding(.bottom,5)
-                    
-                    Text("本日のYES")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.system(size: 11))
-                        .foregroundColor(.black)
-                        .bold()
-                        .padding(.bottom, 1)
-                    Text("\(yesLabel)")
-                        .foregroundColor(.white)
-                        .bold()
-                }
+                Divider()
+                    .frame(height: 0.3) // Dividerの太さを設定
+                    .background(Color.black) // Dividerの色を指定
+                    .padding(.bottom,5)
+ 
+                Text("\(yesLabel)")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(.white)
+                    .bold()
+                    .shadow(radius: 5)
             }
+            
         }
         .onAppear {
             currentManager = dayChangeManager.first
@@ -188,7 +170,7 @@ struct MyWidget: Widget {
 }
 
 
-#Preview(as: .systemMedium) { // widgetのサイズを指定
+#Preview(as: .systemSmall) { // widgetのサイズを指定
     MyWidget()
 } timeline: {
     SimpleEntry(date: .now, yesData: sampleData)

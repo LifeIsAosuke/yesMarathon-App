@@ -27,113 +27,158 @@ struct YesCalendarView: View {
     }()
     
     var body: some View {
-        VStack {
+        ZStack {
             
-            if calculateAchievedDays() >= 2{
-                HStack() {
-                    Text("\(calculateAchievedDays())")
-                        .font(.system(size: 70))
-                        .foregroundColor(Color.yesOrange)
-
-                    Text("日連続達成！！")
-                        .font(.system(size: 35))
-                        .alignmentGuide(.bottom) { dimension in dimension[.bottom]}
-                }
-                .bold()
-            }
+            Color.background
+                .ignoresSafeArea()
             
-            // 一言コメント表示
-            Text(showDayAchievedLabel())
-                .padding()
-            
-            //----------------------------------------------------------------------
-            //ここからカレンダー表示部分
-            
-            // ボタンと年月表示ヘッダー
-            HStack {
-                // 先月のカレンダー情報を取得するボタン
-                Button(action: { changeMonth(by: -1) }) {
-                    Image(systemName: "chevron.left")
-                        .bold()
-                }
-                Spacer()
-                // 現在の年月
-                Text(displayedDate, formatter: dateFormatter)
-                    .bold()
-                Spacer()
-                // 来月のカレンダー情報を取得するボタン
-                Button(action: { changeMonth(by: 1) }) {
-                    Image(systemName: "chevron.right")
-                        .bold()
-                }
-            }
-            .foregroundColor(.black)
-            .padding()
-            
-            // 曜日ヘッダー
-            HStack {
-                ForEach(["日", "月", "火", "水", "木", "金", "土"], id: \.self) { day in
-                    Text(day)
-                        .bold()
-                        .frame(maxWidth: .infinity)
-                        .foregroundColor(.black)
-                        .opacity(0.4)
-                }
-            }
-            .padding(.bottom, 8)
-            
-            Divider()
-            
-            // カレンダーの各セル
-            GeometryReader { geometry in
-                // セルの大きさを取得
-                let cellSize = geometry.size.width / 7
+            VStack {
                 
-                //　カレンダーの各セルを表示
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 0) {
-                    ForEach(Array(generateDates(for: displayedDate).enumerated()), id: \.offset) { index, date in
-                        if let date = date {
-                            // Find matching EachDayData for this date
-                            let matchingData = eachDayDatas.first { eachDayData in
-                                calendar.isDate(eachDayData.day, inSameDayAs: date)
-                            }
-                            
-                            if let data = matchingData {
-                                // yesを達成した日は詳細画面に飛べるようにする
-                                NavigationLink(destination: DetailView(matchingData: data)) {
-                                    VStack {
-                                        ZStack {
-                                            Circle()
-                                                .frame(width: 40, height: 40)
-                                                .foregroundColor(Color.yesOrange)
-                                                .opacity(0.8)
-                                            
-                                            Text("\(calendar.component(.day, from: date))")
-                                                .font(.headline)
-                                                .foregroundColor(.white)
-                                        }
-                                    }
-                                    .frame(width: cellSize, height: cellSize)
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                            } else {
-                                // それ以外は日付ラベル
-                                Text("\(calendar.component(.day, from: date))")
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
-                                    .frame(width: cellSize, height: cellSize)
-                            }
-                        } else {
-                            Spacer()
-                                .frame(width: cellSize, height: cellSize)
+                switch calculateAchievedDays() {
+                case 0:
+                    HStack() {
+                        Text("YES")
+                            .font(.system(size: 50))
+                            .foregroundColor(Color.yesOrange)
+                        
+                        Text("マラソンスタート！！")
+                            .font(.system(size: 20))
+                    }
+                    .bold()
+                    .shadow(radius: 1)
+                case 1:
+                    HStack() {
+                        Text("1")
+                            .font(.system(size: 70))
+                            .foregroundColor(Color.yesOrange)
+                        
+                        Text("日目達成！！")
+                            .font(.system(size: 35))
+                    }
+                    .bold()
+                    .shadow(radius: 1)
+                    
+                case 2...:
+                    HStack() {
+                        Text("\(calculateAchievedDays())")
+                            .font(.system(size: 70))
+                            .foregroundColor(Color.yesOrange)
+                        
+                        Text("日連続達成！！")
+                            .font(.system(size: 35))
+                    }
+                    .bold()
+                    .shadow(radius: 1)
+                default:
+                    Text("ログインに数が正しく表示されていません")
+                }
+                
+                // 一言コメント表示
+                Text(showDayAchievedLabel())
+                
+                Spacer()
+                
+                //----------------------------------------------------------------------
+                
+                //ここからカレンダー表示部分
+                
+                // ボタンと年月表示ヘッダー
+                VStack {
+                    HStack {
+                        // 先月のカレンダー情報を取得するボタン
+                        Button(action: { changeMonth(by: -1) }) {
+                            Image(systemName: "chevron.left")
+                                .bold()
+                        }
+                        Spacer()
+                        // 現在の年月
+                        Text(displayedDate, formatter: dateFormatter)
+                            .bold()
+                        Spacer()
+                        // 来月のカレンダー情報を取得するボタン
+                        Button(action: { changeMonth(by: 1) }) {
+                            Image(systemName: "chevron.right")
+                                .bold()
                         }
                     }
+                    .foregroundColor(.black)
+                    .padding()
+                    
+                    // 曜日ヘッダー
+                    HStack {
+                        ForEach(["日", "月", "火", "水", "木", "金", "土"], id: \.self) { day in
+                            Text(day)
+                                .bold()
+                                .frame(maxWidth: .infinity)
+                                .foregroundColor(.black)
+                                .opacity(0.4)
+                        }
+                    }
+                    .padding(.bottom, 8)
+                    
+                    Divider()
+                    
+                    // カレンダーの各セル
+                    GeometryReader { geometry in
+                        // セルの大きさを取得
+                        let cellSize = geometry.size.width / 7
+                        
+                        //　カレンダーの各セルを表示
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 0) {
+                            ForEach(Array(generateDates(for: displayedDate).enumerated()), id: \.offset) { index, date in
+                                if let date = date {
+                                    // Find matching EachDayData for this date
+                                    let matchingData = eachDayDatas.first { eachDayData in
+                                        calendar.isDate(eachDayData.day, inSameDayAs: date)
+                                    }
+                                    
+                                    if let data = matchingData {
+                                        // yesを達成した日は詳細画面に飛べるようにする
+                                        NavigationLink(destination: DetailView(matchingData: data)) {
+                                            VStack {
+              
+                                                Text("\(calendar.component(.day, from: date))")
+                                                    .font(.headline)
+                                                    .foregroundColor(.white)
+                                                    .background {
+                                                        Circle()
+                                                            .frame(width: 40, height: 40)
+                                                            .foregroundColor(Color.yesOrange)
+                                                            .opacity(0.8)
+                                                            .shadow(radius: 5)
+                                                    }
+                                                
+                                            }
+                                            .frame(width: cellSize, height: cellSize)
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
+                                    } else {
+                                        // それ以外は日付ラベル
+                                        Text("\(calendar.component(.day, from: date))")
+                                            .font(.headline)
+                                            .foregroundColor(.primary)
+                                            .frame(width: cellSize, height: cellSize)
+                                    }
+                                } else {
+                                    Spacer()
+                                        .frame(width: cellSize, height: cellSize)
+                                }
+                            }
+                        }
+                    }
+                    .frame(height: 300) // 高さを固定
                 }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .shadow(radius: 2)
+                
+                Spacer()
+                Spacer()
             }
-            .frame(height: 300) // 高さを固定
+            .padding()
+            .animation(.easeInOut, value: displayedDate) // アニメーションを追加
         }
-        .padding()
-        .animation(.easeInOut, value: displayedDate) // アニメーションを追加
     }
     
     // 表示する月の変更
@@ -207,7 +252,7 @@ struct YesCalendarView: View {
         case 0...100:
             showLabel = motivationalComments[yesAchievedDays]
             break
-            case 101...:
+        case 101...:
             showLabel = "101日以上達成です！おめでとう！"
             break
         default:

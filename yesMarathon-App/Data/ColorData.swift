@@ -19,4 +19,7 @@ extension Color {
     
     // 黄色
     static let yesYellow = Color(red: 253 / 255.0, green: 202 / 255.0, blue: 0 / 255.0)
+    
+    // 背景色
+    static let background = Color(red: 245/255.0, green: 245/255.0, blue: 245/255.0)
 }
