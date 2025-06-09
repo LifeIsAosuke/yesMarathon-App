@@ -8,25 +8,31 @@ struct YesLogView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
+            ZStack {
                 
-                YesCalendarView()
+                Color.background
+                    .ignoresSafeArea()
                 
-                Spacer()
+                VStack {
                     
-            }
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        HStack {
-                            Image(systemName: "chevron.backward")
-                            Text("ホームに戻る")
+                    YesCalendarView()
+                    
+                    Spacer()
+                        
+                }
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            HStack {
+                                Image(systemName: "chevron.backward")
+                                Text("ホームに戻る")
+                            }
                         }
+                        .foregroundColor(.black)
                     }
-                    .foregroundColor(.black)
                 }
             }
         }

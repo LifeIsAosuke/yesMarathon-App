@@ -92,7 +92,7 @@ struct HomeView: View {
                                     
                                     Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90.circle")
                                         .foregroundColor(Color.yesOrange)
-                                        .font(.system(size: 24))
+                                        .font(.system(size: 30))
                                     
                                     
                                 }
@@ -106,7 +106,7 @@ struct HomeView: View {
                                     
                                     Image(systemName: "pencil.circle")
                                         .foregroundColor(Color.yesOrange)
-                                        .font(.system(size: 24))
+                                        .font(.system(size: 30))
                                     
                                 }
                                 .alert("本日のYESを入力", isPresented: $isPresented, actions: {
@@ -178,10 +178,6 @@ struct HomeView: View {
                         } label: {
                             ZStack {
                                 Circle()
-                                    .foregroundColor(Color.yesYellowOrange)
-                                    .frame(width: 320, height: 320)
-                                    .scaleEffect(animationFlag ? 1.1 : 1.0)
-                                Circle()
                                     .foregroundColor(Color.yesOrange)
                                     .frame(width: 310, height: 310)
                                     .scaleEffect(animationFlag ? 1.1 : 1.0)
@@ -192,12 +188,10 @@ struct HomeView: View {
                                     .scaleEffect(animationFlag ? 1.1 : 1.0)
                             }
                         }
+                        .shadow(color: Color.yesYellow, radius: 5)
                         .frame(maxHeight: .infinity, alignment: .bottom)
                         .padding(.bottom, 150)
-                        
-                        
-                        
-                        
+     
                     } else {
                         ScrollView {
                             VStack {
