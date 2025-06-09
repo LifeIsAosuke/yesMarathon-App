@@ -173,15 +173,13 @@ struct HomeView: View {
                         }
                         
                         Divider()
-                        
-                        HStack {
+             
                             // YESお題
-                            Text(yesLabel.wordJoined())
-                                .font(.system(size:25))
-                                .bold()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                        }
+                        Text(yesLabel.wordJoined())
+                            .font(.system(size:25))
+                            .bold()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                 
                         
                         
                         
