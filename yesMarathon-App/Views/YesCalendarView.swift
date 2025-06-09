@@ -34,22 +34,38 @@ struct YesCalendarView: View {
             
             VStack {
                 
-                if calculateAchievedDays() >= 2{
+                switch calculateAchievedDays() {
+                case 0:
+                    Text("YESマラソンスタート！！")
+                        .font(.system(size: 35))
+                case 1:
+                    HStack() {
+                        Text("1")
+                            .font(.system(size: 70))
+                            .foregroundColor(Color.yesOrange)
+                        
+                        Text("日目達成！！")
+                            .font(.system(size: 35))
+                    }
+                    .bold()
+                case 2...:
                     HStack() {
                         Text("\(calculateAchievedDays())")
                             .font(.system(size: 70))
                             .foregroundColor(Color.yesOrange)
-
+                        
                         Text("日連続達成！！")
                             .font(.system(size: 35))
-                            .alignmentGuide(.bottom) { dimension in dimension[.bottom]}
                     }
                     .bold()
+                default:
+                    Text("ログインに数が正しく表示されていません")
                 }
                 
                 // 一言コメント表示
                 Text(showDayAchievedLabel())
-                    .padding()
+                
+                Spacer()
                 
                 //----------------------------------------------------------------------
                 
@@ -142,7 +158,10 @@ struct YesCalendarView: View {
                 .padding()
                 .background(Color.white)
                 .cornerRadius(10)
-                .shadow(radius: 5)
+                .shadow(radius: 2)
+                
+                Spacer()
+                Spacer()
             }
             .padding()
             .animation(.easeInOut, value: displayedDate) // アニメーションを追加
@@ -220,7 +239,7 @@ struct YesCalendarView: View {
         case 0...100:
             showLabel = motivationalComments[yesAchievedDays]
             break
-            case 101...:
+        case 101...:
             showLabel = "101日以上達成です！おめでとう！"
             break
         default:

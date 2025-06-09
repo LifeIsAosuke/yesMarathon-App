@@ -61,6 +61,10 @@ struct HomeView: View {
     @State private var animationFlag: Bool = false
     @State private var animationScale: Double = 1.2
     
+    init() {
+        UITextView.appearance().backgroundColor = .clear
+    }
+    
     var body: some View {
         NavigationStack {
             
@@ -69,8 +73,33 @@ struct HomeView: View {
                 Color.background
                     .ignoresSafeArea()
                 
+                if !isYesButtonTapped {
+                    NavigationLink {
+                        YesLogView()
+                    } label: {
+                        VStack {
+                            Image(systemName: "calendar.badge.checkmark")
+                                .font(.system(size: 45))
+                            Text("YESログ")
+                                .foregroundStyle(Color.yesOrange)
+                                .font(.system(size: 15))
+                        }
+                        .padding()
+                        .foregroundStyle(Color.yesOrange)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                    .padding()
+                }
+                
                 VStack { // 全体のVStack
                     
+                    if !isYesButtonTapped {
+                        Spacer(minLength: 120)
+                    } else {
+                        Spacer(minLength: 50)
+                    }
+                    
+                    // 本日のYESラベル
                     VStack {
                         
                         HStack {
@@ -158,11 +187,10 @@ struct HomeView: View {
                     .background(Color.white)
                     .cornerRadius(10)
                     .padding(.horizontal, 32)
-                    .padding(.vertical, 16)
                     // 影をつける
-                    .shadow(radius: 5)
+                    .shadow(radius: 2)
                     
-                    Spacer()
+                    Spacer(minLength: 50)
                     
                     if !isYesButtonTapped{
                         // YESボタン
@@ -181,6 +209,7 @@ struct HomeView: View {
                                     .foregroundColor(Color.yesOrange)
                                     .frame(width: 310, height: 310)
                                     .scaleEffect(animationFlag ? 1.1 : 1.0)
+                                    .shadow(color: Color.yesYellow, radius: 5)
                                 Text("YES!")
                                     .font(.system(size: 90))
                                     .bold()
@@ -188,7 +217,6 @@ struct HomeView: View {
                                     .scaleEffect(animationFlag ? 1.1 : 1.0)
                             }
                         }
-                        .shadow(color: Color.yesYellow, radius: 5)
                         .frame(maxHeight: .infinity, alignment: .bottom)
                         .padding(.bottom, 150)
      
@@ -329,23 +357,6 @@ struct HomeView: View {
                     }
                     
                     Spacer()
-                }
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        NavigationLink {
-                            YesLogView()
-                        } label: {
-                            VStack {
-                                Image(systemName: "calendar.badge.checkmark")
-                                    .font(.system(size: 20))
-                                Text("YESログ")
-                                    .foregroundStyle(Color.yesOrange)
-                                    .font(.system(size: 15))
-                            }
-                            .padding()
-                            .foregroundStyle(Color.yesOrange)
-                        }
-                    }
                 }
             }
             
