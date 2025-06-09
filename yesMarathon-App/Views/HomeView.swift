@@ -343,11 +343,12 @@ struct HomeView: View {
                     } label: {
                         VStack {
                             Image(systemName: "calendar.badge.checkmark")
-                                .font(.system(size: 40))
+                                .font(.system(size: 20))
                             Text("YESログ")
                                 .foregroundStyle(Color.yesOrange)
                                 .font(.system(size: 15))
                         }
+                        .padding()
                         .foregroundStyle(Color.yesOrange)
                     }
                 }
