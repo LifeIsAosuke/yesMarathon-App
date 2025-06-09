@@ -48,6 +48,7 @@ struct YesCalendarView: View {
                             .font(.system(size: 35))
                     }
                     .bold()
+                    
                 case 2...:
                     HStack() {
                         Text("\(calculateAchievedDays())")
