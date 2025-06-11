@@ -13,6 +13,7 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var dayChangeManager: [DayChangeManager] // データベースに登録されているDayChangeManager型のインスタンスを全て取得
     
+    
     // ------------------------------
     @State private var currentManager: DayChangeManager?
 
