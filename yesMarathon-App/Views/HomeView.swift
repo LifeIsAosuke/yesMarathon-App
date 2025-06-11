@@ -84,7 +84,7 @@ struct HomeView: View {
                         VStack {
                             Image(systemName: "calendar.badge.checkmark")
                                 .font(.system(size: 45))
-                                
+                            
                             Text("YESログ")
                                 .foregroundStyle(Color.yesOrange)
                                 .font(.system(size: 15))
@@ -105,7 +105,7 @@ struct HomeView: View {
                         Spacer(minLength: 50)
                     }
                     
-
+                    
                     
                     // 本日のYESラベル
                     VStack {
@@ -128,7 +128,7 @@ struct HomeView: View {
                                     Task {
                                         await handleShuffleButtonTap()
                                     }
-
+                                    
                                 } label: {
                                     
                                     Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90.circle")
@@ -154,7 +154,7 @@ struct HomeView: View {
                                 }
                                 .alert("本日のYESを入力", isPresented: $isPresented, actions: {
                                     TextField("\(yesSuggestion.random())", text: $editingText)
-                                
+                                    
                                     
                                     Button{
                                         // 変更があればYESラベルに登録
@@ -183,13 +183,13 @@ struct HomeView: View {
                         }
                         
                         Divider()
-             
-                            // YESお題
+                        
+                        // YESお題
                         Text(yesLabel.wordJoined())
                             .font(.system(size:25))
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
-        
+                        
                     }
                     .frame(maxWidth: .infinity, alignment: .top)
                     .padding()
@@ -202,7 +202,7 @@ struct HomeView: View {
                     Spacer()
                     Spacer()
                     
-  
+                    
                     
                     if !isYesButtonTapped{
                         // YESボタン
@@ -327,12 +327,12 @@ struct HomeView: View {
                                                 
                                             }
                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                      
+                                            
                                             
                                             
                                             Image(systemName: "chevron.right")
                                                 .frame(maxWidth: .infinity, alignment: .trailing)
-                                              
+                                            
                                         }
                                         .frame(minHeight: 40)
                                         .padding()
@@ -386,7 +386,7 @@ struct HomeView: View {
             yesLabel = currentManager?.showYesTitle() ?? "currentManagerの取得に失敗しているよ"
         }
     }
-
+    
     
     // SwiftDataに保存するための関数
     private func addData() {
@@ -440,12 +440,6 @@ struct HomeView: View {
     @MainActor
     func fetchOpenAIResponse() async {
         
-        let prompts = [
-            "26字以下で1日完結し,日常でYES行動を促す簡単にできる挑戦を提案して",
-            "26字以下で1日完結し、日常生活でYESと言える小さな挑戦を教えて",
-            "26字以下で1日完結し、自分を前向きにするYES行動の挑戦をお願い",
-            "日常の中でYESと言え1日完結する小さな挑戦を、26字以下で提案して"
-        ]
         guard let randomPrompt = prompts.randomElement() else { return }
         
         // API Keyを取得
