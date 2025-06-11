@@ -9,6 +9,8 @@ import SwiftUI
 import SwiftData
 import PhotosUI
 import WidgetKit
+import OpenAI
+
 
 extension String {
     // 全ての文字の間に Unicode WORD JOINER を挿入する
@@ -60,6 +62,9 @@ struct HomeView: View {
     // Yesボタンタップ時のアニメーション起動フラグ変数
     @State private var animationFlag: Bool = false
     
+    
+    @State private var responseText: String = "Loading..."
+    
     init() {
         UITextView.appearance().backgroundColor = .clear
     }
@@ -100,6 +105,8 @@ struct HomeView: View {
                         Spacer(minLength: 50)
                     }
                     
+
+                    
                     // 本日のYESラベル
                     VStack {
                         
@@ -110,15 +117,18 @@ struct HomeView: View {
                                 .bold()
                             
                             
+                            
                             Spacer()
                             
                             if !isYesButtonTapped {
                                 
                                 // シャッフルボタン
                                 Button{
-                                    yesLabel = YesSuggestion().random()
-                                    modifyYesLabel()
-                                    
+                                    // ChatGPT APIを呼び出し
+                                    Task {
+                                        await handleShuffleButtonTap()
+                                    }
+
                                 } label: {
                                     
                                     Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90.circle")
@@ -144,7 +154,7 @@ struct HomeView: View {
                                 }
                                 .alert("本日のYESを入力", isPresented: $isPresented, actions: {
                                     TextField("\(yesSuggestion.random())", text: $editingText)
-                                    
+                                
                                     
                                     Button{
                                         // 変更があればYESラベルに登録
@@ -179,10 +189,7 @@ struct HomeView: View {
                             .font(.system(size:25))
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
-                 
-                        
-                        
-                        
+        
                     }
                     .frame(maxWidth: .infinity, alignment: .top)
                     .padding()
@@ -194,6 +201,8 @@ struct HomeView: View {
                     
                     Spacer()
                     Spacer()
+                    
+  
                     
                     if !isYesButtonTapped{
                         // YESボタン
@@ -377,6 +386,7 @@ struct HomeView: View {
             yesLabel = currentManager?.showYesTitle() ?? "currentManagerの取得に失敗しているよ"
         }
     }
+
     
     // SwiftDataに保存するための関数
     private func addData() {
@@ -419,6 +429,52 @@ struct HomeView: View {
         // widgetを更新
         WidgetCenter.shared.reloadAllTimelines()
     }
+    
+    private func handleShuffleButtonTap() async {
+        await fetchOpenAIResponse()
+        yesLabel = responseText
+        modifyYesLabel()
+    }
+    
+    // ChatGPT API 呼び出し
+    @MainActor
+    func fetchOpenAIResponse() async {
+        
+        let prompts = [
+            "26字以下で1日完結し,日常でYES行動を促す簡単にできる挑戦を提案して",
+            "26字以下で1日完結し、日常生活でYESと言える小さな挑戦を教えて",
+            "26字以下で1日完結し、自分を前向きにするYES行動の挑戦をお願い",
+            "日常の中でYESと言え1日完結する小さな挑戦を、26字以下で提案して"
+        ]
+        guard let randomPrompt = prompts.randomElement() else { return }
+        
+        // API Keyを取得
+        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "OpenAI_API_KEY") as? String, !apiKey.isEmpty else {
+            fatalError("API Key が設定されていません")
+        }
+        let openAI = OpenAI(apiToken: apiKey)
+        
+        guard let message = ChatQuery.ChatCompletionMessageParam(role: .user, content: randomPrompt) else { return }
+        
+        let query = ChatQuery(messages: [message], model: .gpt4_o)
+        
+        do {
+            let result = try await openAI.chats(query: query)
+            if let firstChoice = result.choices.first, let content = firstChoice.message.content {
+                responseText = content
+            } else {
+                handleAPIError()
+            }
+        } catch {
+            handleAPIError()
+        }
+    }
+    
+    private func handleAPIError() {
+        responseText = YesSuggestion().random()
+        print("Open API の実行に失敗しました。")
+    }
+    
 }
 
 #Preview {

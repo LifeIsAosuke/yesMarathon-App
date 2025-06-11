@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		425E5F872DF9647500B20777 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 425E5F862DF9647500B20777 /* OpenAI */; };
 		428D85992DF183D500D64710 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428D85982DF183D500D64710 /* WidgetKit.framework */; };
 		428D859B2DF183D500D64710 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428D859A2DF183D500D64710 /* SwiftUI.framework */; };
 		428D85A62DF183D700D64710 /* MyWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 428D85962DF183D500D64710 /* MyWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -61,6 +62,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		425E5F892DF96F5600B20777 /* Exceptions for "yesMarathon-App" folder in "yesMarathon-App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				.gitignore,
+				Info.plist,
+			);
+			target = 42BF13A52DE7514400E7B73B /* yesMarathon-App */;
+		};
 		428D85AA2DF183D700D64710 /* Exceptions for "MyWidget" folder in "MyWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -78,6 +87,16 @@
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		425E5F8C2DF972BA00B20777 /* Exceptions for "yesMarathon-App" folder in "Compile Sources" phase from "yesMarathon-App" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 42BF13A22DE7514400E7B73B /* Sources */;
+			membershipExceptions = (
+				.gitignore,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		428D859C2DF183D500D64710 /* MyWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -90,6 +109,8 @@
 		42BF13A82DE7514400E7B73B /* yesMarathon-App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				425E5F892DF96F5600B20777 /* Exceptions for "yesMarathon-App" folder in "yesMarathon-App" target */,
+				425E5F8C2DF972BA00B20777 /* Exceptions for "yesMarathon-App" folder in "Compile Sources" phase from "yesMarathon-App" target */,
 				42C42B132DF3EB7C00BA05E7 /* Exceptions for "yesMarathon-App" folder in "MyWidgetExtension" target */,
 			);
 			path = "yesMarathon-App";
@@ -121,6 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				425E5F872DF9647500B20777 /* OpenAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,6 +240,7 @@
 			);
 			name = "yesMarathon-App";
 			packageProductDependencies = (
+				425E5F862DF9647500B20777 /* OpenAI */,
 			);
 			productName = "yesMarathon-App";
 			productReference = 42BF13A62DE7514400E7B73B /* yesMarathon-App.app */;
@@ -304,6 +327,9 @@
 			);
 			mainGroup = 42BF139D2DE7514400E7B73B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				425E5F832DF95F7900B20777 /* XCRemoteSwiftPackageReference "OpenAI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 42BF13A72DE7514400E7B73B /* Products */;
 			projectDirPath = "";
@@ -586,6 +612,8 @@
 				DEVELOPMENT_TEAM = 8CG4864C4M;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "yesMarathon-App/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -615,6 +643,8 @@
 				DEVELOPMENT_TEAM = 8CG4864C4M;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "yesMarathon-App/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -750,6 +780,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		425E5F832DF95F7900B20777 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MacPaw/OpenAI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		425E5F862DF9647500B20777 /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 425E5F832DF95F7900B20777 /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 42BF139E2DE7514400E7B73B /* Project object */;
 }
