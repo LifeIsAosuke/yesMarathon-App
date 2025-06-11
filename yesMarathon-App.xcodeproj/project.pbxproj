@@ -304,6 +304,9 @@
 			);
 			mainGroup = 42BF139D2DE7514400E7B73B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				425E5F832DF95F7900B20777 /* XCRemoteSwiftPackageReference "OpenAI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 42BF13A72DE7514400E7B73B /* Products */;
 			projectDirPath = "";
@@ -750,6 +753,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		425E5F832DF95F7900B20777 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MacPaw/OpenAI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 42BF139E2DE7514400E7B73B /* Project object */;
 }
