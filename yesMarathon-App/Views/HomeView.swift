@@ -439,13 +439,23 @@ struct HomeView: View {
     // ChatGPT API 呼び出し
     @MainActor
     func fetchOpenAIResponse() async {
-        // API Keyがハードコーディングされており危険
+        
+        let prompts = [
+            "26字以下で1日完結し,日常でYES行動を促す簡単にできる挑戦を提案して",
+            "26字以下で1日完結し、日常生活でYESと言える小さな挑戦を教えて",
+            "26字以下で1日完結し、自分を前向きにするYES行動の挑戦をお願い",
+            "日常の中でYESと言え1日完結する小さな挑戦を、26字以下で提案して"
+        ]
+        guard let randomPrompt = prompts.randomElement() else { return }
+        
+        // API Keyを取得
         guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "OpenAI_API_KEY") as? String, !apiKey.isEmpty else {
             fatalError("API Key が設定されていません")
         }
         let openAI = OpenAI(apiToken: apiKey)
         
-        guard let message = ChatQuery.ChatCompletionMessageParam(role: .user, content: "普段ならしないような行動を一つ提案して。１行程度の自己肯定感が上がるようなもので") else { return }
+        guard let message = ChatQuery.ChatCompletionMessageParam(role: .user, content: randomPrompt) else { return }
+        
         let query = ChatQuery(messages: [message], model: .gpt4_o)
         
         do {
