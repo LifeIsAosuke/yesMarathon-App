@@ -444,6 +444,7 @@ struct HomeView: View {
         
         // API Keyを取得
         guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "OpenAI_API_KEY") as? String, !apiKey.isEmpty else {
+
             fatalError("API Key が設定されていません")
         }
         let openAI = OpenAI(apiToken: apiKey)
@@ -469,6 +470,18 @@ struct HomeView: View {
         print("Open API の実行に失敗しました。")
     }
     
+}
+
+extension Bundle {
+    func value(for key: String, inPlistNamed plistName: String) -> String? {
+        guard let url = self.url(forResource: plistName, withExtension: "plist"),
+              let data = try? Data(contentsOf: url),
+              let plist = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any]
+        else {
+            return nil
+        }
+        return plist[key] as? String
+    }
 }
 
 #Preview {

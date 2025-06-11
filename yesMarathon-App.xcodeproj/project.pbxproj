@@ -65,7 +65,6 @@
 		425E5F892DF96F5600B20777 /* Exceptions for "yesMarathon-App" folder in "yesMarathon-App" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				.gitignore,
 				Info.plist,
 			);
 			target = 42BF13A52DE7514400E7B73B /* yesMarathon-App */;
@@ -87,16 +86,6 @@
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		425E5F8C2DF972BA00B20777 /* Exceptions for "yesMarathon-App" folder in "Compile Sources" phase from "yesMarathon-App" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = 42BF13A22DE7514400E7B73B /* Sources */;
-			membershipExceptions = (
-				.gitignore,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		428D859C2DF183D500D64710 /* MyWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -110,7 +99,6 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				425E5F892DF96F5600B20777 /* Exceptions for "yesMarathon-App" folder in "yesMarathon-App" target */,
-				425E5F8C2DF972BA00B20777 /* Exceptions for "yesMarathon-App" folder in "Compile Sources" phase from "yesMarathon-App" target */,
 				42C42B132DF3EB7C00BA05E7 /* Exceptions for "yesMarathon-App" folder in "MyWidgetExtension" target */,
 			);
 			path = "yesMarathon-App";
