@@ -13,6 +13,9 @@ struct AchievedView: View {
     // データベースからDayChangeManagerの情報を取得
     @Query private var dayChangeManager: [DayChangeManager]
     @State private var currentManager: DayChangeManager?
+    //UserInfoManager型のインスタンスを全て取得
+    @Query private var userInfoManager: [UserInfoManager]
+    @State private var currentUserInfo: UserInfoManager?
     
     //　背景色
     @State private var backgroundColor: Color = Color.white
@@ -26,6 +29,9 @@ struct AchievedView: View {
     // アニメーションを適応するかの管理用変数
     @State private var isAnimated: Bool = false
     
+    // 設定画面へ画面遷移管理用のフラグ変数
+    @State private var isShowSettingView: Bool = false
+    
     let backgroundGradientColor: LinearGradient = LinearGradient(gradient: Gradient(colors: [.yellow, .red]), startPoint: .topLeading, endPoint: .bottomTrailing)
     
     var body: some View {
@@ -34,6 +40,55 @@ struct AchievedView: View {
                 
                 // 背景
                 backgroundColor.ignoresSafeArea()
+                
+                VStack {
+                    HStack {
+                        
+                        Button {
+                            isShowSettingView = true
+                        } label: {
+                            if let userIconData = currentUserInfo?.userIconData, let uiImage = UIImage(data: userIconData) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                                    .shadow(radius: 5)
+                                    .padding()
+                            } else {
+                                Image(systemName: "person.crop.circle.fill")
+                                    .foregroundStyle(Color.yesOrange)
+                                    .scaleEffect(3)
+                                    .padding()
+                            }
+                        }
+                        .padding()
+                        .sheet(isPresented: $isShowSettingView) {
+                            SettingView()
+                        }
+                        
+                        Spacer()
+                        
+                        
+                        // YESログボタン
+                        NavigationLink {
+                            YesLogView()
+                        } label: {
+                            VStack {
+                                Image(systemName: "calendar.badge.checkmark")
+                                    .font(.system(size: 45))
+                                
+                                Text("YESログ")
+                                    .font(.system(size: 15))
+                            }
+                            .padding()
+                            .foregroundStyle(Color.yesOrange)
+                            .shadow(radius: 3)
+                        }
+                    }
+                    .padding()
+                    
+                    Spacer()
+                }
                    
                 
                 VStack {
@@ -63,33 +118,13 @@ struct AchievedView: View {
                         .padding()
                 }
                 .padding()
-                
-                // YESログボタン
-                VStack {
-                    HStack {
-                        Spacer()
-                        NavigationLink {
-                            YesLogView()
-                        } label: {
-                            VStack {
-                                Image(systemName: "calendar.badge.checkmark")
-                                    .resizable()
-                                    .frame(width: 48, height: 48)
-                                Text("YESログ")
-                                    .font(.caption)
-                            }
-                            .foregroundColor(Color.yesOrange)
-                            .padding()
-                        }
-                    }
-                    Spacer()
-                }
             }
         }
         // 画面遷移後アニメーション開始
         .onAppear {
             
             currentManager = dayChangeManager.first
+            currentUserInfo = userInfoManager.first
             
             backgroundColor = Color.yesOrange
             
