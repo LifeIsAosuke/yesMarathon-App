@@ -9,46 +9,70 @@ import SwiftData
 
 struct ContentView: View {
     // -----データベースから情報を取得-----
-    
     @Environment(\.modelContext) private var modelContext
-    @Query private var dayChangeManager: [DayChangeManager] // データベースに登録されているDayChangeManager型のインスタンスを全て取得
-    @State private var currentManager: DayChangeManager?
+    //DayChangeManager型のインスタンスを全て取得
+    @Query private var dayChangeManager: [DayChangeManager]
+    @State private var currentDayChangeManager: DayChangeManager?
+    
+    //UserInfoManager型のインスタンスを全て取得
+    @Query private var userInfoManager: [UserInfoManager]
+    @State private var currentUserInfo: UserInfoManager?
     // ------------------------------
 
     var body: some View {
         
         Group {
-            if currentManager?.isTrue == true { // isTrue == true
+            if currentDayChangeManager?.isTrue == true { // isTrue == true
                 AchievedView()
-            } else if currentManager?.isTrue == false { // isTrue == true
+            } else if currentDayChangeManager?.isTrue == false { // isTrue == true
                 HomeView()
             } else {
                 Text("画面読み込みに失敗しました")
             }
         }
         .onAppear {
-            if dayChangeManager.isEmpty { // アプリ初回起動時
-                currentManager = initializeManager()
-            } else { // 2回目以降のアプリ起動
-                currentManager = dayChangeManager.first
+            
+            if isInitialized() { // 初回起動時
+                initializeManager()
+            } else { // 2回目以降のログイン
+                currentDayChangeManager = dayChangeManager.first
+                currentUserInfo = userInfoManager.first
             }
+            
+            //本日のYESを更新
             startYesLabelUpdate()
 
         }
-        .onChange(of: dayChangeManager) { _ in
-            currentManager = dayChangeManager.first
+//        .onChange(of: dayChangeManager) { _ in
+//            currentManager = dayChangeManager.first
+//        }
+    }
+    
+    //　アプリの初回起動かどうかを確かめる関数
+    private func isInitialized() -> Bool {
+        if dayChangeManager.isEmpty && userInfoManager.isEmpty {
+            return true // 初回起動である（true）
+        } else {
+            print("初回起動エラー")
         }
+        
+        return false // 2回目以降の起動である（false）
     }
 
-    private func initializeManager() -> DayChangeManager {
-        // DayChangeManagerのインスタンス化
-        let newManager = DayChangeManager(yesTitle: YesSuggestion().random())
+    // 各Managerの初期化
+    private func initializeManager(){
+
+        let newDayChangeManager = DayChangeManager(yesTitle: YesSuggestion().random())
+        let newUserInfoManager = UserInfoManager()
         
         
-        modelContext.insert(newManager)
+    
+        modelContext.insert(newDayChangeManager)
+        modelContext.insert(newUserInfoManager)
         try? modelContext.save() // データベースに変更内容を保存
         
-        return newManager
+        currentDayChangeManager = newDayChangeManager
+        currentUserInfo = newUserInfoManager
     }
 
     private func startYesLabelUpdate() {
@@ -70,10 +94,10 @@ struct ContentView: View {
         Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { _ in
             
             // currentManagerがインスタンス化されているか確認
-            guard let manager = currentManager else { return }
+            guard let manager = currentDayChangeManager else { return }
             
-            currentManager?.isTrue = false // 本日のYES達成をfalseに
-            currentManager?.EditYesTitle(yesTitle: YesSuggestion().random())
+            currentDayChangeManager?.isTrue = false // 本日のYES達成をfalseに
+            currentDayChangeManager?.EditYesTitle(yesTitle: YesSuggestion().random())
             
             do {
                 try modelContext.save()
