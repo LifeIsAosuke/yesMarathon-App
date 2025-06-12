@@ -65,6 +65,9 @@ struct HomeView: View {
     
     @State private var responseText: String = "Loading..."
     
+    // 設定画面へ画面遷移管理用のフラグ変数
+    @State private var isShowSettingView: Bool = false
+    
     init() {
         UITextView.appearance().backgroundColor = .clear
     }
@@ -77,26 +80,46 @@ struct HomeView: View {
                 Color.background
                     .ignoresSafeArea()
                 
-                // test
+            
                 
                 if !isYesButtonTapped {
-                    NavigationLink {
-                        YesLogView()
-                    } label: {
-                        VStack {
-                            Image(systemName: "calendar.badge.checkmark")
-                                .font(.system(size: 45))
+                    VStack {
+                        HStack {
                             
-                            Text("YESログ")
+                            Button {
+                                isShowSettingView = true
+                            } label: {
+                                Image(systemName: "person.crop.circle")
+                                    .scaleEffect(2.5)
+                            }
+                            .padding()
+                            .sheet(isPresented: $isShowSettingView) {
+                                SettingView()
+                            }
+                            
+                            Spacer()
+                            
+                            
+                            // YESログボタン
+                            NavigationLink {
+                                YesLogView()
+                            } label: {
+                                VStack {
+                                    Image(systemName: "calendar.badge.checkmark")
+                                        .font(.system(size: 45))
+                                    
+                                    Text("YESログ")
+                                        .font(.system(size: 15))
+                                }
+                                .padding()
                                 .foregroundStyle(Color.yesOrange)
-                                .font(.system(size: 15))
+                                .shadow(radius: 3)
+                            }
                         }
                         .padding()
-                        .foregroundStyle(Color.yesOrange)
-                        .shadow(radius: 3)
+                        
+                        Spacer()
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                    .padding()
                 }
                 
                 VStack { // 全体のVStack
