@@ -6,9 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SettingView: View {
     
+    // データベースから情報を取得
+    @Environment(\.modelContext) private var modelContext
+    @Query private var userInfoManager: [UserInfoManager]
+    
+    
+    // 画面キルに関する変数
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
