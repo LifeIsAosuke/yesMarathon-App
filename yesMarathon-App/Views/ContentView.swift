@@ -9,50 +9,86 @@ import SwiftData
 
 struct ContentView: View {
     // -----データベースから情報を取得-----
-    
     @Environment(\.modelContext) private var modelContext
-    @Query private var dayChangeManager: [DayChangeManager] // データベースに登録されているDayChangeManager型のインスタンスを全て取得
+    //DayChangeManager型のインスタンスを全て取得
+    @Query private var dayChangeManager: [DayChangeManager]
+    @State private var currentDayChangeManager: DayChangeManager?
     
-    
+    //UserInfoManager型のインスタンスを全て取得
+    @Query private var userInfoManager: [UserInfoManager]
+    @State private var currentUserInfo: UserInfoManager?
     // ------------------------------
-    @State private var currentManager: DayChangeManager?
 
     var body: some View {
         
         Group {
-            if currentManager?.isTrue == true { // isTrue == true
+            if currentDayChangeManager?.isTrue == true { // isTrue == true
                 AchievedView()
-            } else if currentManager?.isTrue == false { // isTrue == true
+            } else if currentDayChangeManager?.isTrue == false { // isTrue == true
                 HomeView()
             } else {
                 Text("画面読み込みに失敗しました")
             }
         }
         .onAppear {
-            if dayChangeManager.isEmpty { // アプリ初回起動時
-                currentManager = initializeManager()
-            } else { // 2回目以降のアプリ起動
-                currentManager = dayChangeManager.first
+            if isInitialized() { // 初回起動時
+                initializeManager()
             }
+            
+            // 初回起動後や2回目以降のログイン時に必ずデータを設定
+            currentDayChangeManager = dayChangeManager.first ?? {
+                let manager = DayChangeManager(yesTitle: YesSuggestion().random())
+                modelContext.insert(manager)
+                return manager
+            }()
+            
+            currentUserInfo = userInfoManager.first ?? {
+                let manager = UserInfoManager()
+                modelContext.insert(manager)
+                return manager
+            }()
+            
+            do {
+                try modelContext.save()
+            } catch {
+                print("初期データの保存に失敗しました: \(error.localizedDescription)")
+            }
+            
+            // 本日のYESを更新
             startYesLabelUpdate()
-
+            
+            if currentUserInfo?.isNotificationOn == true {
+                // 通知設定
+                NotificationManager.instance.sendNotification_morning()
+                NotificationManager.instance.sendNotification_evening()
+            }
         }
-        .onChange(of: dayChangeManager) { _ in
-            currentManager = dayChangeManager.first
+    }
+    
+    //　アプリが初回起動かを確かめる関数
+    private func isInitialized() -> Bool {
+        // 両方のデータが存在する場合に「初期化済み」とみなす
+        return !dayChangeManager.isEmpty && !userInfoManager.isEmpty
+    }
+
+    // 各Managerの初期化
+    private func initializeManager() {
+        let newDayChangeManager = DayChangeManager(yesTitle: YesSuggestion().random())
+        let newUserInfoManager = UserInfoManager()
+
+        modelContext.insert(newDayChangeManager)
+        modelContext.insert(newUserInfoManager)
+        
+        do {
+            try modelContext.save() // データベースに変更内容を保存
+            currentDayChangeManager = newDayChangeManager
+            currentUserInfo = newUserInfoManager
+        } catch {
+            print("初期化に失敗しました: \(error.localizedDescription)")
         }
     }
 
-    private func initializeManager() -> DayChangeManager {
-        // DayChangeManagerのインスタンス化
-        let newManager = DayChangeManager(yesTitle: YesSuggestion().random())
-        
-        
-        modelContext.insert(newManager)
-        try? modelContext.save() // データベースに変更内容を保存
-        
-        return newManager
-    }
-
+    // 日付変更に伴う処理を行う関数
     private func startYesLabelUpdate() {
         // 次の午前０時を計算
         guard let midnight = Calendar.current.nextDate(
@@ -72,20 +108,16 @@ struct ContentView: View {
         Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { _ in
             
             // currentManagerがインスタンス化されているか確認
-            guard let manager = currentManager else { return }
+            guard let manager = currentDayChangeManager else { return }
             
-            currentManager?.isTrue = false // 本日のYES達成をfalseに
-            currentManager?.EditYesTitle(yesTitle: YesSuggestion().random())
+            currentDayChangeManager?.isTrue = false // 本日のYES達成をfalseに
+            currentDayChangeManager?.EditYesTitle(yesTitle: YesSuggestion().random())
             
             do {
                 try modelContext.save()
             } catch {
                 print("managerの更新に失敗しました: \(error.localizedDescription)")
             }
-            
-            // 通知設定
-            NotificationManager.instance.sendNotification_morning()
-            NotificationManager.instance.sendNotification_evening()
             
             // 再びこの関数を実行
             startYesLabelUpdate()
@@ -95,10 +127,8 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: [DayChangeManager.self, EachDayData.self])
+        .modelContainer(for: [DayChangeManager.self, EachDayData.self, UserInfoManager.self])
 }
-
-
 
 #Preview {
     ContentView()

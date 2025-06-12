@@ -27,8 +27,10 @@ struct HomeView: View {
     // DayChangeManagerの情報を取得（配列で取得し状態管理）-----
     @Environment(\.modelContext) private var modelContext
     @Query private var dayChangeManager: [DayChangeManager]
-    
     @State private var currentManager: DayChangeManager?
+    
+    @Query private var userInfoManager: [UserInfoManager]
+    @State private var currentUserInfo: UserInfoManager?
     // --------------------------------------------------
     
     //-----入力部分に使う変数--------------------------------------
@@ -65,6 +67,9 @@ struct HomeView: View {
     
     @State private var responseText: String = "Loading..."
     
+    // 設定画面へ画面遷移管理用のフラグ変数
+    @State private var isShowSettingView: Bool = false
+    
     init() {
         UITextView.appearance().backgroundColor = .clear
     }
@@ -78,23 +83,54 @@ struct HomeView: View {
                     .ignoresSafeArea()
                 
                 if !isYesButtonTapped {
-                    NavigationLink {
-                        YesLogView()
-                    } label: {
-                        VStack {
-                            Image(systemName: "calendar.badge.checkmark")
-                                .font(.system(size: 45))
+                    VStack {
+                        HStack {
                             
-                            Text("YESログ")
+                            Button {
+                                isShowSettingView = true
+                            } label: {
+                                if let userIconData = currentUserInfo?.userIconData, let uiImage = UIImage(data: userIconData) {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(Circle())
+                                        .shadow(radius: 5)
+                                        .padding()
+                                } else {
+                                    Image(systemName: "person.crop.circle.fill")
+                                        .foregroundStyle(Color.yesOrange)
+                                        .scaleEffect(3)
+                                        .padding()
+                                }
+                            }
+                            .padding()
+                            .sheet(isPresented: $isShowSettingView) {
+                                SettingView()
+                            }
+                            
+                            Spacer()
+                            
+                            
+                            // YESログボタン
+                            NavigationLink {
+                                YesLogView()
+                            } label: {
+                                VStack {
+                                    Image(systemName: "calendar.badge.checkmark")
+                                        .font(.system(size: 45))
+                                    
+                                    Text("YESログ")
+                                        .font(.system(size: 15))
+                                }
+                                .padding()
                                 .foregroundStyle(Color.yesOrange)
-                                .font(.system(size: 15))
+                                .shadow(radius: 3)
+                            }
                         }
                         .padding()
-                        .foregroundStyle(Color.yesOrange)
-                        .shadow(radius: 3)
+                        
+                        Spacer()
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                    .padding()
                 }
                 
                 VStack { // 全体のVStack
@@ -224,8 +260,11 @@ struct HomeView: View {
                                     Circle()
                                         .foregroundStyle(Color.yesOrange)
                                         .frame(width: 310, height: 310)
-                                        .scaleEffect(animationFlag ? 1.1 : 1.0)
+                                        .overlay {
+                                            Circle().stroke(Color.yesYellow, lineWidth: 3)
+                                        }
                                         .shadow(radius: 5)
+                                        .scaleEffect(animationFlag ? 1.1 : 1.0)
                                 }
                             
                         }
@@ -384,6 +423,8 @@ struct HomeView: View {
         .onAppear {
             currentManager = dayChangeManager.first
             yesLabel = currentManager?.showYesTitle() ?? "currentManagerの取得に失敗しているよ"
+            
+            currentUserInfo = userInfoManager.first
         }
     }
     
@@ -444,7 +485,7 @@ struct HomeView: View {
         
         // API Keyを取得
         guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "OpenAI_API_KEY") as? String, !apiKey.isEmpty else {
-
+            
             fatalError("API Key が設定されていません")
         }
         let openAI = OpenAI(apiToken: apiKey)
@@ -486,6 +527,6 @@ extension Bundle {
 
 #Preview {
     HomeView()
-        .modelContainer(for: [DayChangeManager.self, EachDayData.self])
+        .modelContainer(for: [DayChangeManager.self, EachDayData.self, UserInfoManager.self])
 }
 
