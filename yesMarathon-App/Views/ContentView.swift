@@ -54,8 +54,8 @@ struct ContentView: View {
                 print("初期データの保存に失敗しました: \(error.localizedDescription)")
             }
             
-            // 本日のYESを更新
-            startYesLabelUpdate()
+            // 日付変更確認と処理
+            checkAndUpdateDateChange()
             
             if currentUserInfo?.isNotificationOn == true {
                 // 通知設定
@@ -73,6 +73,9 @@ struct ContentView: View {
 
     // 各Managerの初期化
     private func initializeManager() {
+        
+        guard userInfoManager.isEmpty else { return } // 既存データがある場合は初期化をスキップ
+        
         let newDayChangeManager = DayChangeManager(yesTitle: YesSuggestion().random())
         let newUserInfoManager = UserInfoManager()
 
@@ -87,40 +90,39 @@ struct ContentView: View {
             print("初期化に失敗しました: \(error.localizedDescription)")
         }
     }
+    
+    // 日付が変わったかを検証する関数
+    private func checkAndUpdateDateChange() {
+        guard let currentUser = currentDayChangeManager else { return }
 
-    // 日付変更に伴う処理を行う関数
-    private func startYesLabelUpdate() {
-        // 次の午前０時を計算
-        guard let midnight = Calendar.current.nextDate(
-            after: Date(),
-            matching: DateComponents(hour: 0, minute: 0, second: 0),
-            matchingPolicy: .nextTime
-        ) else {
-            print("時刻の計算に失敗しました")
-            return
-        }
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let lastLogin = currentUser.lastLoginDate ?? Date.distantPast
 
-        // 次の午前０時までの時間を計算（タイマーの時間間隔として利用）
-        let timeInterval = midnight.timeIntervalSinceNow
+        // 最後にログインした日付と現在の日付が異なる場合
+        if calendar.isDate(today, inSameDayAs: lastLogin) == false {
+            handleDateChange() // 日付変更の処理を実行
+            currentUser.lastLoginDate = today // 最終ログイン日を更新
 
-        
-        // 日付が変わったら呼び出されるタイマー
-        Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { _ in
-            
-            // currentManagerがインスタンス化されているか確認
-            guard let manager = currentDayChangeManager else { return }
-            
-            currentDayChangeManager?.isTrue = false // 本日のYES達成をfalseに
-            currentDayChangeManager?.EditYesTitle(yesTitle: YesSuggestion().random())
-            
             do {
-                try modelContext.save()
+                try modelContext.save() // データベースに保存
             } catch {
-                print("managerの更新に失敗しました: \(error.localizedDescription)")
+                print("日付変更後のデータ保存に失敗しました: \(error.localizedDescription)")
             }
-            
-            // 再びこの関数を実行
-            startYesLabelUpdate()
+        }
+    }
+    
+    // 日付変更に伴う処理
+    private func handleDateChange() {
+        guard let manager = currentDayChangeManager else { return }
+
+        manager.isTrue = false // 本日のYES達成をリセット
+        manager.yesTitle = YesSuggestion().random()
+
+        do {
+            try modelContext.save()
+        } catch {
+            print("日付変更処理の保存に失敗しました: \(error.localizedDescription)")
         }
     }
 }
