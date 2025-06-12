@@ -27,8 +27,10 @@ struct HomeView: View {
     // DayChangeManagerの情報を取得（配列で取得し状態管理）-----
     @Environment(\.modelContext) private var modelContext
     @Query private var dayChangeManager: [DayChangeManager]
-    
     @State private var currentManager: DayChangeManager?
+    
+    @Query private var userInfoManager: [UserInfoManager]
+    @State private var currentUserInfo: UserInfoManager?
     // --------------------------------------------------
     
     //-----入力部分に使う変数--------------------------------------
@@ -80,8 +82,6 @@ struct HomeView: View {
                 Color.background
                     .ignoresSafeArea()
                 
-            
-                
                 if !isYesButtonTapped {
                     VStack {
                         HStack {
@@ -89,8 +89,17 @@ struct HomeView: View {
                             Button {
                                 isShowSettingView = true
                             } label: {
-                                Image(systemName: "person.crop.circle")
-                                    .scaleEffect(2.5)
+                                if let userIconData = currentUserInfo?.userIconData, let uiImage = UIImage(data: userIconData) {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .padding()
+                                } else {
+                                    Image(systemName: "person.crop.circle.fill")
+                                        .foregroundStyle(Color.yesOrange)
+                                        .scaleEffect(3)
+                                        .padding()
+                                }
                             }
                             .padding()
                             .sheet(isPresented: $isShowSettingView) {
@@ -409,6 +418,8 @@ struct HomeView: View {
         .onAppear {
             currentManager = dayChangeManager.first
             yesLabel = currentManager?.showYesTitle() ?? "currentManagerの取得に失敗しているよ"
+            
+            currentUserInfo = userInfoManager.first
         }
     }
     
@@ -511,6 +522,6 @@ extension Bundle {
 
 #Preview {
     HomeView()
-        .modelContainer(for: [DayChangeManager.self, EachDayData.self])
+        .modelContainer(for: [DayChangeManager.self, EachDayData.self, UserInfoManager.self])
 }
 

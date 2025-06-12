@@ -7,12 +7,18 @@
 
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 struct SettingView: View {
     
     // データベースから情報を取得
     @Environment(\.modelContext) private var modelContext
     @Query private var userInfoManager: [UserInfoManager]
+    @State private var currentUserInfoManager: UserInfoManager?
+    
+    // 画像に関する変数
+    @State private var selectedItem: PhotosPickerItem?
+    @State private var imageData: Data?
     
     
     // 画面キルに関する変数
@@ -31,29 +37,48 @@ struct SettingView: View {
                     
                     Spacer()
                     
-                    Image(systemName: "person.crop.circle")
-                        .scaleEffect(6)
+                    // アイコン画像
+                    if let imageData = currentUserInfoManager?.userIconData, let uiImage = UIImage(data: imageData) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .frame(width: 150, height: 150)
+                            .clipShape(Circle())
+//                            .overlay {
+//                                Circle().stroke(.white, lineWidth: 2)
+//                            }
+//                            .shadow(radius: 5)
+                            
+                    } else {
+                        Image(systemName: "person.crop.circle")
+                            .scaleEffect(6)
+                    }
                     
                     Spacer()
-                    
-                    Text("userName")
-                        .bold()
-                    
+  
+                    // アイコン変更ボタン
+                    PhotosPicker(selection: $selectedItem) {
+                        Text("アイコンを変更する")
+                    }
+                    .onChange(of: selectedItem) { newItem in
+                        Task {
+                            do {
+                                if let data = try await newItem?.loadTransferable(type: Data.self) {
+                                    currentUserInfoManager?.userIconData = data
+                                    try modelContext.save()
+                                }
+                            } catch {
+                                print("画像の保存に失敗しました: \(error.localizedDescription)")
+                            }
+                        }
+                    }
+
+
                     Spacer()
                     
                     Divider()
                     Toggle("通知設定", isOn: .constant(true))
                         .padding()
                     
-                    Divider()
-                    Text("本日のYESジャンル設定")
-                    Divider()
-                    HStack {
-                        Text("アプリの評価")
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                    }
-                    .padding()
                     Divider()
                     HStack {
                         Text("ご意見")
@@ -71,7 +96,9 @@ struct SettingView: View {
                     Divider()
                     
                     Spacer()
+                    Spacer()
                 }
+                .padding()
             }
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -79,11 +106,28 @@ struct SettingView: View {
                     Button {
                         dismiss()
                     } label: {
-                        HStack {
-                            Text("完了")
-                        }
+                        
+                        Text("完了")
+                        
+                        
                     }
                     .foregroundColor(.black)
+                    .bold()
+                }
+            }
+            .onAppear {
+                if let userInfo = userInfoManager.first {
+                    currentUserInfoManager = userInfo
+                } else {
+                    // 初期化
+                    let newUserInfoManager = UserInfoManager()
+                    modelContext.insert(newUserInfoManager)
+                    do {
+                        try modelContext.save()
+                        currentUserInfoManager = newUserInfoManager
+                    } catch {
+                        print("UserInfoManager の初期化に失敗しました: \(error.localizedDescription)")
+                    }
                 }
             }
         }
@@ -95,4 +139,5 @@ struct SettingView: View {
 
 #Preview {
     SettingView()
+        .modelContainer(for: [UserInfoManager.self])
 }

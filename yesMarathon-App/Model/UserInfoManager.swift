@@ -11,33 +11,18 @@ import UIKit
 
 @Model
 final class UserInfoManager: ObservableObject {
-    private var userIcon: Data?
-    private var userName: String
-    private var isNotificationOn: Bool = false
+    var userIconData: Data?
+    var userName: String = "ユーザーネーム"
+    var isNotificationOn: Bool = false
     
-    init(userIcon: Data? = nil) {
-        self.userIcon = userIcon
+    init() {
+        self.userIconData = nil
         self.userName = "ユーザーネーム"
         self.isNotificationOn = false
     }
     
-    var image: UIImage? {
-        guard let userIcon = userIcon else { return nil }
-        return UIImage(data: userIcon)
-    }
-    
-    // アイコンの変更
-    public func setUserIcon(_ iconData: Data) {
-        self.userIcon = iconData
-    }
-    
-    // ユーザー名の設定
-    public func setUserName(_ name: String) {
-        self.userName = name
-    }
-    
-    // 通知設定の変更
-    public func toggleNotification() {
-        self.isNotificationOn.toggle()
+    var image: UIImage? { // UIImage型のプロパティ
+        guard let userIconData = userIconData else { return nil }
+        return UIImage(data: userIconData)
     }
 }

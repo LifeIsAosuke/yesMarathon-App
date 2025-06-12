@@ -52,27 +52,26 @@ struct ContentView: View {
     private func isInitialized() -> Bool {
         if dayChangeManager.isEmpty && userInfoManager.isEmpty {
             return true // 初回起動である（true）
-        } else {
-            print("初回起動エラー")
         }
         
         return false // 2回目以降の起動である（false）
     }
 
     // 各Managerの初期化
-    private func initializeManager(){
-
+    private func initializeManager() {
         let newDayChangeManager = DayChangeManager(yesTitle: YesSuggestion().random())
         let newUserInfoManager = UserInfoManager()
-        
-        
-    
+
         modelContext.insert(newDayChangeManager)
         modelContext.insert(newUserInfoManager)
-        try? modelContext.save() // データベースに変更内容を保存
         
-        currentDayChangeManager = newDayChangeManager
-        currentUserInfo = newUserInfoManager
+        do {
+            try modelContext.save() // データベースに変更内容を保存
+            currentDayChangeManager = newDayChangeManager
+            currentUserInfo = newUserInfoManager
+        } catch {
+            print("初期化に失敗しました: \(error.localizedDescription)")
+        }
     }
 
     private func startYesLabelUpdate() {
@@ -117,7 +116,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: [DayChangeManager.self, EachDayData.self])
+        .modelContainer(for: [DayChangeManager.self, EachDayData.self, UserInfoManager.self])
 }
 
 
