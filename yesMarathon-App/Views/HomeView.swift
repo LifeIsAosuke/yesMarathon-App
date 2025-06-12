@@ -77,6 +77,8 @@ struct HomeView: View {
                 Color.background
                     .ignoresSafeArea()
                 
+                // test
+                
                 if !isYesButtonTapped {
                     NavigationLink {
                         YesLogView()
