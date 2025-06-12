@@ -123,9 +123,11 @@ struct SettingView: View {
             }
             .onAppear {
                 if let userInfo = userInfoManager.first {
+                    // 既存のインスタンスを使用
                     currentUserInfoManager = userInfo
                     isNotificationOn = userInfo.isNotificationOn
-                } else {
+                } else if userInfoManager.isEmpty {
+                    // データベースにインスタンスがない場合のみ新規作成
                     let newUserInfoManager = UserInfoManager()
                     modelContext.insert(newUserInfoManager)
                     do {
@@ -135,6 +137,9 @@ struct SettingView: View {
                     } catch {
                         print("UserInfoManager の初期化に失敗しました: \(error.localizedDescription)")
                     }
+                } else {
+                    // 複数存在している場合のエラーハンドリング
+                    print("警告: UserInfoManager が複数存在しています")
                 }
             }
         }

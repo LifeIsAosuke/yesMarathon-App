@@ -261,7 +261,7 @@ struct HomeView: View {
                                         .foregroundStyle(Color.yesOrange)
                                         .frame(width: 310, height: 310)
                                         .overlay {
-                                            Circle().stroke(Color.yesYellow, lineWidth: 3)
+                                            Circle().stroke(Color.yesYellow, lineWidth: 2)
                                         }
                                         .shadow(radius: 5)
                                         .scaleEffect(animationFlag ? 1.1 : 1.0)

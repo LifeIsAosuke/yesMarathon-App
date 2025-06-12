@@ -11,11 +11,13 @@ import SwiftData
 @Model
 final class DayChangeManager {
     @Attribute var isTrue: Bool = false
-    @Attribute private var yesTitle: String
+    @Attribute var yesTitle: String
+    var lastLoginDate: Date?
     
     init(yesTitle: String) {
         self.isTrue = false
         self.yesTitle = yesTitle
+        self.lastLoginDate = nil
     }
     
     // YESタイトルの表示
