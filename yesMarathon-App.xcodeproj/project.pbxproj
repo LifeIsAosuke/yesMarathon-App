@@ -52,6 +52,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		425E61AF2DF9EF9D00B20777 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		428D85962DF183D500D64710 /* MyWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MyWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		428D85982DF183D500D64710 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		428D859A2DF183D500D64710 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -62,7 +63,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		425E5F892DF96F5600B20777 /* Exceptions for "yesMarathon-App" folder in "yesMarathon-App" target */ = {
+		425E62962DFA5A9200B20777 /* Exceptions for "yesMarathon-App" folder in "yesMarathon-App" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -98,7 +99,7 @@
 		42BF13A82DE7514400E7B73B /* yesMarathon-App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				425E5F892DF96F5600B20777 /* Exceptions for "yesMarathon-App" folder in "yesMarathon-App" target */,
+				425E62962DFA5A9200B20777 /* Exceptions for "yesMarathon-App" folder in "yesMarathon-App" target */,
 				42C42B132DF3EB7C00BA05E7 /* Exceptions for "yesMarathon-App" folder in "MyWidgetExtension" target */,
 			);
 			path = "yesMarathon-App";
@@ -170,6 +171,7 @@
 				428D859C2DF183D500D64710 /* MyWidget */,
 				428D85972DF183D500D64710 /* Frameworks */,
 				42BF13A72DE7514400E7B73B /* Products */,
+				425E61AF2DF9EF9D00B20777 /* Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -215,8 +217,8 @@
 			buildPhases = (
 				42BF13A22DE7514400E7B73B /* Sources */,
 				42BF13A32DE7514400E7B73B /* Frameworks */,
-				42BF13A42DE7514400E7B73B /* Resources */,
 				428D85A72DF183D700D64710 /* Embed Foundation Extensions */,
+				425E62952DFA5A9200B20777 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -332,14 +334,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		428D85942DF183D500D64710 /* Resources */ = {
+		425E62952DFA5A9200B20777 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		42BF13A42DE7514400E7B73B /* Resources */ = {
+		428D85942DF183D500D64710 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
