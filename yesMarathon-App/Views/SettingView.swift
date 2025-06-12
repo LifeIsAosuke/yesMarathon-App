@@ -8,33 +8,76 @@
 import SwiftUI
 
 struct SettingView: View {
+    
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         
-        ZStack {
-            
-            Color.background
-                .ignoresSafeArea()
-            
-            
-            VStack {
+        NavigationStack {
+            ZStack {
                 
-                Spacer()
+                Color.background
+                    .ignoresSafeArea()
                 
-                Image(systemName: "person.crop.circle")
-                    .scaleEffect(6)
                 
-                Spacer()
-                
-                Text("userName")
-                
-                Spacer()
-                
-                Text("通知設定")
-                Text("アプリの評価")
-                Text("")
-                Text("このアプリを共有する")
-                
-                Spacer()
+                VStack {
+                    
+                    Spacer()
+                    
+                    Image(systemName: "person.crop.circle")
+                        .scaleEffect(6)
+                    
+                    Spacer()
+                    
+                    Text("userName")
+                        .bold()
+                    
+                    Spacer()
+                    
+                    Divider()
+                    Toggle("通知設定", isOn: .constant(true))
+                        .padding()
+                    
+                    Divider()
+                    Text("本日のYESジャンル設定")
+                    Divider()
+                    HStack {
+                        Text("アプリの評価")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                    }
+                    .padding()
+                    Divider()
+                    HStack {
+                        Text("ご意見")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                    }
+                    .padding()
+                    Divider()
+                    HStack {
+                        Text("このアプリを共有する")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                    }
+                    .padding()
+                    Divider()
+                    
+                    Spacer()
+                }
+            }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        HStack {
+                            Text("完了")
+                        }
+                    }
+                    .foregroundColor(.black)
+                }
             }
         }
         
