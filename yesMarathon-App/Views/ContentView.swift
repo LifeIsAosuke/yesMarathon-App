@@ -31,17 +31,31 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            
             if isInitialized() { // 初回起動時
                 initializeManager()
-            } else { // 2回目以降のログイン
-                currentDayChangeManager = dayChangeManager.first
-                currentUserInfo = userInfoManager.first
             }
             
-            //本日のYESを更新
+            // 初回起動後や2回目以降のログイン時に必ずデータを設定
+            currentDayChangeManager = dayChangeManager.first ?? {
+                let manager = DayChangeManager(yesTitle: YesSuggestion().random())
+                modelContext.insert(manager)
+                return manager
+            }()
+            
+            currentUserInfo = userInfoManager.first ?? {
+                let manager = UserInfoManager()
+                modelContext.insert(manager)
+                return manager
+            }()
+            
+            do {
+                try modelContext.save()
+            } catch {
+                print("初期データの保存に失敗しました: \(error.localizedDescription)")
+            }
+            
+            // 本日のYESを更新
             startYesLabelUpdate()
-
         }
 //        .onChange(of: dayChangeManager) { _ in
 //            currentManager = dayChangeManager.first
@@ -50,11 +64,8 @@ struct ContentView: View {
     
     //　アプリの初回起動かどうかを確かめる関数
     private func isInitialized() -> Bool {
-        if dayChangeManager.isEmpty && userInfoManager.isEmpty {
-            return true // 初回起動である（true）
-        }
-        
-        return false // 2回目以降の起動である（false）
+        // 両方のデータが存在する場合に「初期化済み」とみなす
+        return !dayChangeManager.isEmpty && !userInfoManager.isEmpty
     }
 
     // 各Managerの初期化

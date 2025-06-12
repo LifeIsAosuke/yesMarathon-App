@@ -43,10 +43,6 @@ struct SettingView: View {
                             .resizable()
                             .frame(width: 150, height: 150)
                             .clipShape(Circle())
-//                            .overlay {
-//                                Circle().stroke(.white, lineWidth: 2)
-//                            }
-//                            .shadow(radius: 5)
                             
                     } else {
                         Image(systemName: "person.crop.circle")
