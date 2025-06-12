@@ -20,6 +20,8 @@ struct SettingView: View {
     @State private var selectedItem: PhotosPickerItem?
     @State private var imageData: Data?
     
+    @State private var isNotificationOn: Bool = false
+    
     
     // 画面キルに関する変数
     @Environment(\.dismiss) var dismiss
@@ -72,8 +74,16 @@ struct SettingView: View {
                     Spacer()
                     
                     Divider()
-                    Toggle("通知設定", isOn: .constant(true))
+                    Toggle("通知設定", isOn: $isNotificationOn)
                         .padding()
+                        .onChange(of: isNotificationOn) { _ in
+                            currentUserInfoManager?.isNotificationOn = isNotificationOn
+                            do {
+                                try modelContext.save()
+                            } catch {
+                                print("通知設定の変更に失敗しました")
+                            }
+                        }
                     
                     Divider()
                     HStack {
@@ -114,13 +124,14 @@ struct SettingView: View {
             .onAppear {
                 if let userInfo = userInfoManager.first {
                     currentUserInfoManager = userInfo
+                    isNotificationOn = userInfo.isNotificationOn
                 } else {
-                    // 初期化
                     let newUserInfoManager = UserInfoManager()
                     modelContext.insert(newUserInfoManager)
                     do {
                         try modelContext.save()
                         currentUserInfoManager = newUserInfoManager
+                        isNotificationOn = newUserInfoManager.isNotificationOn
                     } catch {
                         print("UserInfoManager の初期化に失敗しました: \(error.localizedDescription)")
                     }
