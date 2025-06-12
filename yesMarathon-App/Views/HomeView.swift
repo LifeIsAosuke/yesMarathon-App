@@ -92,7 +92,9 @@ struct HomeView: View {
                                 if let userIconData = currentUserInfo?.userIconData, let uiImage = UIImage(data: userIconData) {
                                     Image(uiImage: uiImage)
                                         .resizable()
-                                        .scaledToFit()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(Circle())
+                                        .shadow(radius: 5)
                                         .padding()
                                 } else {
                                     Image(systemName: "person.crop.circle.fill")
@@ -480,7 +482,7 @@ struct HomeView: View {
         
         // API Keyを取得
         guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "OpenAI_API_KEY") as? String, !apiKey.isEmpty else {
-
+            
             fatalError("API Key が設定されていません")
         }
         let openAI = OpenAI(apiToken: apiKey)
