@@ -56,13 +56,16 @@ struct ContentView: View {
             
             // 本日のYESを更新
             startYesLabelUpdate()
+            
+            if currentUserInfo?.isNotificationOn == true {
+                // 通知設定
+                NotificationManager.instance.sendNotification_morning()
+                NotificationManager.instance.sendNotification_evening()
+            }
         }
-//        .onChange(of: dayChangeManager) { _ in
-//            currentManager = dayChangeManager.first
-//        }
     }
     
-    //　アプリの初回起動かどうかを確かめる関数
+    //　アプリが初回起動かを確かめる関数
     private func isInitialized() -> Bool {
         // 両方のデータが存在する場合に「初期化済み」とみなす
         return !dayChangeManager.isEmpty && !userInfoManager.isEmpty
@@ -85,6 +88,7 @@ struct ContentView: View {
         }
     }
 
+    // 日付変更に伴う処理を行う関数
     private func startYesLabelUpdate() {
         // 次の午前０時を計算
         guard let midnight = Calendar.current.nextDate(
@@ -115,10 +119,6 @@ struct ContentView: View {
                 print("managerの更新に失敗しました: \(error.localizedDescription)")
             }
             
-            // 通知設定
-            NotificationManager.instance.sendNotification_morning()
-            NotificationManager.instance.sendNotification_evening()
-            
             // 再びこの関数を実行
             startYesLabelUpdate()
         }
@@ -129,8 +129,6 @@ struct ContentView: View {
     ContentView()
         .modelContainer(for: [DayChangeManager.self, EachDayData.self, UserInfoManager.self])
 }
-
-
 
 #Preview {
     ContentView()
