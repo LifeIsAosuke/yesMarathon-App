@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import PhotosUI
+import StoreKit
 
 struct SettingView: View {
     
@@ -25,6 +26,8 @@ struct SettingView: View {
     
     // 画面キルに関する変数
     @Environment(\.dismiss) var dismiss
+    
+    @Environment(\.requestReview) private var requestReview
     
     var body: some View {
         
@@ -99,18 +102,28 @@ struct SettingView: View {
                     }
                     
                     Divider()
-                    HStack {
-                        Text("このアプリを評価する")
-                        Spacer()
-                        Image(systemName: "chevron.right")
+                    Button {
+                        requestReview()
+                    } label: {
+                        HStack {
+                            Text("このアプリを評価する")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                        }
                     }
+                    .foregroundStyle(.black)
                     .padding()
                     Divider()
-                    HStack {
-                        Text("共有する")
-                        Spacer()
-                        Image(systemName: "chevron.right")
+                    Button {
+                        // 共有先はAppStoreのアプリ画面（未実装）
+                    } label: {
+                        HStack {
+                            Text("共有する")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                        }
                     }
+                    .foregroundStyle(.black)
                     .padding()
                     Divider()
                     
