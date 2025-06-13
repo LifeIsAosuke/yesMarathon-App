@@ -12,7 +12,7 @@ import SwiftData
 final class DayChangeManager {
     @Attribute var isTrue: Bool = false
     @Attribute var yesTitle: String
-    var lastLoginDate: Date?
+    @Attribute var lastLoginDate: Date?
     
     init(yesTitle: String) {
         self.isTrue = false

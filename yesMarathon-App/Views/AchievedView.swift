@@ -125,9 +125,15 @@ struct AchievedView: View {
         }
         // 画面遷移後アニメーション開始
         .onAppear {
-            
-            currentManager = dayChangeManager.first
-            currentUserInfo = userInfoManager.first
+            // 各Managerの取得
+            currentManager = dayChangeManager.first ?? {
+                print("AchievedView: dayChangeManagerの初期化に失敗しています")
+                return nil
+            } ()
+            currentUserInfo = userInfoManager.first ?? {
+                print("AchievedView: userInfoManagerの初期化に失敗しています")
+                return nil
+            } ()
             
             backgroundColor = Color.yesOrange
             
@@ -145,4 +151,5 @@ struct AchievedView: View {
 
 #Preview {
     AchievedView()
+        .modelContainer(for: [DayChangeManager.self, EachDayData.self, UserInfoManager.self])
 }

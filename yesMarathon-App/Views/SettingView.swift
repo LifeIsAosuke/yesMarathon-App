@@ -51,6 +51,7 @@ struct SettingView: View {
                             
                     } else {
                         Image(systemName: "person.crop.circle")
+                            .foregroundStyle(Color.yesOrange)
                             .frame(width: 150, height: 150)
                     }
                     
@@ -152,9 +153,9 @@ struct SettingView: View {
                     // 既存のインスタンスを使用
                     currentUserInfoManager = userInfo
                     isNotificationOn = userInfo.isNotificationOn
-                    print("userInfoManagerを取得しました")
+                    print("SettingView: userInfoManagerを取得しました")
                 } else {
-                    print("userInfoManagerの初期化に失敗しています")
+                    print("SettingView: userInfoManagerの初期化に失敗しています")
                 }
 //                if let userInfo = userInfoManager.first {
 //                    // 既存のインスタンスを使用

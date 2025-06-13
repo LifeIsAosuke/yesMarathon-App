@@ -41,7 +41,7 @@ struct ContentView: View {
                 // currentDayManagerの初期化(初回起動時)
                 let manager = DayChangeManager(yesTitle: YesSuggestion().random())
                 modelContext.insert(manager)
-                print("dayChangeManagerを初期化しました")
+                print("ContentView: dayChangeManagerを初期化しました")
                 return manager
             }()
             
@@ -50,14 +50,14 @@ struct ContentView: View {
                 // userInfoManagerの初期化（初回起動時）
                 let manager = UserInfoManager()
                 modelContext.insert(manager)
-                print("userInfoManagerを初期化しました")
+                print("ContentView: userInfoManagerを初期化しました")
                 return manager
             }()
             
             do {
                 try modelContext.save()
             } catch {
-                print("初期データの保存に失敗しました: \(error.localizedDescription)")
+                print("ContentView: データの保存に失敗しました: \(error.localizedDescription)")
             }
             
             // 日付変更確認と処理
@@ -127,7 +127,7 @@ struct ContentView: View {
         do {
             try modelContext.save()
         } catch {
-            print("日付変更処理の保存に失敗しました: \(error.localizedDescription)")
+            print("ContentView: 日付変更処理の保存に失敗しました: \(error.localizedDescription)")
         }
     }
 }

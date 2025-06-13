@@ -11,9 +11,9 @@ import UIKit
 
 @Model
 final class UserInfoManager: ObservableObject {
-    var userIconData: Data?
-    var userName: String = "ユーザーネーム"
-    var isNotificationOn: Bool = false
+    @Attribute var userIconData: Data?
+    @Attribute var userName: String = "ユーザーネーム"
+    @Attribute var isNotificationOn: Bool = false
     
     init() {
         self.userIconData = nil
