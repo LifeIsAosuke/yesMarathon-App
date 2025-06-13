@@ -152,21 +152,29 @@ struct SettingView: View {
                     // 既存のインスタンスを使用
                     currentUserInfoManager = userInfo
                     isNotificationOn = userInfo.isNotificationOn
-                } else if userInfoManager.isEmpty {
-                    // データベースにインスタンスがない場合のみ新規作成
-                    let newUserInfoManager = UserInfoManager()
-                    modelContext.insert(newUserInfoManager)
-                    do {
-                        try modelContext.save()
-                        currentUserInfoManager = newUserInfoManager
-                        isNotificationOn = newUserInfoManager.isNotificationOn
-                    } catch {
-                        print("UserInfoManager の初期化に失敗しました: \(error.localizedDescription)")
-                    }
+                    print("userInfoManagerを取得しました")
                 } else {
-                    // 複数存在している場合のエラーハンドリング
-                    print("警告: UserInfoManager が複数存在しています")
+                    print("userInfoManagerの初期化に失敗しています")
                 }
+//                if let userInfo = userInfoManager.first {
+//                    // 既存のインスタンスを使用
+//                    currentUserInfoManager = userInfo
+//                    isNotificationOn = userInfo.isNotificationOn
+//                } else if userInfoManager.isEmpty {
+//                    // データベースにインスタンスがない場合のみ新規作成
+//                    let newUserInfoManager = UserInfoManager()
+//                    modelContext.insert(newUserInfoManager)
+//                    do {
+//                        try modelContext.save()
+//                        currentUserInfoManager = newUserInfoManager
+//                        isNotificationOn = newUserInfoManager.isNotificationOn
+//                    } catch {
+//                        print("UserInfoManager の初期化に失敗しました: \(error.localizedDescription)")
+//                    }
+//                } else {
+//                    // 複数存在している場合のエラーハンドリング
+//                    print("警告: UserInfoManager が複数存在しています")
+//                }
             }
         }
     }

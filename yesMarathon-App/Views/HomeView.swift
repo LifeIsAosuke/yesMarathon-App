@@ -426,10 +426,16 @@ struct HomeView: View {
             
         }
         .onAppear {
-            currentManager = dayChangeManager.first
+            // 各Managerの要素を取得
+            currentManager = dayChangeManager.first ?? {
+                print("dayChangeManagerの取得に失敗しています")
+                return nil
+            } ()
+            currentUserInfo = userInfoManager.first ?? {
+                print("userInfoManagernの取得に失敗しています")
+                return nil
+            } ()
             yesLabel = currentManager?.showYesTitle() ?? "currentManagerの取得に失敗しているよ"
-            
-            currentUserInfo = userInfoManager.first
         }
     }
     

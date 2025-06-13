@@ -28,23 +28,29 @@ struct ContentView: View {
                 HomeView()
             } else {
                 Text("画面読み込みに失敗しました")
+                Text("Managerの初期化に失敗しています")
             }
         }
         .onAppear {
-            if isInitialized() { // 初回起動時
-                initializeManager()
-            }
+//            if isInitialized() { // 初回起動時
+//                initializeManager()
+//            }
             
-            // 初回起動後や2回目以降のログイン時に必ずデータを設定
+            // DayChangeManager配列の最初の要素を取り出す
             currentDayChangeManager = dayChangeManager.first ?? {
+                // currentDayManagerの初期化(初回起動時)
                 let manager = DayChangeManager(yesTitle: YesSuggestion().random())
                 modelContext.insert(manager)
+                print("dayChangeManagerを初期化しました")
                 return manager
             }()
             
+            // userInfoManager配列の最初の要素を取り出す
             currentUserInfo = userInfoManager.first ?? {
+                // userInfoManagerの初期化（初回起動時）
                 let manager = UserInfoManager()
                 modelContext.insert(manager)
+                print("userInfoManagerを初期化しました")
                 return manager
             }()
             
@@ -103,7 +109,6 @@ struct ContentView: View {
         if calendar.isDate(today, inSameDayAs: lastLogin) == false {
             handleDateChange() // 日付変更の処理を実行
             currentUser.lastLoginDate = today // 最終ログイン日を更新
-
             do {
                 try modelContext.save() // データベースに保存
             } catch {
