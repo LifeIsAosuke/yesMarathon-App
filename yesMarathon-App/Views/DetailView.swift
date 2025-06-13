@@ -72,16 +72,22 @@ struct DetailView: View {
                                 .padding()
                         }
                     } else { // 編集画面
-                        TextEditor(text: $comment)
-                            .overlay(alignment: .topLeading) {
-                                if comment.isEmpty {
-                                    Text("ここにコメントを入力")
-                                        .allowsHitTesting(false)
+                        ZStack {
+                            
+                            TextEditor(text: $comment)
+                                .scrollContentBackground(Visibility.hidden)
+                            
+                            if comment.isEmpty {
+                                HStack {
+                                    Text("今日のYESな瞬間を記録")
                                         .opacity(0.3)
+                                    
+                                    Spacer()
                                 }
+                                
                             }
-                            .frame(minHeight: 40)
-                            .padding()
+                        }
+                        .padding()
                     }
                     
                     Divider()
@@ -100,6 +106,9 @@ struct DetailView: View {
                         
                         if !isEditing {
                             HStack {
+                                
+                                Spacer()
+                                
                                 // 色塗りスターの表示
                                 ForEach(0..<matchingData.yesEvaluation, id: \.self) { _ in
                                     Image(systemName: "star.fill")
@@ -112,9 +121,10 @@ struct DetailView: View {
                                     Image(systemName: "star")
                                         .font(.system(size: 25))
                                 }
+                                
+                                Spacer()
                             }
                             .padding()
-                            .frame(maxWidth: .infinity, alignment: .center)
                             
                         } else { // 編集画面
                             HStack(alignment: .top) {

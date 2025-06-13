@@ -48,7 +48,7 @@ struct SettingView: View {
                             
                     } else {
                         Image(systemName: "person.crop.circle")
-                            .scaleEffect(6)
+                            .frame(width: 150, height: 150)
                     }
                     
                     Spacer()

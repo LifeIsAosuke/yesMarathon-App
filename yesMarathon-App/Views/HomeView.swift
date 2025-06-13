@@ -90,6 +90,9 @@ struct HomeView: View {
                                         .resizable()
                                         .frame(width: 50, height: 50)
                                         .clipShape(Circle())
+                                        .overlay {
+                                            Circle().stroke(.black, lineWidth: 1)
+                                        }
                                         .shadow(radius: 5)
                                         .padding()
                                 } else {
