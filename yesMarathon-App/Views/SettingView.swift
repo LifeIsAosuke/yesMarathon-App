@@ -75,6 +75,7 @@ struct SettingView: View {
                     
                     Divider()
                     Toggle("通知設定", isOn: $isNotificationOn)
+                        .tint(Color.yesOrange)
                         .padding()
                         .onChange(of: isNotificationOn) { _ in
                             currentUserInfoManager?.isNotificationOn = isNotificationOn
@@ -84,17 +85,29 @@ struct SettingView: View {
                                 print("通知設定の変更に失敗しました")
                             }
                         }
+                    Divider()
+                    Button {
+                        openURL("https://docs.google.com/forms/d/e/1FAIpQLSeis1VJf5Ygvl-NnK629AIbMeHRsazFZ-tM5tLL8-hThlIo2g/viewform?usp=dialog")
+                    } label: {
+                        HStack {
+                            Text("ご意見・お問い合わせ")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                        }
+                        .foregroundStyle(.black)
+                        .padding()
+                    }
                     
                     Divider()
                     HStack {
-                        Text("ご意見")
+                        Text("このアプリを評価する")
                         Spacer()
                         Image(systemName: "chevron.right")
                     }
                     .padding()
                     Divider()
                     HStack {
-                        Text("このアプリを共有する")
+                        Text("共有する")
                         Spacer()
                         Image(systemName: "chevron.right")
                     }
@@ -143,9 +156,12 @@ struct SettingView: View {
                 }
             }
         }
-        
-        
-        
+    }
+    
+    private func openURL(_ urlString: String) {
+        if let url = URL(string: urlString) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
 }
 
