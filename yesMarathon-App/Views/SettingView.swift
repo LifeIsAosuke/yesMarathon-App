@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import PhotosUI
+import StoreKit
 
 struct SettingView: View {
     
@@ -25,6 +26,8 @@ struct SettingView: View {
     
     // 画面キルに関する変数
     @Environment(\.dismiss) var dismiss
+    
+    @Environment(\.requestReview) private var requestReview
     
     var body: some View {
         
@@ -48,7 +51,7 @@ struct SettingView: View {
                             
                     } else {
                         Image(systemName: "person.crop.circle")
-                            .scaleEffect(6)
+                            .frame(width: 150, height: 150)
                     }
                     
                     Spacer()
@@ -75,6 +78,7 @@ struct SettingView: View {
                     
                     Divider()
                     Toggle("通知設定", isOn: $isNotificationOn)
+                        .tint(Color.yesOrange)
                         .padding()
                         .onChange(of: isNotificationOn) { _ in
                             currentUserInfoManager?.isNotificationOn = isNotificationOn
@@ -84,20 +88,42 @@ struct SettingView: View {
                                 print("通知設定の変更に失敗しました")
                             }
                         }
+                    Divider()
+                    Button {
+                        openURL("https://docs.google.com/forms/d/e/1FAIpQLSeis1VJf5Ygvl-NnK629AIbMeHRsazFZ-tM5tLL8-hThlIo2g/viewform?usp=dialog")
+                    } label: {
+                        HStack {
+                            Text("ご意見・お問い合わせ")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                        }
+                        .foregroundStyle(.black)
+                        .padding()
+                    }
                     
                     Divider()
-                    HStack {
-                        Text("ご意見")
-                        Spacer()
-                        Image(systemName: "chevron.right")
+                    Button {
+                        requestReview()
+                    } label: {
+                        HStack {
+                            Text("このアプリを評価する")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                        }
                     }
+                    .foregroundStyle(.black)
                     .padding()
                     Divider()
-                    HStack {
-                        Text("このアプリを共有する")
-                        Spacer()
-                        Image(systemName: "chevron.right")
+                    Button {
+                        // 共有先はAppStoreのアプリ画面（未実装）
+                    } label: {
+                        HStack {
+                            Text("共有する")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                        }
                     }
+                    .foregroundStyle(.black)
                     .padding()
                     Divider()
                     
@@ -143,9 +169,12 @@ struct SettingView: View {
                 }
             }
         }
-        
-        
-        
+    }
+    
+    private func openURL(_ urlString: String) {
+        if let url = URL(string: urlString) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
 }
 

@@ -70,10 +70,6 @@ struct HomeView: View {
     // 設定画面へ画面遷移管理用のフラグ変数
     @State private var isShowSettingView: Bool = false
     
-    init() {
-        UITextView.appearance().backgroundColor = .clear
-    }
-    
     var body: some View {
         NavigationStack {
             
@@ -94,6 +90,9 @@ struct HomeView: View {
                                         .resizable()
                                         .frame(width: 50, height: 50)
                                         .clipShape(Circle())
+                                        .overlay {
+                                            Circle().stroke(.black, lineWidth: 1)
+                                        }
                                         .shadow(radius: 5)
                                         .padding()
                                 } else {
@@ -277,29 +276,35 @@ struct HomeView: View {
                                 Divider()
                                 
                                 // コメント入力部分
-                                Group {
-                                    HStack {
-                                        Image(systemName: "text.justify.left")
-                                            .frame(width: 25, height: 25)
-                                        Text("コメント")
-                                            .font(.system(size: 14))
-                                    }
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding()
-                                    .bold()
+                                
+                                HStack {
+                                    Image(systemName: "text.justify.left")
+                                        .frame(width: 25, height: 25)
+                                    Text("コメント")
+                                        .font(.system(size: 14))
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding()
+                                .bold()
+                                
+                                ZStack {
                                     
                                     TextEditor(text: $comment)
-                                        .overlay(alignment: .topLeading) {
-                                            if comment.isEmpty {
-                                                Text("今日のYESな瞬間を記録")
-                                                    .allowsHitTesting(false)
-                                                    .opacity(0.3)
-                                            }
-                                        }
-                                        .frame(minHeight: 20)
-                                        .padding()
+                                        .scrollContentBackground(Visibility.hidden)
                                     
+                                    if comment.isEmpty {
+                                        HStack {
+                                            Text("今日のYESな瞬間を記録")
+                                                .opacity(0.3)
+                                            
+                                            Spacer()
+                                        }
+                                     
+                                    }
                                 }
+                                .padding()
+                                
+                                
                                 
                                 Divider()
                                 
