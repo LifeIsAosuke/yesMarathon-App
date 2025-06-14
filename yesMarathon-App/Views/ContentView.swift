@@ -11,7 +11,7 @@ struct ContentView: View {
     // -----データベースから情報を取得-----
     @Environment(\.modelContext) private var modelContext
     //DayChangeManager型のインスタンスを全て取得
-    @Query private var dayChangeManager: [DayChangeManager]
+    @Query private var dayChangeManager: [DayChangeManager] // クエリーにフィルターをかける
     @State private var currentDayChangeManager: DayChangeManager?
     
     //UserInfoManager型のインスタンスを全て取得
@@ -28,30 +28,36 @@ struct ContentView: View {
                 HomeView()
             } else {
                 Text("画面読み込みに失敗しました")
+                Text("Managerの初期化に失敗しています")
             }
         }
         .onAppear {
-            if isInitialized() { // 初回起動時
-                initializeManager()
-            }
+//            if isInitialized() { // 初回起動時
+//                initializeManager()
+//            }
             
-            // 初回起動後や2回目以降のログイン時に必ずデータを設定
+            // DayChangeManager配列の最初の要素を取り出す
             currentDayChangeManager = dayChangeManager.first ?? {
+                // currentDayManagerの初期化(初回起動時)
                 let manager = DayChangeManager(yesTitle: YesSuggestion().random())
                 modelContext.insert(manager)
+                print("ContentView: dayChangeManagerを初期化しました")
                 return manager
             }()
-            
+
+            // userInfoManager配列の最初の要素を取り出す
             currentUserInfo = userInfoManager.first ?? {
+                // userInfoManagerの初期化（初回起動時）
                 let manager = UserInfoManager()
                 modelContext.insert(manager)
+                print("ContentView: userInfoManagerを初期化しました")
                 return manager
             }()
             
             do {
                 try modelContext.save()
             } catch {
-                print("初期データの保存に失敗しました: \(error.localizedDescription)")
+                print("ContentView: データの保存に失敗しました: \(error.localizedDescription)")
             }
             
             // 日付変更確認と処理
@@ -103,7 +109,6 @@ struct ContentView: View {
         if calendar.isDate(today, inSameDayAs: lastLogin) == false {
             handleDateChange() // 日付変更の処理を実行
             currentUser.lastLoginDate = today // 最終ログイン日を更新
-
             do {
                 try modelContext.save() // データベースに保存
             } catch {
@@ -112,7 +117,7 @@ struct ContentView: View {
         }
     }
     
-    // 日付変更に伴う処理
+    // 日付変更に伴う処理（日付にフィルターをかける）
     private func handleDateChange() {
         guard let manager = currentDayChangeManager else { return }
 
@@ -122,7 +127,7 @@ struct ContentView: View {
         do {
             try modelContext.save()
         } catch {
-            print("日付変更処理の保存に失敗しました: \(error.localizedDescription)")
+            print("ContentView: 日付変更処理の保存に失敗しました: \(error.localizedDescription)")
         }
     }
 }

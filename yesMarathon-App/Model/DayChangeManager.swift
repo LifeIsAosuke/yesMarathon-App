@@ -12,21 +12,11 @@ import SwiftData
 final class DayChangeManager {
     @Attribute var isTrue: Bool = false
     @Attribute var yesTitle: String
-    var lastLoginDate: Date?
+    @Attribute var lastLoginDate: Date?
     
     init(yesTitle: String) {
         self.isTrue = false
         self.yesTitle = yesTitle
         self.lastLoginDate = nil
-    }
-    
-    // YESタイトルの表示
-    public func showYesTitle() -> String {
-        return yesTitle
-    }
-    
-    // 自分で決めるボタンタップで呼び出し
-    public func EditYesTitle(yesTitle: String) {
-        self.yesTitle = yesTitle
     }
 }

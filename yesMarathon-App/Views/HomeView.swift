@@ -426,10 +426,17 @@ struct HomeView: View {
             
         }
         .onAppear {
-            currentManager = dayChangeManager.first
-            yesLabel = currentManager?.showYesTitle() ?? "currentManagerの取得に失敗しているよ"
-            
-            currentUserInfo = userInfoManager.first
+            // 各Managerの要素を取得
+            currentManager = dayChangeManager.first ?? {
+                print("HomeView: dayChangeManagerの取得に失敗しています")
+                return nil
+            } ()
+            currentUserInfo = userInfoManager.first ?? {
+                print("HomeView: userInfoManagernの取得に失敗しています")
+                return nil
+            } ()
+
+            yesLabel = currentManager?.showYesTitle() ?? "HomeView: currentManagerの取得に失敗しています"
         }
     }
     
@@ -438,19 +445,20 @@ struct HomeView: View {
     private func addData() {
         // 必須項目の検証
         guard !yesLabel.isEmpty else {
-            print("お題が未入力です")
+            print("HomeView: お題が未入力です")
             return
         }
         // 入力事項をデータベースに保存
         let newData = EachDayData(yesTitle: yesLabel, day: today, comment: comment, yesEvaluation: yesEvaluation, imageData: imageData)
         do {
-            try modelContext.insert(newData)
+            modelContext.insert(newData)
             // dayChangeManagerのisTrueを更新し、保存
             currentManager?.isTrue = true
             try modelContext.save()
+            print("HomeView: 新たなeachDayDataが追加されました")
             
         } catch {
-            print("データの保存に失敗しました: \(error.localizedDescription)")
+            print("HomeView: データの保存に失敗しました: \(error.localizedDescription)")
         }
     }
     
@@ -470,7 +478,7 @@ struct HomeView: View {
         do {
             try modelContext.save()
         } catch {
-            print("本日のYESの更新に失敗しました")
+            print("HomeView: 本日のYESの更新に失敗しました")
         }
         // widgetを更新
         WidgetCenter.shared.reloadAllTimelines()
