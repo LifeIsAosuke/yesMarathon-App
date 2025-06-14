@@ -74,69 +74,7 @@ struct HomeView: View {
                 Color.background
                     .ignoresSafeArea()
                 
-                if !isYesButtonTapped {
-                    VStack {
-                        HStack {
-                            
-                            Button {
-                                isShowSettingView = true
-                            } label: {
-                                if let userIconData = userInfoManager.userIconData, let uiImage = UIImage(data: userIconData) {
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .frame(width: 50, height: 50)
-                                        .clipShape(Circle())
-                                        .overlay {
-                                            Circle().stroke(.black, lineWidth: 1)
-                                        }
-                                        .shadow(radius: 5)
-                                        .padding()
-                                } else {
-                                    Image(systemName: "person.crop.circle.fill")
-                                        .foregroundStyle(Color.yesOrange)
-                                        .scaleEffect(3)
-                                        .padding()
-                                }
-                            }
-                            .padding()
-                            .sheet(isPresented: $isShowSettingView) {
-                                SettingView()
-                            }
-                            
-                            Spacer()
-                            
-                            
-                            // YESログボタン
-                            NavigationLink {
-                                YesLogView()
-                            } label: {
-                                VStack {
-                                    Image(systemName: "calendar.badge.checkmark")
-                                        .font(.system(size: 45))
-                                    
-                                    Text("YESログ")
-                                        .font(.system(size: 15))
-                                }
-                                .padding()
-                                .foregroundStyle(Color.yesOrange)
-                                .shadow(radius: 3)
-                            }
-                        }
-                        .padding()
-                        
-                        Spacer()
-                    }
-                }
-                
                 VStack { // 全体のVStack
-                    
-                    if !isYesButtonTapped {
-                        Spacer(minLength: 120)
-                    } else {
-                        Spacer(minLength: 50)
-                    }
-                    
-                    
                     
                     // 本日のYESラベル
                     VStack {
@@ -295,7 +233,7 @@ struct HomeView: View {
                                             
                                             Spacer()
                                         }
-                                     
+                                        
                                     }
                                 }
                                 .padding()
@@ -416,7 +354,58 @@ struct HomeView: View {
                     }
                     
                     Spacer()
-                    Spacer()
+                }
+                .padding(.vertical, 40)
+            }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    // 設定画面へ
+                    if !isYesButtonTapped {
+                        VStack {
+                            
+                            Spacer()
+                            
+                            
+                            Button {
+                                isShowSettingView = true
+                            } label: {
+                                
+                                Image(systemName: "gearshape")
+                                    .font(.system(size: 25))
+                                    .bold()
+                                    .foregroundStyle(Color.yesOrange)
+                                    .shadow(radius: 1)
+                            }
+                            .padding()
+                            .sheet(isPresented: $isShowSettingView) {
+                                SettingView()
+                            }
+                            
+                        }
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    // YesLogへ
+                    VStack {
+                        
+                        Spacer()
+                        
+                        
+                        if !isYesButtonTapped {
+                            // YESログボタン
+                            NavigationLink {
+                                YesLogView()
+                            } label: {
+                                Image(systemName: "calendar.badge.checkmark")
+                                    .font(.system(size: 30))
+                            }
+                            .foregroundStyle(Color.yesOrange)
+                            .shadow(radius: 3)
+                        }
+                    }
                 }
             }
             
@@ -461,7 +450,7 @@ struct HomeView: View {
     private func modifyYesLabel() {
         // データベースに本日のYESの変更内容を保存
         dayChangeManager.yesTitle = yesLabel
-
+        
         // widgetを更新
         WidgetCenter.shared.reloadAllTimelines()
     }

@@ -71,23 +71,20 @@ struct AchievedView: View {
                         NavigationLink {
                             YesLogView()
                         } label: {
-                            VStack {
-                                Image(systemName: "calendar.badge.checkmark")
-                                    .font(.system(size: 45))
-                                
-                                Text("YESログ")
-                                    .font(.system(size: 15))
-                            }
-                            .padding()
-                            .foregroundStyle(Color.yesOrange)
-                            .shadow(radius: 3)
+                            
+                            Image(systemName: "calendar.badge.checkmark")
+                                .font(.system(size: 45))
+                            
                         }
+                        .padding()
+                        .foregroundStyle(Color.yesOrange)
+                        .shadow(radius: 3)
                     }
                     .padding()
                     
                     Spacer()
                 }
-                   
+                
                 
                 VStack {
                     
@@ -103,7 +100,7 @@ struct AchievedView: View {
                         .frame(width: 237, height: 258)
                         .padding()
                         .scaleEffect(iconScale)
-                        // HomeViewから画面遷移後アニメーション開始
+                    // HomeViewから画面遷移後アニメーション開始
                         .onAppear {
                             withAnimation (.easeOut(duration: 2.0)) {
                                 iconScale = 1.0

@@ -52,21 +52,11 @@ struct ContentView: View {
 
         // 最後にログインした日付と現在の日付が異なる場合
         if calendar.isDate(today, inSameDayAs: lastLogin) == false {
-            handleDateChange() // 日付変更の処理を実行
+            dayChangeManager.isTrue = false // 本日のYES達成をリセット
+            dayChangeManager.yesTitle = YesSuggestion().random()
             dayChangeManager.lastLoginDate = today // 最終ログイン日を更新
         }
     }
-    
-    // 日付変更に伴う処理（日付にフィルターをかける）
-    private func handleDateChange() {
-        dayChangeManager.isTrue = false // 本日のYES達成をリセット
-        dayChangeManager.yesTitle = YesSuggestion().random()
-    }
-}
-
-#Preview {
-    ContentView()
-        .modelContainer(for: [EachDayData.self])
 }
 
 #Preview {
