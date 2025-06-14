@@ -9,10 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct AchievedView: View {
-    
-    // データベースからDayChangeManagerの情報を取得
-    @Query private var dayChangeManager: [DayChangeManager]
-    @State private var currentManager: DayChangeManager?
+
     //UserInfoManager型のインスタンスを全て取得
     @Query private var userInfoManager: [UserInfoManager]
     @State private var currentUserInfo: UserInfoManager?
@@ -126,10 +123,6 @@ struct AchievedView: View {
         // 画面遷移後アニメーション開始
         .onAppear {
             // 各Managerの取得
-            currentManager = dayChangeManager.first ?? {
-                print("AchievedView: dayChangeManagerの初期化に失敗しています")
-                return nil
-            } ()
             currentUserInfo = userInfoManager.first ?? {
                 print("AchievedView: userInfoManagerの初期化に失敗しています")
                 return nil
@@ -151,5 +144,5 @@ struct AchievedView: View {
 
 #Preview {
     AchievedView()
-        .modelContainer(for: [DayChangeManager.self, EachDayData.self, UserInfoManager.self])
+        .modelContainer(for: [EachDayData.self, UserInfoManager.self])
 }

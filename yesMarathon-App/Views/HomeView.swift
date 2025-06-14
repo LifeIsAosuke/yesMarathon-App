@@ -26,8 +26,8 @@ struct HomeView: View {
     
     // DayChangeManagerの情報を取得（配列で取得し状態管理）-----
     @Environment(\.modelContext) private var modelContext
-    @Query private var dayChangeManager: [DayChangeManager]
-    @State private var currentManager: DayChangeManager?
+    
+    @EnvironmentObject var dayChangeManager: DayChangeManager
     
     @Query private var userInfoManager: [UserInfoManager]
     @State private var currentUserInfo: UserInfoManager?
@@ -427,16 +427,12 @@ struct HomeView: View {
         }
         .onAppear {
             // 各Managerの要素を取得
-            currentManager = dayChangeManager.first ?? {
-                print("HomeView: dayChangeManagerの取得に失敗しています")
-                return nil
-            } ()
             currentUserInfo = userInfoManager.first ?? {
                 print("HomeView: userInfoManagernの取得に失敗しています")
                 return nil
             } ()
 
-            yesLabel = currentManager?.showYesTitle() ?? "HomeView: currentManagerの取得に失敗しています"
+            yesLabel = dayChangeManager.yesTitle
         }
     }
     
@@ -453,7 +449,7 @@ struct HomeView: View {
         do {
             modelContext.insert(newData)
             // dayChangeManagerのisTrueを更新し、保存
-            currentManager?.isTrue = true
+            dayChangeManager.isTrue = true
             try modelContext.save()
             print("HomeView: 新たなeachDayDataが追加されました")
             
@@ -474,12 +470,8 @@ struct HomeView: View {
     // YESラベルを変更した時に呼ばれる
     private func modifyYesLabel() {
         // データベースに本日のYESの変更内容を保存
-        currentManager?.EditYesTitle(yesTitle: yesLabel)
-        do {
-            try modelContext.save()
-        } catch {
-            print("HomeView: 本日のYESの更新に失敗しました")
-        }
+        dayChangeManager.yesTitle = yesLabel
+
         // widgetを更新
         WidgetCenter.shared.reloadAllTimelines()
     }
@@ -540,6 +532,6 @@ extension Bundle {
 
 #Preview {
     HomeView()
-        .modelContainer(for: [DayChangeManager.self, EachDayData.self, UserInfoManager.self])
+        .modelContainer(for: [EachDayData.self, UserInfoManager.self])
 }
 

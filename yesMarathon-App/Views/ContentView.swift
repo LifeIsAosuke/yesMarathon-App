@@ -11,8 +11,7 @@ struct ContentView: View {
     // -----データベースから情報を取得-----
     @Environment(\.modelContext) private var modelContext
     //DayChangeManager型のインスタンスを全て取得
-    @Query private var dayChangeManager: [DayChangeManager] // クエリーにフィルターをかける
-    @State private var currentDayChangeManager: DayChangeManager?
+    @StateObject private var dayChangeManager = DayChangeManager() // 環境オブジェクトとして生成
     
     //UserInfoManager型のインスタンスを全て取得
     @Query private var userInfoManager: [UserInfoManager]
@@ -22,28 +21,17 @@ struct ContentView: View {
     var body: some View {
         
         Group {
-            if currentDayChangeManager?.isTrue == true { // isTrue == true
+            if dayChangeManager.isTrue == true { // isTrue == true
                 AchievedView()
-            } else if currentDayChangeManager?.isTrue == false { // isTrue == true
+            } else if dayChangeManager.isTrue == false { // isTrue == true
                 HomeView()
             } else {
                 Text("画面読み込みに失敗しました")
                 Text("Managerの初期化に失敗しています")
             }
         }
+        .environmentObject(dayChangeManager)
         .onAppear {
-//            if isInitialized() { // 初回起動時
-//                initializeManager()
-//            }
-            
-            // DayChangeManager配列の最初の要素を取り出す
-            currentDayChangeManager = dayChangeManager.first ?? {
-                // currentDayManagerの初期化(初回起動時)
-                let manager = DayChangeManager(yesTitle: YesSuggestion().random())
-                modelContext.insert(manager)
-                print("ContentView: dayChangeManagerを初期化しました")
-                return manager
-            }()
 
             // userInfoManager配列の最初の要素を取り出す
             currentUserInfo = userInfoManager.first ?? {
@@ -70,27 +58,18 @@ struct ContentView: View {
             }
         }
     }
-    
-    //　アプリが初回起動かを確かめる関数
-    private func isInitialized() -> Bool {
-        // 両方のデータが存在する場合に「初期化済み」とみなす
-        return !dayChangeManager.isEmpty && !userInfoManager.isEmpty
-    }
 
     // 各Managerの初期化
     private func initializeManager() {
         
         guard userInfoManager.isEmpty else { return } // 既存データがある場合は初期化をスキップ
         
-        let newDayChangeManager = DayChangeManager(yesTitle: YesSuggestion().random())
         let newUserInfoManager = UserInfoManager()
 
-        modelContext.insert(newDayChangeManager)
         modelContext.insert(newUserInfoManager)
         
         do {
             try modelContext.save() // データベースに変更内容を保存
-            currentDayChangeManager = newDayChangeManager
             currentUserInfo = newUserInfoManager
         } catch {
             print("初期化に失敗しました: \(error.localizedDescription)")
@@ -99,42 +78,28 @@ struct ContentView: View {
     
     // 日付が変わったかを検証する関数
     private func checkAndUpdateDateChange() {
-        guard let currentUser = currentDayChangeManager else { return }
 
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
-        let lastLogin = currentUser.lastLoginDate ?? Date.distantPast
+        let lastLogin = dayChangeManager.lastLoginDate ?? Date.distantPast
 
         // 最後にログインした日付と現在の日付が異なる場合
         if calendar.isDate(today, inSameDayAs: lastLogin) == false {
             handleDateChange() // 日付変更の処理を実行
-            currentUser.lastLoginDate = today // 最終ログイン日を更新
-            do {
-                try modelContext.save() // データベースに保存
-            } catch {
-                print("日付変更後のデータ保存に失敗しました: \(error.localizedDescription)")
-            }
+            dayChangeManager.lastLoginDate = today // 最終ログイン日を更新
         }
     }
     
     // 日付変更に伴う処理（日付にフィルターをかける）
     private func handleDateChange() {
-        guard let manager = currentDayChangeManager else { return }
-
-        manager.isTrue = false // 本日のYES達成をリセット
-        manager.yesTitle = YesSuggestion().random()
-
-        do {
-            try modelContext.save()
-        } catch {
-            print("ContentView: 日付変更処理の保存に失敗しました: \(error.localizedDescription)")
-        }
+        dayChangeManager.isTrue = false // 本日のYES達成をリセット
+        dayChangeManager.yesTitle = YesSuggestion().random()
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: [DayChangeManager.self, EachDayData.self, UserInfoManager.self])
+        .modelContainer(for: [EachDayData.self, UserInfoManager.self])
 }
 
 #Preview {

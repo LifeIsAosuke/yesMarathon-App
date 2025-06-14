@@ -266,7 +266,6 @@ struct YesCalendarView: View {
 }
 #Preview {
     YesCalendarView()
-        .modelContainer(for: [DayChangeManager.self, EachDayData.self])
 }
 
 extension DateFormatter {
