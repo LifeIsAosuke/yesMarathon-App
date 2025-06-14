@@ -11,7 +11,7 @@ struct ContentView: View {
     // -----データベースから情報を取得-----
     @Environment(\.modelContext) private var modelContext
     //DayChangeManager型のインスタンスを全て取得
-    @Query private var dayChangeManager: [DayChangeManager]
+    @Query private var dayChangeManager: [DayChangeManager] // クエリーにフィルターをかける
     @State private var currentDayChangeManager: DayChangeManager?
     
     //UserInfoManager型のインスタンスを全て取得
@@ -44,7 +44,7 @@ struct ContentView: View {
                 print("ContentView: dayChangeManagerを初期化しました")
                 return manager
             }()
-            
+
             // userInfoManager配列の最初の要素を取り出す
             currentUserInfo = userInfoManager.first ?? {
                 // userInfoManagerの初期化（初回起動時）
@@ -117,7 +117,7 @@ struct ContentView: View {
         }
     }
     
-    // 日付変更に伴う処理
+    // 日付変更に伴う処理（日付にフィルターをかける）
     private func handleDateChange() {
         guard let manager = currentDayChangeManager else { return }
 

@@ -19,14 +19,4 @@ final class DayChangeManager {
         self.yesTitle = yesTitle
         self.lastLoginDate = nil
     }
-    
-    // YESタイトルの表示
-    public func showYesTitle() -> String {
-        return yesTitle
-    }
-    
-    // 自分で決めるボタンタップで呼び出し
-    public func EditYesTitle(yesTitle: String) {
-        self.yesTitle = yesTitle
-    }
 }
