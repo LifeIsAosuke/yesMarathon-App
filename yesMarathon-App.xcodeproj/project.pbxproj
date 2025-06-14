@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		421358E92DFDC1FE00AE40B1 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 421358E82DFDC1F200AE40B1 /* Config.xcconfig */; };
+		421358EB2DFDC2A500AE40B1 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 421358EA2DFDC29F00AE40B1 /* .gitignore */; };
 		425E5F872DF9647500B20777 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 425E5F862DF9647500B20777 /* OpenAI */; };
 		428D85992DF183D500D64710 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428D85982DF183D500D64710 /* WidgetKit.framework */; };
 		428D859B2DF183D500D64710 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428D859A2DF183D500D64710 /* SwiftUI.framework */; };
@@ -52,6 +54,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		421358E82DFDC1F200AE40B1 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		421358EA2DFDC29F00AE40B1 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		425E61AF2DF9EF9D00B20777 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		428D85962DF183D500D64710 /* MyWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MyWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		428D85982DF183D500D64710 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -164,6 +168,8 @@
 		42BF139D2DE7514400E7B73B = {
 			isa = PBXGroup;
 			children = (
+				421358EA2DFDC29F00AE40B1 /* .gitignore */,
+				421358E82DFDC1F200AE40B1 /* Config.xcconfig */,
 				42C42B112DF3EB5E00BA05E7 /* MyWidgetExtension.entitlements */,
 				42BF13A82DE7514400E7B73B /* yesMarathon-App */,
 				42BF13B62DE7514500E7B73B /* yesMarathon-AppTests */,
@@ -345,6 +351,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				421358E92DFDC1FE00AE40B1 /* Config.xcconfig in Resources */,
+				421358EB2DFDC2A500AE40B1 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,8 +601,7 @@
 		};
 		42BF13C82DE7514500E7B73B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = 42BF13A82DE7514400E7B73B /* yesMarathon-App */;
-			baseConfigurationReferenceRelativePath = Config.xcconfig;
+			baseConfigurationReference = 421358E82DFDC1F200AE40B1 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

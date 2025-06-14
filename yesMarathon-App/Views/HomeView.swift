@@ -467,9 +467,9 @@ struct HomeView: View {
         guard let randomPrompt = prompts.randomElement() else { return }
         
         // API Keyを取得
-        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "OpenAI_API_KEY") as? String, !apiKey.isEmpty else {
-            
-            fatalError("API Key が設定されていません")
+        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String, !apiKey.isEmpty else {
+            print("API Keyが設定されていません")
+            return
         }
         let openAI = OpenAI(apiToken: apiKey)
         
