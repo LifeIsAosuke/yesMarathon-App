@@ -9,10 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct AchievedView: View {
-
-    //UserInfoManager型のインスタンスを全て取得
-    @Query private var userInfoManager: [UserInfoManager]
-    @State private var currentUserInfo: UserInfoManager?
+    
+    @EnvironmentObject var userInfoManager: UserInfoManager
     
     //　背景色
     @State private var backgroundColor: Color = Color.white
@@ -44,7 +42,7 @@ struct AchievedView: View {
                         Button {
                             isShowSettingView = true
                         } label: {
-                            if let userIconData = currentUserInfo?.userIconData, let uiImage = UIImage(data: userIconData) {
+                            if let userIconData = userInfoManager.userIconData, let uiImage = UIImage(data: userIconData) {
                                 Image(uiImage: uiImage)
                                     .resizable()
                                     .frame(width: 50, height: 50)
@@ -122,11 +120,6 @@ struct AchievedView: View {
         }
         // 画面遷移後アニメーション開始
         .onAppear {
-            // 各Managerの取得
-            currentUserInfo = userInfoManager.first ?? {
-                print("AchievedView: userInfoManagerの初期化に失敗しています")
-                return nil
-            } ()
             
             backgroundColor = Color.yesOrange
             
@@ -144,5 +137,5 @@ struct AchievedView: View {
 
 #Preview {
     AchievedView()
-        .modelContainer(for: [EachDayData.self, UserInfoManager.self])
+        .modelContainer(for: [EachDayData.self])
 }

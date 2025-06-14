@@ -24,14 +24,10 @@ extension String {
 
 struct HomeView: View {
     
-    // DayChangeManagerの情報を取得（配列で取得し状態管理）-----
     @Environment(\.modelContext) private var modelContext
     
     @EnvironmentObject var dayChangeManager: DayChangeManager
-    
-    @Query private var userInfoManager: [UserInfoManager]
-    @State private var currentUserInfo: UserInfoManager?
-    // --------------------------------------------------
+    @EnvironmentObject var userInfoManager: UserInfoManager
     
     //-----入力部分に使う変数--------------------------------------
     
@@ -85,7 +81,7 @@ struct HomeView: View {
                             Button {
                                 isShowSettingView = true
                             } label: {
-                                if let userIconData = currentUserInfo?.userIconData, let uiImage = UIImage(data: userIconData) {
+                                if let userIconData = userInfoManager.userIconData, let uiImage = UIImage(data: userIconData) {
                                     Image(uiImage: uiImage)
                                         .resizable()
                                         .frame(width: 50, height: 50)
@@ -426,12 +422,6 @@ struct HomeView: View {
             
         }
         .onAppear {
-            // 各Managerの要素を取得
-            currentUserInfo = userInfoManager.first ?? {
-                print("HomeView: userInfoManagernの取得に失敗しています")
-                return nil
-            } ()
-
             yesLabel = dayChangeManager.yesTitle
         }
     }
@@ -532,6 +522,6 @@ extension Bundle {
 
 #Preview {
     HomeView()
-        .modelContainer(for: [EachDayData.self, UserInfoManager.self])
+        .modelContainer(for: [EachDayData.self])
 }
 

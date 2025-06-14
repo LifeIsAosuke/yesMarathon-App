@@ -5,21 +5,15 @@
 //  Created by A S on 2025/06/12.
 //
 
+import SwiftUI
 import Foundation
 import SwiftData
 import UIKit
 
-@Model
 final class UserInfoManager: ObservableObject {
-    @Attribute var userIconData: Data?
-    @Attribute var userName: String = "ユーザーネーム"
-    @Attribute var isNotificationOn: Bool = false
-    
-    init() {
-        self.userIconData = nil
-        self.userName = "ユーザーネーム"
-        self.isNotificationOn = false
-    }
+    @AppStorage("userIconData") var userIconData: Data?
+    @AppStorage("userName") var userName: String = "ユーザーネーム"
+    @AppStorage("isNotificationOn") var isNotificationOn: Bool = false
     
     var image: UIImage? { // UIImage型のプロパティ
         guard let userIconData = userIconData else { return nil }

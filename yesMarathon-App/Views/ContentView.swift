@@ -9,13 +9,11 @@ import SwiftData
 
 struct ContentView: View {
     // -----データベースから情報を取得-----
-    @Environment(\.modelContext) private var modelContext
-    //DayChangeManager型のインスタンスを全て取得
-    @StateObject private var dayChangeManager = DayChangeManager() // 環境オブジェクトとして生成
     
-    //UserInfoManager型のインスタンスを全て取得
-    @Query private var userInfoManager: [UserInfoManager]
-    @State private var currentUserInfo: UserInfoManager?
+//    @Environment(\.modelContext) private var modelContext
+    
+    @StateObject private var dayChangeManager = DayChangeManager()
+    @StateObject private var userInfoManager = UserInfoManager()
     // ------------------------------
 
     var body: some View {
@@ -31,48 +29,17 @@ struct ContentView: View {
             }
         }
         .environmentObject(dayChangeManager)
+        .environmentObject(userInfoManager)
         .onAppear {
-
-            // userInfoManager配列の最初の要素を取り出す
-            currentUserInfo = userInfoManager.first ?? {
-                // userInfoManagerの初期化（初回起動時）
-                let manager = UserInfoManager()
-                modelContext.insert(manager)
-                print("ContentView: userInfoManagerを初期化しました")
-                return manager
-            }()
-            
-            do {
-                try modelContext.save()
-            } catch {
-                print("ContentView: データの保存に失敗しました: \(error.localizedDescription)")
-            }
             
             // 日付変更確認と処理
             checkAndUpdateDateChange()
             
-            if currentUserInfo?.isNotificationOn == true {
+            if userInfoManager.isNotificationOn == true {
                 // 通知設定
                 NotificationManager.instance.sendNotification_morning()
                 NotificationManager.instance.sendNotification_evening()
             }
-        }
-    }
-
-    // 各Managerの初期化
-    private func initializeManager() {
-        
-        guard userInfoManager.isEmpty else { return } // 既存データがある場合は初期化をスキップ
-        
-        let newUserInfoManager = UserInfoManager()
-
-        modelContext.insert(newUserInfoManager)
-        
-        do {
-            try modelContext.save() // データベースに変更内容を保存
-            currentUserInfo = newUserInfoManager
-        } catch {
-            print("初期化に失敗しました: \(error.localizedDescription)")
         }
     }
     
@@ -99,7 +66,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: [EachDayData.self, UserInfoManager.self])
+        .modelContainer(for: [EachDayData.self])
 }
 
 #Preview {
