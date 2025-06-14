@@ -481,10 +481,12 @@ struct HomeView: View {
             let result = try await openAI.chats(query: query)
             if let firstChoice = result.choices.first, let content = firstChoice.message.content {
                 responseText = content
+                print("API応答: \(responseText)")
             } else {
                 handleAPIError()
             }
         } catch {
+            print("API呼び出しエラー: \(error.localizedDescription)")
             handleAPIError()
         }
     }
