@@ -64,10 +64,10 @@ struct SimpleEntry: TimelineEntry {
 struct MyWidgetEntryView : View {
     
     // DayChangeManagerの情報を取得--------------------------
-    @Query private var dayChangeManager: [DayChangeManager]
     @Query private var eachDayDatas: [EachDayData]
-    @State private var currentManager: DayChangeManager?
     //-----------------------------------------------------
+    
+    @ObservedObject private var dayChangeManager = DayChangeManager()
     
     // 本日のYES表示用
     @State private var yesLabel: String = "Hello world"
@@ -112,11 +112,7 @@ struct MyWidgetEntryView : View {
             
         }
         .onAppear {
-            currentManager = dayChangeManager.first
-            yesLabel = currentManager?.showYesTitle() ?? "さぁ、YESマラソンへ旅立とう！"
-        }
-        .onChange(of: currentManager) { _ in
-            yesLabel = currentManager?.showYesTitle() ?? "更新に失敗しているよ"
+            yesLabel = dayChangeManager.yesTitle
         }
         
     }
@@ -156,12 +152,12 @@ struct MyWidget: Widget {
             if #available(iOS 17.0, *) {
                 MyWidgetEntryView(entry: entry)
                     .containerBackground(Color.yesOrange, for: .widget)
-                    .modelContainer(for: [DayChangeManager.self, EachDayData.self])
+                    .modelContainer(for: [EachDayData.self])
             } else {
                 MyWidgetEntryView(entry: entry)
                     .padding()
                     .background()
-                    .modelContainer(for: [DayChangeManager.self, EachDayData.self.self])
+                    .modelContainer(for: [EachDayData.self.self])
             }
         }
         .configurationDisplayName("YESマラソン")
