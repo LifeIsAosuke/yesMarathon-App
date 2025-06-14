@@ -6,11 +6,15 @@
 //
 import SwiftUI
 import SwiftData
+import OpenAI
+import WidgetKit
 
 struct ContentView: View {
     
     @StateObject var dayChangeManager = DayChangeManager()
     @StateObject var userInfoManager = UserInfoManager()
+    
+    @StateObject var chatGPT = ChatGPT()
 
     var body: some View {
         
@@ -26,6 +30,7 @@ struct ContentView: View {
         }
         .environmentObject(dayChangeManager)
         .environmentObject(userInfoManager)
+        .environmentObject(chatGPT)
         .onAppear {
             // 日付変更確認と処理
             checkAndUpdateDateChange()
@@ -42,9 +47,19 @@ struct ContentView: View {
         // 最後にログインした日付と現在の日付が異なる場合
         if calendar.isDate(today, inSameDayAs: lastLogin) == false {
             dayChangeManager.isTrue = false // 本日のYES達成をリセット
-            dayChangeManager.yesTitle = YesSuggestion().random()
+            
+            Task { // YESタイトルの更新
+                await changeYesTitle()
+            }
+            
             dayChangeManager.lastLoginDate = today // 最終ログイン日を更新
         }
+    }
+    
+    private func changeYesTitle() async {
+        await chatGPT.fetchOpenAIResponse()
+        dayChangeManager.yesTitle = chatGPT.getResponseText()
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
 
