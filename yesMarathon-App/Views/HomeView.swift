@@ -27,7 +27,6 @@ struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     
     @EnvironmentObject var dayChangeManager: DayChangeManager
-    @EnvironmentObject var userInfoManager: UserInfoManager
     
     //-----入力部分に使う変数--------------------------------------
     

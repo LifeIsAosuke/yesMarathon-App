@@ -10,8 +10,6 @@ import SwiftData
 
 struct AchievedView: View {
     
-    @EnvironmentObject var userInfoManager: UserInfoManager
-    
     //　背景色
     @State private var backgroundColor: Color = Color.white
     
@@ -35,56 +33,6 @@ struct AchievedView: View {
                 
                 // 背景
                 backgroundColor.ignoresSafeArea()
-                
-                VStack {
-                    HStack {
-                        
-                        Button {
-                            isShowSettingView = true
-                        } label: {
-                            if let userIconData = userInfoManager.userIconData, let uiImage = UIImage(data: userIconData) {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
-                                    .overlay {
-                                        Circle().stroke(.black, lineWidth: 1)
-                                    }
-                                    .shadow(radius: 5)
-                                    .padding()
-                            } else {
-                                Image(systemName: "person.crop.circle.fill")
-                                    .foregroundStyle(Color.yesOrange)
-                                    .scaleEffect(3)
-                                    .padding()
-                            }
-                        }
-                        .padding()
-                        .sheet(isPresented: $isShowSettingView) {
-                            SettingView()
-                        }
-                        
-                        Spacer()
-                        
-                        
-                        // YESログボタン
-                        NavigationLink {
-                            YesLogView()
-                        } label: {
-                            
-                            Image(systemName: "calendar.badge.checkmark")
-                                .font(.system(size: 45))
-                            
-                        }
-                        .padding()
-                        .foregroundStyle(Color.yesOrange)
-                        .shadow(radius: 3)
-                    }
-                    .padding()
-                    
-                    Spacer()
-                }
-                
                 
                 VStack {
                     
@@ -113,6 +61,55 @@ struct AchievedView: View {
                         .padding()
                 }
                 .padding()
+            }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    // 設定画面へ
+                    
+                    VStack {
+                        
+                        Spacer()
+                        
+                        
+                        Button {
+                            isShowSettingView = true
+                        } label: {
+                            
+                            Image(systemName: "gearshape")
+                                .font(.system(size: 25))
+                                .bold()
+                                .foregroundStyle(Color.yesOrange)
+                                .shadow(radius: 1)
+                        }
+                        .padding()
+                        .sheet(isPresented: $isShowSettingView) {
+                            SettingView()
+                        }
+                        
+                    }
+                    
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    // YesLogへ
+                    VStack {
+                        
+                        Spacer()
+                        
+                        // YESログボタン
+                        NavigationLink {
+                            YesLogView()
+                        } label: {
+                            Image(systemName: "calendar.badge.checkmark")
+                                .font(.system(size: 30))
+                        }
+                        .foregroundStyle(Color.yesOrange)
+                        .shadow(radius: 3)
+                        
+                    }
+                }
             }
         }
         // 画面遷移後アニメーション開始

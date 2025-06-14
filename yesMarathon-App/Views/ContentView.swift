@@ -8,13 +8,9 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    // -----データベースから情報を取得-----
     
-//    @Environment(\.modelContext) private var modelContext
-    
-    @StateObject private var dayChangeManager = DayChangeManager()
-    @StateObject private var userInfoManager = UserInfoManager()
-    // ------------------------------
+    @StateObject var dayChangeManager = DayChangeManager()
+    @StateObject var userInfoManager = UserInfoManager()
 
     var body: some View {
         
@@ -31,15 +27,8 @@ struct ContentView: View {
         .environmentObject(dayChangeManager)
         .environmentObject(userInfoManager)
         .onAppear {
-            
             // 日付変更確認と処理
             checkAndUpdateDateChange()
-            
-            if userInfoManager.isNotificationOn == true {
-                // 通知設定
-                NotificationManager.instance.sendNotification_morning()
-                NotificationManager.instance.sendNotification_evening()
-            }
         }
     }
     

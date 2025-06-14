@@ -12,14 +12,9 @@ import StoreKit
 
 struct SettingView: View {
     
-    // データベースから情報を取得
-    @Environment(\.modelContext) private var modelContext
-    
     @EnvironmentObject var userInfoManager: UserInfoManager
     
     // 画像に関する変数
-    @State private var selectedItem: PhotosPickerItem?
-    @State private var imageData: Data?
     
     @State private var isNotificationOn: Bool = false
     
@@ -39,43 +34,6 @@ struct SettingView: View {
                 
                 
                 VStack {
-                    
-                    Spacer()
-                    
-                    // アイコン画像
-                    if let imageData = userInfoManager.userIconData, let uiImage = UIImage(data: imageData) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .frame(width: 150, height: 150)
-                            .clipShape(Circle())
-                            
-                    } else {
-                        Image(systemName: "person.crop.circle")
-                            .foregroundStyle(Color.yesOrange)
-                            .frame(width: 150, height: 150)
-                    }
-                    
-                    Spacer()
-  
-                    // アイコン変更ボタン
-                    PhotosPicker(selection: $selectedItem) {
-                        Text("アイコンを変更する")
-                    }
-                    .onChange(of: selectedItem) { newItem in
-                        Task {
-                            do {
-                                if let data = try await newItem?.loadTransferable(type: Data.self) {
-                                    userInfoManager.userIconData = data
-                                
-                                }
-                            } catch {
-                                print("画像の保存に失敗しました: \(error.localizedDescription)")
-                            }
-                        }
-                    }
-
-
-                    Spacer()
                     
                     Divider()
                     Toggle("通知設定", isOn: $userInfoManager.isNotificationOn)
@@ -120,7 +78,6 @@ struct SettingView: View {
                     .padding()
                     Divider()
                     
-                    Spacer()
                     Spacer()
                 }
                 .padding()
