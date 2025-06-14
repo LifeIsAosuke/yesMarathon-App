@@ -10,8 +10,6 @@ import SwiftData
 
 struct AchievedView: View {
     
-    @EnvironmentObject var userInfoManager: UserInfoManager
-    
     //　背景色
     @State private var backgroundColor: Color = Color.white
     
@@ -37,59 +35,6 @@ struct AchievedView: View {
                 backgroundColor.ignoresSafeArea()
                 
                 VStack {
-                    HStack {
-                        
-                        Button {
-                            isShowSettingView = true
-                        } label: {
-                            if let userIconData = userInfoManager.userIconData, let uiImage = UIImage(data: userIconData) {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
-                                    .overlay {
-                                        Circle().stroke(.black, lineWidth: 1)
-                                    }
-                                    .shadow(radius: 5)
-                                    .padding()
-                            } else {
-                                Image(systemName: "person.crop.circle.fill")
-                                    .foregroundStyle(Color.yesOrange)
-                                    .scaleEffect(3)
-                                    .padding()
-                            }
-                        }
-                        .padding()
-                        .sheet(isPresented: $isShowSettingView) {
-                            SettingView()
-                        }
-                        
-                        Spacer()
-                        
-                        
-                        // YESログボタン
-                        NavigationLink {
-                            YesLogView()
-                        } label: {
-                            VStack {
-                                Image(systemName: "calendar.badge.checkmark")
-                                    .font(.system(size: 45))
-                                
-                                Text("YESログ")
-                                    .font(.system(size: 15))
-                            }
-                            .padding()
-                            .foregroundStyle(Color.yesOrange)
-                            .shadow(radius: 3)
-                        }
-                    }
-                    .padding()
-                    
-                    Spacer()
-                }
-                   
-                
-                VStack {
                     
                     Text("本日のYES達成！")
                         .foregroundStyle(textColor)
@@ -103,7 +48,7 @@ struct AchievedView: View {
                         .frame(width: 237, height: 258)
                         .padding()
                         .scaleEffect(iconScale)
-                        // HomeViewから画面遷移後アニメーション開始
+                    // HomeViewから画面遷移後アニメーション開始
                         .onAppear {
                             withAnimation (.easeOut(duration: 2.0)) {
                                 iconScale = 1.0
@@ -116,6 +61,55 @@ struct AchievedView: View {
                         .padding()
                 }
                 .padding()
+            }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    // 設定画面へ
+                    
+                    VStack {
+                        
+                        Spacer()
+                        
+                        
+                        Button {
+                            isShowSettingView = true
+                        } label: {
+                            
+                            Image(systemName: "gearshape")
+                                .font(.system(size: 25))
+                                .bold()
+                                .foregroundStyle(Color.yesOrange)
+                                .shadow(radius: 1)
+                        }
+                        .padding()
+                        .sheet(isPresented: $isShowSettingView) {
+                            SettingView()
+                        }
+                        
+                    }
+                    
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    // YesLogへ
+                    VStack {
+                        
+                        Spacer()
+                        
+                        // YESログボタン
+                        NavigationLink {
+                            YesLogView()
+                        } label: {
+                            Image(systemName: "calendar.badge.checkmark")
+                                .font(.system(size: 30))
+                        }
+                        .foregroundStyle(Color.yesOrange)
+                        .shadow(radius: 3)
+                        
+                    }
+                }
             }
         }
         // 画面遷移後アニメーション開始
