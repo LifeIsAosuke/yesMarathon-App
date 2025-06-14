@@ -28,6 +28,8 @@ struct HomeView: View {
     
     @EnvironmentObject var dayChangeManager: DayChangeManager
     
+    @EnvironmentObject var chatGPT: ChatGPT
+    
     //-----入力部分に使う変数--------------------------------------
     
     // 日付
@@ -58,9 +60,6 @@ struct HomeView: View {
     
     // Yesボタンタップ時のアニメーション起動フラグ変数
     @State private var animationFlag: Bool = false
-    
-    
-    @State private var responseText: String = "Loading..."
     
     // 設定画面へ画面遷移管理用のフラグ変数
     @State private var isShowSettingView: Bool = false
@@ -449,64 +448,14 @@ struct HomeView: View {
     private func modifyYesLabel() {
         // データベースに本日のYESの変更内容を保存
         dayChangeManager.yesTitle = yesLabel
-        
         // widgetを更新
         WidgetCenter.shared.reloadAllTimelines()
     }
     
     private func handleShuffleButtonTap() async {
-        await fetchOpenAIResponse()
-        yesLabel = responseText
+        await chatGPT.fetchOpenAIResponse()
+        yesLabel = chatGPT.getResponseText()
         modifyYesLabel()
-    }
-    
-    // ChatGPT API 呼び出し
-    @MainActor
-    func fetchOpenAIResponse() async {
-        
-        guard let randomPrompt = prompts.randomElement() else { return }
-        
-        // API Keyを取得
-        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String, !apiKey.isEmpty else {
-            print("API Keyが設定されていません")
-            return
-        }
-        let openAI = OpenAI(apiToken: apiKey)
-        
-        guard let message = ChatQuery.ChatCompletionMessageParam(role: .user, content: randomPrompt) else { return }
-        
-        let query = ChatQuery(messages: [message], model: .gpt4_o)
-        
-        do {
-            let result = try await openAI.chats(query: query)
-            if let firstChoice = result.choices.first, let content = firstChoice.message.content {
-                responseText = content
-                print("API応答: \(responseText)")
-            } else {
-                handleAPIError()
-            }
-        } catch {
-            print("API呼び出しエラー: \(error.localizedDescription)")
-            handleAPIError()
-        }
-    }
-    
-    private func handleAPIError() {
-        responseText = YesSuggestion().random()
-        print("Open API の実行に失敗しました。")
-    }
-    
-}
-
-extension Bundle {
-    func value(for key: String, inPlistNamed plistName: String) -> String? {
-        guard let url = self.url(forResource: plistName, withExtension: "plist"),
-              let data = try? Data(contentsOf: url),
-              let plist = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any]
-        else {
-            return nil
-        }
-        return plist[key] as? String
     }
 }
 
