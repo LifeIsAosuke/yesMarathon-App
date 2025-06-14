@@ -41,5 +41,4 @@ struct YesLogView: View {
 
 #Preview {
     YesLogView()
-        .modelContainer(for: [DayChangeManager.self, EachDayData.self])
 }

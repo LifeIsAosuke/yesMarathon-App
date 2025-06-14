@@ -8,15 +8,10 @@
 import SwiftUI
 import SwiftData
 
-@Model
-final class DayChangeManager {
-    @Attribute var isTrue: Bool = false
-    @Attribute var yesTitle: String
-    @Attribute var lastLoginDate: Date?
+final class DayChangeManager: ObservableObject {
     
-    init(yesTitle: String) {
-        self.isTrue = false
-        self.yesTitle = yesTitle
-        self.lastLoginDate = nil
-    }
+    @AppStorage("isTrue") var isTrue: Bool = false
+    @AppStorage("yesTitle") var yesTitle: String = "初期化状態です"
+    @AppStorage("yesTitle") var lastLoginDate: Date?
+    
 }

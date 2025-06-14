@@ -14,8 +14,8 @@ struct SettingView: View {
     
     // データベースから情報を取得
     @Environment(\.modelContext) private var modelContext
-    @Query private var userInfoManager: [UserInfoManager]
-    @State private var currentUserInfoManager: UserInfoManager?
+    
+    @EnvironmentObject var userInfoManager: UserInfoManager
     
     // 画像に関する変数
     @State private var selectedItem: PhotosPickerItem?
@@ -43,7 +43,7 @@ struct SettingView: View {
                     Spacer()
                     
                     // アイコン画像
-                    if let imageData = currentUserInfoManager?.userIconData, let uiImage = UIImage(data: imageData) {
+                    if let imageData = userInfoManager.userIconData, let uiImage = UIImage(data: imageData) {
                         Image(uiImage: uiImage)
                             .resizable()
                             .frame(width: 150, height: 150)
@@ -65,8 +65,8 @@ struct SettingView: View {
                         Task {
                             do {
                                 if let data = try await newItem?.loadTransferable(type: Data.self) {
-                                    currentUserInfoManager?.userIconData = data
-                                    try modelContext.save()
+                                    userInfoManager.userIconData = data
+                                
                                 }
                             } catch {
                                 print("画像の保存に失敗しました: \(error.localizedDescription)")
@@ -78,17 +78,9 @@ struct SettingView: View {
                     Spacer()
                     
                     Divider()
-                    Toggle("通知設定", isOn: $isNotificationOn)
+                    Toggle("通知設定", isOn: $userInfoManager.isNotificationOn)
                         .tint(Color.yesOrange)
                         .padding()
-                        .onChange(of: isNotificationOn) { _ in
-                            currentUserInfoManager?.isNotificationOn = isNotificationOn
-                            do {
-                                try modelContext.save()
-                            } catch {
-                                print("通知設定の変更に失敗しました")
-                            }
-                        }
                     Divider()
                     Button {
                         openURL("https://docs.google.com/forms/d/e/1FAIpQLSeis1VJf5Ygvl-NnK629AIbMeHRsazFZ-tM5tLL8-hThlIo2g/viewform?usp=dialog")
@@ -148,35 +140,6 @@ struct SettingView: View {
                     .bold()
                 }
             }
-            .onAppear {
-                if let userInfo = userInfoManager.first {
-                    // 既存のインスタンスを使用
-                    currentUserInfoManager = userInfo
-                    isNotificationOn = userInfo.isNotificationOn
-                    print("SettingView: userInfoManagerを取得しました")
-                } else {
-                    print("SettingView: userInfoManagerの初期化に失敗しています")
-                }
-//                if let userInfo = userInfoManager.first {
-//                    // 既存のインスタンスを使用
-//                    currentUserInfoManager = userInfo
-//                    isNotificationOn = userInfo.isNotificationOn
-//                } else if userInfoManager.isEmpty {
-//                    // データベースにインスタンスがない場合のみ新規作成
-//                    let newUserInfoManager = UserInfoManager()
-//                    modelContext.insert(newUserInfoManager)
-//                    do {
-//                        try modelContext.save()
-//                        currentUserInfoManager = newUserInfoManager
-//                        isNotificationOn = newUserInfoManager.isNotificationOn
-//                    } catch {
-//                        print("UserInfoManager の初期化に失敗しました: \(error.localizedDescription)")
-//                    }
-//                } else {
-//                    // 複数存在している場合のエラーハンドリング
-//                    print("警告: UserInfoManager が複数存在しています")
-//                }
-            }
         }
     }
     
@@ -189,5 +152,4 @@ struct SettingView: View {
 
 #Preview {
     SettingView()
-        .modelContainer(for: [UserInfoManager.self])
 }
