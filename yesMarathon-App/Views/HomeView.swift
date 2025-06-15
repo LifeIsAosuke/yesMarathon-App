@@ -426,6 +426,11 @@ struct HomeView: View {
             modelContext.insert(newData)
             // dayChangeManagerのisTrueを更新し、保存
             dayChangeManager.isTrue = true
+            
+            Task {
+                await chatGPT.achieveComment(yesTitle: yesLabel)
+            }
+            
             try modelContext.save()
             print("HomeView: 新たなeachDayDataが追加されました")
             

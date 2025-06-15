@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import OpenAI
 
 struct AchievedView: View {
     
@@ -24,6 +25,9 @@ struct AchievedView: View {
     
     // 設定画面へ画面遷移管理用のフラグ変数
     @State private var isShowSettingView: Bool = false
+    
+    @EnvironmentObject var chatGPT: ChatGPT
+    @EnvironmentObject var dayChangeManager: DayChangeManager
     
     let backgroundGradientColor: LinearGradient = LinearGradient(gradient: Gradient(colors: [.yellow, .red]), startPoint: .topLeading, endPoint: .bottomTrailing)
     
@@ -55,7 +59,7 @@ struct AchievedView: View {
                             }
                         }
                     
-                    Text("また明日も頑張ろう")
+                    Text(chatGPT.getResponseText())
                         .foregroundStyle(textColor)
                         .bold()
                         .padding()
