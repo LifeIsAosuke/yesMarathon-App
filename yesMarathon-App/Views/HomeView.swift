@@ -181,7 +181,6 @@ struct HomeView: View {
                                 animationFlag.toggle()
                                 isYesButtonTapped.toggle()
                             }
-                            
                         } label: {
                             Text("YES!")
                                 .font(.system(size: 90))
@@ -190,14 +189,14 @@ struct HomeView: View {
                                 .background {
                                     Circle()
                                         .foregroundStyle(Color.yesOrange)
-                                        .frame(width: 310, height: 310)
+                                        .frame(width: UIDevice.current.userInterfaceIdiom == .pad ? 500 : 310,
+                                               height: UIDevice.current.userInterfaceIdiom == .pad ? 500 : 310)
                                         .overlay {
                                             Circle().stroke(Color.yesYellow, lineWidth: 2)
                                         }
                                         .shadow(radius: 5)
                                         .scaleEffect(animationFlag ? 1.1 : 1.0)
                                 }
-                            
                         }
                         .scaleEffect(animationFlag ? 1.05 : 1.0)
                         
