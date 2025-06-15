@@ -45,7 +45,6 @@ struct AchievedView: View {
                         .font(.title)
                         .bold()
                         .padding()
-                        .shadow(radius: 2)
                     
                     Image("achievedIcon")
                         .resizable()
@@ -120,6 +119,7 @@ struct AchievedView: View {
         .onAppear {
             
             backgroundColor = Color.yesOrange
+            textColor = Color.yesOrange
             
             // 2秒後にアニメーションを開始
             DispatchQueue.main.asyncAfter(deadline: .now() + 2){
