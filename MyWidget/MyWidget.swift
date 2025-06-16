@@ -89,13 +89,22 @@ struct MyWidgetEntryView : View {
                 .font(.system(size:10))
             
             VStack() {
-                HStack {
-                    Text("\(calculateAchievedDays())")
+                if dayChangeManager.isTrue { // 達成されていたら
+                    HStack {
+                        Text("本日のYES達成！")
+                            .font(.system(size: 15))
+                        Text("\(calculateAchievedDays())")
+                            .foregroundColor(.white)
+                            .font(.system(size: 20))
+                            .bold()
+                        Text("日目!!")
+                            .font(.system(size: 15))
+                    }
+                } else { // 達成していなかったら
+                    Text("本日のYES")
                         .foregroundColor(.white)
-                        .font(.system(size: 20))
-                        .bold()
-                    Text("日目!!")
                         .font(.system(size: 15))
+                        .bold()
                 }
                 
                 Divider()
@@ -103,11 +112,18 @@ struct MyWidgetEntryView : View {
                     .background(Color.black) // Dividerの色を指定
                     .padding(.bottom,5)
  
-                Text("\(yesLabel)")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundColor(.white)
-                    .bold()
-                    .shadow(radius: 5)
+                if dayChangeManager.isTrue { // 達成されていたら
+                    Text("また明日もYESな1日を！🔥🔥")
+                        .foregroundColor(.white)
+                        .bold()
+                        .shadow(radius: 5)
+                } else { // 達成していなかったら
+                    Text("\(yesLabel)")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(.white)
+                        .bold()
+                        .shadow(radius: 5)
+                }
             }
             
         }
@@ -166,7 +182,7 @@ struct MyWidget: Widget {
 }
 
 
-#Preview(as: .systemSmall) { // widgetのサイズを指定
+#Preview(as: .systemMedium) { // widgetのサイズを指定
     MyWidget()
 } timeline: {
     SimpleEntry(date: .now, yesData: sampleData)

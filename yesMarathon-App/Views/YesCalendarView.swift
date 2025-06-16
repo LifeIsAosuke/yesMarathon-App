@@ -166,7 +166,7 @@ struct YesCalendarView: View {
                             }
                         }
                     }
-                    .frame(height: UIDevice.current.userInterfaceIdiom == .pad ? 800 : 300)
+                    .frame(height: 300)
                 }
                 .padding()
                 .background(Color.white)
