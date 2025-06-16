@@ -189,8 +189,7 @@ struct HomeView: View {
                                 .background {
                                     Circle()
                                         .foregroundStyle(Color.yesOrange)
-                                        .frame(width: UIDevice.current.userInterfaceIdiom == .pad ? 500 : 310,
-                                               height: UIDevice.current.userInterfaceIdiom == .pad ? 500 : 310)
+                                        .frame(width: 310, height: 310)
                                         .overlay {
                                             Circle().stroke(Color.yesYellow, lineWidth: 2)
                                         }
@@ -426,6 +425,11 @@ struct HomeView: View {
             modelContext.insert(newData)
             // dayChangeManagerのisTrueを更新し、保存
             dayChangeManager.isTrue = true
+            
+            Task {
+                await chatGPT.achieveComment(yesTitle: yesLabel)
+            }
+            
             try modelContext.save()
             print("HomeView: 新たなeachDayDataが追加されました")
             
