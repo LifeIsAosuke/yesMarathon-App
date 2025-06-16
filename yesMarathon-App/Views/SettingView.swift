@@ -40,6 +40,7 @@ struct SettingView: View {
                         .tint(Color.yesOrange)
                         .padding()
                     Divider()
+                    
                     Button {
                         openURL("https://docs.google.com/forms/d/e/1FAIpQLSeis1VJf5Ygvl-NnK629AIbMeHRsazFZ-tM5tLL8-hThlIo2g/viewform?usp=dialog")
                     } label: {
@@ -65,17 +66,17 @@ struct SettingView: View {
                     .foregroundStyle(.black)
                     .padding()
                     Divider()
-                    Button {
-                        // 共有先はAppStoreのアプリ画面（未実装）
-                    } label: {
+                    
+                    ShareLink(item: URL(string: "https://apps.apple.com/jp/app/yesmarathon/id6746979101")!) {
                         HStack {
                             Text("共有する")
                             Spacer()
                             Image(systemName: "chevron.right")
                         }
+                        .foregroundStyle(.black)
+                        .padding()
                     }
-                    .foregroundStyle(.black)
-                    .padding()
+                              
                     Divider()
                     
                     Spacer()
