@@ -37,6 +37,17 @@ struct SettingView: View {
                     
                     Divider()
                     Toggle("通知設定", isOn: $userInfoManager.isNotificationOn)
+                        .onChange(of: userInfoManager.isNotificationOn) { isOn in
+                            if isOn {
+                                NotificationManager.instance.requestPermission()
+                                NotificationManager.instance.sendNotification_morning()
+                                NotificationManager.instance.sendNotification_evening()
+                                print("通知が有効化されました")
+                            } else {
+                                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                                print("通知が無効化されました")
+                            }
+                        }
                         .tint(Color.yesOrange)
                         .padding()
                     Divider()
