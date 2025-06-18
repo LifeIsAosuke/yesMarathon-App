@@ -12,5 +12,4 @@ final class DayChangeManager: ObservableObject {
     @AppStorage("isTrue") var isTrue: Bool = false
     @AppStorage("yesTitle") var yesTitle: String = "今日は”No”と言わないようにする"
     @AppStorage("lastLoginDate") var lastLoginDate: Date?
-    
 }
