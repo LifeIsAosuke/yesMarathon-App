@@ -16,6 +16,7 @@ class ChatGPT: ObservableObject {
     @MainActor
     public func fetchOpenAIResponse() async {
         
+        // プロンプトの選定
         guard let randomPrompt = prompts.randomElement() else { return }
         
         // API Keyを取得
