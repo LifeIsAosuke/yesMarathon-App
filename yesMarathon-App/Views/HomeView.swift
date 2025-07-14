@@ -30,6 +30,8 @@ struct HomeView: View {
     
     @EnvironmentObject var chatGPT: ChatGPT
     
+    @EnvironmentObject var userInfoManager: UserInfoManager
+    
     //-----入力部分に使う変数--------------------------------------
     
     // 日付
@@ -456,7 +458,7 @@ struct HomeView: View {
     }
     
     private func handleShuffleButtonTap() async {
-        await chatGPT.fetchOpenAIResponse()
+        await chatGPT.fetchOpenAIResponse(categoryValue: userInfoManager.yesCategory)
         yesLabel = chatGPT.getResponseText()
         modifyYesLabel()
     }

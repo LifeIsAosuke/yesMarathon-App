@@ -12,12 +12,24 @@ class ChatGPT: ObservableObject {
     
     @AppStorage("responseText") var responseText: String = "Loading..."
     
+    
+    
     // ChatGPT API 呼び出し
     @MainActor
-    public func fetchOpenAIResponse() async {
+    public func fetchOpenAIResponse(categoryValue: Int) async {
         
         // プロンプトの選定
-        guard let randomPrompt = prompts.randomElement() else { return }
+        let randomPrompt: String
+        
+        if prompts.indices.contains(categoryValue) { // カテゴリーごとに選定
+            randomPrompt = prompts[categoryValue].randomElement() ?? ""
+        } else if categoryValue == 7 { // ランダムに選択
+            randomPrompt = prompts.flatMap { $0 }.randomElement() ?? ""
+        } else { // エラー処理
+            randomPrompt = prompts.flatMap { $0 }.randomElement() ?? ""
+            print("カテゴリー選定エラーです。全体からランダムに選択しました。")
+        }
+        
         
         // API Keyを取得
         guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String, !apiKey.isEmpty else {
