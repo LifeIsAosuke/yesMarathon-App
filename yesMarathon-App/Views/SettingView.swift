@@ -90,6 +90,27 @@ struct SettingView: View {
                               
                     Divider()
                     
+                    HStack {
+                        Text("カテゴリーを選択:")
+                        
+                        Spacer()
+                        
+                        Picker("カテゴリーを選択:", selection: userInfoManager.$yesCategory) {
+                            Text("恋愛").tag(0)
+                            Text("対人関係").tag(1)
+                            Text("趣味開拓").tag(2)
+                            Text("行動").tag(3)
+                            Text("学び").tag(4)
+                            Text("冒険").tag(5)
+                            Text("ランダム").tag(6)
+                        }
+                        .tint(Color.yesOrange)
+                    }
+                    .padding()
+                    
+                    Divider()
+                    
+                    
                     Spacer()
                 }
                 .padding()
@@ -119,6 +140,7 @@ struct SettingView: View {
     }
 }
 
-#Preview {
-    SettingView()
-}
+//#Preview {
+//    SettingView()
+//        .modelContainer(for: [UserInfoManager.self])
+//}

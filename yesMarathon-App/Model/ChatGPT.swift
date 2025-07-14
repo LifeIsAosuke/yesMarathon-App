@@ -23,7 +23,7 @@ class ChatGPT: ObservableObject {
         
         if prompts.indices.contains(categoryValue) { // カテゴリーごとに選定
             randomPrompt = prompts[categoryValue].randomElement() ?? ""
-        } else if categoryValue == 7 { // ランダムに選択
+        } else if categoryValue == 6 { // ランダムに選択
             randomPrompt = prompts.flatMap { $0 }.randomElement() ?? ""
         } else { // エラー処理
             randomPrompt = prompts.flatMap { $0 }.randomElement() ?? ""
