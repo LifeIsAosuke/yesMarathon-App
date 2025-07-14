@@ -12,4 +12,6 @@ import UIKit
 
 final class UserInfoManager: ObservableObject {
     @AppStorage("isNotificationOn") var isNotificationOn: Bool = false
+    // YESお題のカテゴリー値
+    @AppStorage("yesCategory") var yesCategory: Int = 1 // default value
 }

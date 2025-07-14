@@ -57,7 +57,7 @@ struct ContentView: View {
     }
     
     private func changeYesTitle() async {
-        await chatGPT.fetchOpenAIResponse()
+        await chatGPT.fetchOpenAIResponse(categoryValue: userInfoManager.yesCategory)
         dayChangeManager.yesTitle = chatGPT.getResponseText()
         WidgetCenter.shared.reloadAllTimelines()
     }
